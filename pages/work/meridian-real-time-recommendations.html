@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>A clickstream graveyard becomes a real-time revenue engine. — Meridian | Alpine Quantum</title>
+<meta name="description" content="A national retail brand was sitting on years of clickstream data in cold storage. We built a Kafka-to-feature-store-to-recommendation pipeline that ships person" />
+<link rel="icon" type="image/svg+xml" href="../../favicon.svg" />
+<link rel="icon" type="image/x-icon" href="../../favicon.ico" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../styles.css">
+<style>
+  .case-detail-hero {
+    background: linear-gradient(135deg, var(--ink) 0%, #1A1A1D 100%);
+    color: var(--paper);
+    padding: 180px 40px 100px;
+    position: relative; overflow: hidden;
+  }
+  .case-detail-hero::before {
+    content: ""; position: absolute; top: -30%; right: -10%; width: 60%; height: 200%;
+    background: radial-gradient(circle, rgba(255,91,46,0.18), transparent 60%);
+    pointer-events: none;
+  }
+  .case-detail-hero-content { max-width: 1280px; margin: 0 auto; position: relative; z-index: 1; }
+  .case-detail-hero .breadcrumb { margin-bottom: 32px; color: rgba(255,255,255,0.6); }
+  .case-detail-hero .breadcrumb a { color: rgba(255,255,255,0.6); }
+  .case-detail-hero .breadcrumb a:hover { color: var(--paper); }
+  .case-detail-hero .breadcrumb .current { color: var(--paper); }
+  .case-detail-meta {
+    font-family: var(--mono); font-size: 11px;
+    text-transform: uppercase; letter-spacing: 0.15em;
+    color: rgba(255,255,255,0.6); margin-bottom: 24px;
+    display: flex; gap: 16px; align-items: center; flex-wrap: wrap;
+  }
+  .case-detail-hero h1 {
+    font-family: var(--display); font-size: clamp(40px, 6vw, 72px);
+    font-weight: 700; line-height: 1.05; letter-spacing: -0.03em;
+    margin-bottom: 24px; max-width: 1000px;
+  }
+  .case-detail-hero h1 em { color: var(--accent); }
+  .case-detail-hero p.lede {
+    font-size: 19px; color: rgba(255,255,255,0.75);
+    max-width: 720px; line-height: 1.55;
+  }
+
+  .case-overview-grid {
+    background: var(--ink); color: var(--paper);
+    padding: 0 40px 80px;
+  }
+  .case-overview-grid-inner {
+    max-width: 1280px; margin: 0 auto;
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px;
+    padding-top: 40px;
+    border-top: 1px solid rgba(255,255,255,0.1);
+  }
+  .case-overview-item .label {
+    font-family: var(--mono); font-size: 10px;
+    text-transform: uppercase; letter-spacing: 0.12em;
+    color: rgba(255,255,255,0.5); margin-bottom: 8px;
+  }
+  .case-overview-item .value { font-size: 15px; font-weight: 500; color: var(--paper); line-height: 1.4; }
+
+  .case-body-section { padding: 100px 40px; }
+  .case-body-container { max-width: 800px; margin: 0 auto; }
+  .case-body-section h2 {
+    font-family: var(--display); font-size: clamp(32px, 4vw, 48px);
+    font-weight: 600; line-height: 1.1; letter-spacing: -0.02em;
+    margin-bottom: 24px;
+  }
+  .case-body-section h2 em { color: var(--accent); }
+  .case-body-section h3 {
+    font-family: var(--display); font-size: 22px; font-weight: 600;
+    line-height: 1.2; letter-spacing: -0.01em;
+    margin-top: 40px; margin-bottom: 16px;
+  }
+  .case-body-section p {
+    font-size: 17px; line-height: 1.65; color: var(--ink-soft);
+    margin-bottom: 20px;
+  }
+  .case-body-section ul { margin: 0 0 24px 24px; }
+  .case-body-section ul li {
+    font-size: 17px; line-height: 1.6; color: var(--ink-soft);
+    margin-bottom: 8px;
+  }
+
+  .metrics-band {
+    background: var(--surface-2);
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    padding: 80px 40px;
+  }
+  .metrics-band-inner {
+    max-width: 1280px; margin: 0 auto;
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;
+  }
+  .metric-card {
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: 24px;
+    padding: 40px; text-align: center;
+  }
+  .metric-card .value {
+    font-family: var(--display); font-size: 72px; font-weight: 700;
+    color: var(--accent); line-height: 1; margin-bottom: 16px;
+    letter-spacing: -0.03em;
+  }
+  .metric-card .label { font-size: 15px; color: var(--ink-soft); line-height: 1.5; }
+
+  .quote-block {
+    background: var(--paper);
+    border-left: 4px solid var(--accent);
+    padding: 32px 40px;
+    margin: 40px 0;
+    border-radius: 0 16px 16px 0;
+  }
+  .quote-block blockquote {
+    font-family: var(--display); font-size: 22px; font-weight: 500;
+    line-height: 1.4; letter-spacing: -0.01em;
+    margin: 0 0 20px 0; color: var(--ink);
+  }
+  .quote-attribution { font-size: 14px; color: var(--ink-soft); }
+  .quote-attribution strong { color: var(--ink); display: block; margin-bottom: 4px; }
+
+  .tech-stack-section {
+    background: var(--ink); color: var(--paper);
+    padding: 80px 40px;
+  }
+  .tech-stack-inner { max-width: 1280px; margin: 0 auto; }
+  .tech-stack-inner .section-eyebrow { color: rgba(255,255,255,0.6); }
+  .tech-stack-inner .section-eyebrow::before { background: var(--paper); }
+  .tech-stack-inner h2 {
+    font-family: var(--display); font-size: clamp(32px, 4vw, 48px);
+    font-weight: 600; line-height: 1.1; letter-spacing: -0.02em;
+    margin-bottom: 40px;
+  }
+  .tech-stack-inner h2 em { color: rgba(255,255,255,0.5); }
+  .tech-stack-grid {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px;
+  }
+  .tech-stack-item {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 12px;
+    padding: 20px;
+  }
+  .tech-stack-cat {
+    font-family: var(--mono); font-size: 10px;
+    text-transform: uppercase; letter-spacing: 0.12em;
+    color: var(--accent); margin-bottom: 10px;
+  }
+  .tech-stack-items { font-size: 14px; line-height: 1.5; color: rgba(255,255,255,0.85); }
+
+  @media (max-width: 1024px) {
+    .case-detail-hero { padding: 130px 24px 64px; }
+    .case-overview-grid { padding: 0 24px 64px; }
+    .case-overview-grid-inner { grid-template-columns: repeat(2, 1fr); }
+    .case-body-section { padding: 64px 24px; }
+    .metrics-band { padding: 64px 24px; }
+    .metrics-band-inner { grid-template-columns: 1fr; }
+    .tech-stack-section { padding: 64px 24px; }
+    .tech-stack-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <a href="../../index.html" class="logo">
+    <svg width="32" height="32" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <path d="M6 42 L24 10 L42 42 Z" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"/>
+      <path d="M16 42 L28 22 L40 42 Z" fill="currentColor"/>
+      <circle cx="24" cy="10" r="3.2" fill="#FF5B2E"/>
+    </svg>
+    <span>Alpine <em>Quantum</em></span>
+  </a>
+  <div class="nav-links">
+    <a href="../../index.html#services">Services</a>
+    <a href="../../index.html#industries">Industries</a>
+    <a href="../../pages/work/" class="active">Client Stories</a>
+    <a href="../../pages/about.html">About</a>
+    <a href="../../pages/insights/">Resources</a>
+  </div>
+  <a href="../../pages/contact.html" class="nav-cta">Contact us</a>
+  <button class="mobile-toggle" aria-label="Menu"><span></span><span></span><span></span></button>
+</nav>
+
+<section class="case-detail-hero">
+  <div class="case-detail-hero-content">
+    <div class="breadcrumb">
+      <a href="../../index.html">Home</a>
+      <span class="breadcrumb-sep">/</span>
+      <a href="index.html">Client Stories</a>
+      <span class="breadcrumb-sep">/</span>
+      <span class="current">Meridian</span>
+    </div>
+    <div class="case-detail-meta">
+      <span>Client Story</span>
+      <span>·</span>
+      <span>Retail</span>
+      <span>·</span>
+      <span>18 weeks · 4 phases</span>
+    </div>
+    <h1>A clickstream graveyard becomes <em>a real-time revenue engine.</em></h1>
+    <p class="lede">A national retail brand was sitting on years of clickstream data in cold storage. We built a Kafka-to-feature-store-to-recommendation pipeline that ships personalized experiences across every digital touchpoint — generating $24M in incremental annual revenue.</p>
+  </div>
+</section>
+
+<div class="case-overview-grid">
+  <div class="case-overview-grid-inner">
+    <div class="case-overview-item"><div class="label">Client</div><div class="value">Meridian Retail Group</div></div>
+    <div class="case-overview-item"><div class="label">Industry</div><div class="value">Retail</div></div>
+    <div class="case-overview-item"><div class="label">Services</div><div class="value">Big Data, AI/ML, Real-time Engineering</div></div>
+    <div class="case-overview-item"><div class="label">Timeline</div><div class="value">18 weeks · 4 phases</div></div>
+  </div>
+</div>
+
+<section class="case-body-section">
+  <div class="case-body-container">
+    <div class="section-eyebrow">The challenge</div>
+    
+    <h2>Data that <em>wasn't earning its keep.</em></h2>
+    <p>Meridian Retail Group operates 340 stores and a digital channel that drives roughly 35% of total revenue. The company had invested heavily in analytics infrastructure over the previous five years — Snowflake warehouse, dbt transformations, Looker for BI. The infrastructure worked. The data flowed. Dashboards were impressive.</p>
+    <p>But the data wasn't driving operational decisions. Recommendation systems on the website ran on three-year-old rules. Email campaigns segmented customers using static cohorts. The product team had been promising "personalization" for two years without shipping any.</p>
+    <p>The CDO had a clear mandate: <em>turn the clickstream into operational decisions, in real time, with measurable revenue impact.</em> Two prior attempts by internal teams had stalled — the real-time engineering proved harder than expected, and the team kept getting pulled into reporting work.</p>
+  
+  </div>
+</section>
+
+<section class="case-body-section" style="background: var(--surface-2); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line);">
+  <div class="case-body-container">
+    <div class="section-eyebrow">The approach</div>
+    <h2>How we did it.</h2>
+    
+    <p>We started by ruthlessly scoping. There were 47 potential personalization use cases on the team's wish list. We picked three: product recommendations on the product detail page, search ranking, and the "for you" email subject line. Each had clear baseline metrics, measurable lift potential, and shared infrastructure requirements.</p>
+
+    <h3>Phase 1: Real-time event pipeline (weeks 1–5)</h3>
+    <p>We built a Kafka-based clickstream ingestion pipeline that captured 47 event types across web, mobile, and in-store touchpoints. Events flow through Kafka into a feature store (Tecton), where they're transformed into real-time features for model serving. The pipeline targets sub-second latency from event to feature availability.</p>
+
+    <h3>Phase 2: Feature store &amp; model training (weeks 6–10)</h3>
+    <p>We built 184 features in the feature store covering session behavior, historical purchase patterns, product affinities, browse-to-buy ratios, and seasonal trends. Three models were trained and validated: a recommendation model (deep learning, two-tower architecture), a search ranking model (gradient-boosted with learn-to-rank loss), and a propensity model for email subject line selection.</p>
+
+    <h3>Phase 3: Production deployment (weeks 11–15)</h3>
+    <p>Models were served via a low-latency inference layer (FastAPI + Redis cache) targeting sub-50ms P95 latency. A/B testing infrastructure was built into the inference layer itself — every recommendation request can be split between treatment variants and control, with clean attribution.</p>
+
+    <h3>Phase 4: Rollout &amp; iteration (weeks 16–18)</h3>
+    <p>We launched to 5% of traffic, then 25%, then 100% over three weeks. Every step was gated by measurable lift on the primary business metrics (conversion rate, AOV, email open rate). By week 18, all three use cases were running at 100% of relevant traffic with statistically significant lift.</p>
+  
+  </div>
+</section>
+
+<section class="metrics-band">
+  <div class="metrics-band-inner">
+    
+    <div class="metric-card">
+      <div class="value">$24M</div>
+      <div class="label">Incremental annual revenue from the three live use cases (recommendation, search, email)</div>
+    </div>
+    
+    <div class="metric-card">
+      <div class="value">8.4×</div>
+      <div class="label">Lift in click-through on personalized recommendations vs the previous rules-based engine</div>
+    </div>
+    
+    <div class="metric-card">
+      <div class="value">42ms</div>
+      <div class="label">P95 latency from event to personalized response, well under the 100ms target</div>
+    </div>
+  </div>
+</section>
+
+<section class="case-body-section">
+  <div class="case-body-container">
+    <div class="quote-block">
+      <blockquote>"We had spent years building data infrastructure that was technically impressive but operationally invisible. Alpine Quantum's gift was connecting our data to specific dollars on the P&L — and showing our team how to keep doing that ourselves."</blockquote>
+      <div class="quote-attribution">
+        <strong>Chief Data Officer</strong>
+        Meridian Retail Group
+      </div>
+    </div>
+
+    <div class="section-eyebrow" style="margin-top: 60px;">The outcome</div>
+    
+    <h2>What Meridian has <em>now.</em></h2>
+    <p>The three launched use cases are themselves significant. But the more durable outcome is the platform underneath them.</p>
+    <p><strong>A reusable real-time ML platform.</strong> The Kafka + Feature Store + inference layer architecture supports new use cases in days rather than months. The team has since launched six additional personalization features on the same infrastructure.</p>
+    <p><strong>A working A/B testing discipline.</strong> Every personalization change ships through the A/B framework. The team now has 18 months of clean experimental data — including evidence of three features that <em>didn't</em> work, which they killed quickly and quietly.</p>
+    <p><strong>Internal ML engineers who can operate it.</strong> Four Meridian engineers worked side-by-side with us throughout the build. They now lead the platform team and have hired two more engineers underneath them.</p>
+  
+  </div>
+</section>
+
+<section class="tech-stack-section">
+  <div class="tech-stack-inner">
+    <div class="section-eyebrow">Technology</div>
+    <h2>The <em>stack</em> behind it.</h2>
+    <div class="tech-stack-grid">
+      
+      <div class="tech-stack-item">
+        <div class="tech-stack-cat">Streaming</div>
+        <div class="tech-stack-items">Apache Kafka, Kafka Streams, Schema Registry</div>
+      </div>
+      
+      <div class="tech-stack-item">
+        <div class="tech-stack-cat">Feature store</div>
+        <div class="tech-stack-items">Tecton, Redis (online), Snowflake (offline)</div>
+      </div>
+      
+      <div class="tech-stack-item">
+        <div class="tech-stack-cat">Modeling</div>
+        <div class="tech-stack-items">TensorFlow, XGBoost, scikit-learn</div>
+      </div>
+      
+      <div class="tech-stack-item">
+        <div class="tech-stack-cat">Serving</div>
+        <div class="tech-stack-items">FastAPI, Redis, Kubernetes (EKS)</div>
+      </div>
+      
+      <div class="tech-stack-item">
+        <div class="tech-stack-cat">Orchestration</div>
+        <div class="tech-stack-items">Airflow, Prefect, GitHub Actions</div>
+      </div>
+      
+      <div class="tech-stack-item">
+        <div class="tech-stack-cat">Experimentation</div>
+        <div class="tech-stack-items">GrowthBook, custom split-test framework</div>
+      </div>
+      
+      <div class="tech-stack-item">
+        <div class="tech-stack-cat">Observability</div>
+        <div class="tech-stack-items">Datadog, MLflow, Evidently for drift</div>
+      </div>
+      
+      <div class="tech-stack-item">
+        <div class="tech-stack-cat">Data warehouse</div>
+        <div class="tech-stack-items">Snowflake, dbt, Looker</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="cta-band">
+  <div class="container">
+    <h2>Want a similar story <em>for your business?</em></h2>
+    <p>Tell us what you're trying to solve. A senior engineer will reply within one business day.</p>
+    <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
+      <a href="../../pages/contact.html" class="btn btn-primary">Start a conversation <span class="btn-arrow">→</span></a>
+      <a href="index.html" class="btn btn-ghost">More client stories <span class="btn-arrow">→</span></a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-bg"><img src="../../images/footer-mountains.png" alt="" /></div>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <a href="../../index.html" class="logo">
+        <svg width="32" height="32" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M6 42 L24 10 L42 42 Z" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"/>
+          <path d="M16 42 L28 22 L40 42 Z" fill="currentColor"/>
+          <circle cx="24" cy="10" r="3.2" fill="#FF5B2E"/>
+        </svg>
+        <span>Alpine <em>Quantum</em></span>
+      </a>
+      <p>A software development and digital services company building innovative solutions across AI, cloud, data, and engineering services for global enterprises.</p>
+      <div class="footer-social"><a href="#" aria-label="LinkedIn">in</a><a href="#" aria-label="X / Twitter">𝕏</a><a href="#" aria-label="GitHub">⌘</a><a href="#" aria-label="YouTube">▶</a></div>
+    </div>
+    <div class="footer-col"><h4>Services</h4><ul>
+      <li><a href="../../pages/services/artificial-intelligence.html">Artificial Intelligence</a></li>
+      <li><a href="../../pages/services/software-engineering.html">Software Engineering</a></li>
+      <li><a href="../../pages/services/cloud-devops.html">Cloud &amp; DevOps</a></li>
+      <li><a href="../../pages/services/big-data-analytics.html">Big Data &amp; Analytics</a></li>
+    </ul></div>
+    <div class="footer-col"><h4>Industries</h4><ul>
+      <li><a href="../../pages/industries/financial-services.html">Financial Services</a></li>
+      <li><a href="../../pages/industries/healthcare.html">Healthcare</a></li>
+      <li><a href="../../pages/industries/retail.html">Retail</a></li>
+      <li><a href="../../pages/industries/manufacturing.html">Manufacturing</a></li>
+    </ul></div>
+    <div class="footer-col"><h4>Company</h4><ul>
+      <li><a href="../../pages/about.html">About us</a></li>
+      <li><a href="../../pages/work/">Client stories</a></li>
+      <li><a href="../../pages/careers.html">Careers</a></li>
+      <li><a href="../../pages/contact.html">Contact</a></li>
+    </ul></div>
+  </div>
+  <div class="footer-bottom">
+    <div>© 2026 Alpine <em style="color: var(--accent); font-weight: 600;">Quantum</em> Inc. All rights reserved.</div>
+    <div><a href="../../pages/legal/privacy.html">Privacy</a><a href="../../pages/legal/terms.html">Terms</a><a href="#">Security</a><a href="#">Sitemap</a></div>
+  </div>
+</footer>
+<script src="../../site.js"></script>
+</body>
+</html>

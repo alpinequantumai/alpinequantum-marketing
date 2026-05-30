@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Software Engineering — Alpine Quantum</title>
+<meta name="description" content="Custom software, application modernization, and platform engineering for global enterprises — built to ship, designed to scale, owned by your team." />
+<link rel="icon" type="image/svg+xml" href="../../favicon.svg" />
+<link rel="icon" type="image/x-icon" href="../../favicon.ico" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../styles.css">
+<style>
+  .service-overview { padding: 100px 40px; }
+  .overview-grid { max-width: 1280px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
+  .overview-text h2 { font-family: var(--display); font-size: clamp(36px, 5vw, 56px); font-weight: 600; line-height: 1.05; letter-spacing: -0.02em; margin-bottom: 24px; }
+  .overview-text h2 em { color: var(--accent); }
+  .overview-text p { font-size: 17px; line-height: 1.6; color: var(--ink-soft); margin-bottom: 18px; }
+  .overview-visual { aspect-ratio: 4/5; border-radius: 24px; overflow: hidden; background: linear-gradient(135deg, var(--ink) 0%, #1A1A1D 100%); display: flex; align-items: center; justify-content: center; }
+  .overview-visual svg { width: 60%; height: auto; opacity: 0.9; }
+
+  .capabilities { background: var(--surface-2); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); padding: 120px 40px; }
+  .capabilities-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; }
+  .capability { background: var(--paper); border: 1px solid var(--line); border-radius: 24px; padding: 40px; transition: all 0.3s; }
+  .capability:hover { border-color: var(--ink); transform: translateY(-4px); }
+  .capability-num { font-family: var(--mono); font-size: 12px; color: var(--ink-muted); margin-bottom: 16px; letter-spacing: 0.1em; }
+  .capability h3 { font-family: var(--display); font-size: 26px; font-weight: 600; line-height: 1.1; letter-spacing: -0.01em; margin-bottom: 16px; }
+  .capability p { font-size: 14px; line-height: 1.55; color: var(--ink-soft); margin-bottom: 24px; }
+  .capability ul { list-style: none; }
+  .capability ul li { font-size: 13px; padding: 10px 0; border-top: 1px solid var(--line); display: flex; align-items: center; gap: 12px; }
+  .capability ul li::before { content: "→"; color: var(--accent); font-weight: 600; }
+
+  .approach-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
+  .approach-step { border-top: 2px solid var(--ink); padding-top: 32px; }
+  .approach-step .num { font-family: var(--mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent); margin-bottom: 16px; font-weight: 500; }
+  .approach-step h3 { font-family: var(--display); font-size: 26px; font-weight: 600; line-height: 1.1; letter-spacing: -0.01em; margin-bottom: 16px; }
+  .approach-step p { font-size: 14px; line-height: 1.55; color: var(--ink-soft); }
+
+  .stack-section { background: var(--ink); color: var(--paper); padding: 120px 40px; }
+  .stack-section .section-eyebrow { color: rgba(255,255,255,0.6); }
+  .stack-section .section-eyebrow::before { background: var(--paper); }
+  .stack-section .section-title em { color: rgba(255,255,255,0.5); }
+  .stack-section .section-desc { color: rgba(255,255,255,0.75); }
+  .stack-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; overflow: hidden; }
+  .stack-cell { background: var(--ink); padding: 32px; min-height: 140px; display: flex; flex-direction: column; justify-content: space-between; transition: background 0.3s; }
+  .stack-cell:hover { background: var(--bg-secondary); }
+  .stack-cat { font-family: var(--mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent); margin-bottom: 16px; }
+  .stack-items { font-family: var(--display); font-size: 18px; font-weight: 600; line-height: 1.3; letter-spacing: -0.01em; }
+  .stack-items span { color: rgba(255,255,255,0.7); font-weight: 400; font-size: 14px; }
+
+  .case-highlight { padding: 120px 40px; background: var(--surface-2); border-top: 1px solid var(--line); }
+  .case-highlight-grid { max-width: 1280px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center; }
+  .case-highlight-text .tag { font-family: var(--mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent); margin-bottom: 16px; }
+  .case-highlight-text .metric { font-family: var(--display); font-size: clamp(72px, 10vw, 140px); font-weight: 700; line-height: 0.9; letter-spacing: -0.03em; margin-bottom: 8px; }
+  .case-highlight-text .metric-x { color: var(--accent); }
+  .case-highlight-text .metric-label { font-size: 16px; color: var(--ink-soft); margin-bottom: 32px; max-width: 360px; line-height: 1.5; }
+  .case-highlight-card { background: var(--paper); border: 1px solid var(--line); border-radius: 24px; padding: 40px; }
+  .case-highlight-card h3 { font-family: var(--display); font-size: 28px; font-weight: 600; line-height: 1.15; letter-spacing: -0.01em; margin-bottom: 16px; }
+  .case-highlight-card p { font-size: 15px; color: var(--ink-soft); line-height: 1.55; margin-bottom: 24px; }
+  .case-highlight-card .read-more { font-size: 13px; color: var(--accent); font-weight: 500; display: inline-flex; align-items: center; gap: 8px; transition: gap 0.25s; }
+  .case-highlight-card .read-more:hover { gap: 12px; }
+
+  .other-services { background: var(--paper); border-top: 1px solid var(--line); }
+  .other-services-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .other-service { background: var(--paper); border: 1px solid var(--line); border-radius: 16px; padding: 32px; display: flex; justify-content: space-between; align-items: center; transition: all 0.3s; }
+  .other-service:hover { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+  .other-service-name { font-family: var(--display); font-size: 20px; font-weight: 600; letter-spacing: -0.01em; }
+  .other-service .arrow { font-size: 20px; color: var(--accent); transition: transform 0.25s; }
+  .other-service:hover .arrow { transform: translateX(6px); }
+
+  @media (max-width: 1024px) {
+    .overview-grid { grid-template-columns: 1fr; gap: 48px; }
+    .overview-visual { aspect-ratio: 16/10; }
+    .capabilities-grid { grid-template-columns: 1fr; }
+    .approach-grid { grid-template-columns: 1fr; gap: 32px; }
+    .stack-grid { grid-template-columns: 1fr 1fr; }
+    .case-highlight-grid { grid-template-columns: 1fr; }
+    .other-services-grid { grid-template-columns: 1fr; }
+    .service-overview, .capabilities, .stack-section, .case-highlight { padding-left: 24px; padding-right: 24px; }
+    .capabilities, .stack-section, .case-highlight { padding-top: 80px; padding-bottom: 80px; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <a href="../../index.html" class="logo">
+    <svg width="32" height="32" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <path d="M6 42 L24 10 L42 42 Z" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"/>
+      <path d="M16 42 L28 22 L40 42 Z" fill="currentColor"/>
+      <circle cx="24" cy="10" r="3.2" fill="#FF5B2E"/>
+    </svg>
+    <span>Alpine <em>Quantum</em></span>
+  </a>
+  <div class="nav-links">
+    <a href="../../index.html#services" class="active">Services</a>
+    <a href="../../index.html#industries" >Industries</a>
+    <a href="../../index.html#work">Client Stories</a>
+    <a href="../../pages/about.html" >About</a>
+    <a href="../../index.html#insights">Resources</a>
+  </div>
+  <a href="../../pages/contact.html" class="nav-cta">Contact us</a>
+  <button class="mobile-toggle" aria-label="Menu"><span></span><span></span><span></span></button>
+</nav>
+
+<section class="page-hero">
+  <div class="page-hero-content">
+    <div class="breadcrumb">
+      <a href="../../index.html">Home</a>
+      <span class="breadcrumb-sep">/</span>
+      <a href="../../index.html#services">Services</a>
+      <span class="breadcrumb-sep">/</span>
+      <span class="current">Software Engineering</span>
+    </div>
+    <div class="page-hero-eyebrow">02 / Service</div>
+    <h1>Custom software, <em>built to last.</em></h1>
+    <p class="lede">Custom software, application modernization, and platform engineering for global enterprises — built to ship, designed to scale, owned by your team.</p>
+  </div>
+</section>
+
+<!-- Overview -->
+<section class="service-overview">
+  <div class="overview-grid">
+    <div class="overview-text">
+      <div class="section-eyebrow">Overview</div>
+      <h2>Where teams ship <em>real systems.</em></h2>
+      <p>Custom software has become an arms race of frameworks, microservices, and ever-changing best practices. Most enterprises end up with sprawling codebases their teams can't maintain, vendors they can't leave, and platforms that take twice as long to deliver each successive feature.</p>
+      <p>Alpine Quantum's software engineering practice exists to do the opposite. We build clean, well-architected systems that your team can extend, operate, and evolve on its own. We make decisions you'll thank us for in three years.</p>
+      <p>We work across web applications, internal platforms, public APIs, enterprise integrations, and full-stack modernization of legacy systems.</p>
+    </div>
+    <div class="overview-visual">
+      <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+      <rect x="20" y="40" width="160" height="120" rx="8" fill="none" stroke="#FF5B2E" stroke-width="3"/>
+      <line x1="20" y1="65" x2="180" y2="65" stroke="#FF5B2E" stroke-width="2"/>
+      <circle cx="35" cy="52.5" r="3" fill="#FF5B2E"/>
+      <circle cx="48" cy="52.5" r="3" fill="#FF5B2E"/>
+      <circle cx="61" cy="52.5" r="3" fill="#FF5B2E"/>
+      <path d="M 40 90 L 60 110 L 40 130" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+      <line x1="75" y1="135" x2="135" y2="135" stroke="#fff" stroke-width="3" stroke-linecap="round"/>
+    </svg>
+    </div>
+  </div>
+</section>
+
+<!-- Capabilities -->
+<section class="capabilities">
+  <div class="container">
+    <div class="section-head">
+      <div>
+        <div class="section-eyebrow">Capabilities</div>
+        <h2 class="section-title">What we <em>build.</em></h2>
+      </div>
+      <p class="section-desc">Four core practice areas — combined or standalone — to take your software initiative from idea to scale.</p>
+    </div>
+    <div class="capabilities-grid">
+      
+      <div class="capability">
+        <div class="capability-num">01 / CUSTOM</div>
+        <h3>Custom Application Development</h3>
+        <p>End-to-end design and development of bespoke web and mobile applications — built for your specific business processes, not retrofitted from a SaaS template.</p>
+        <ul>
+          <li>Full-stack web applications</li>
+          <li>Native iOS &amp; Android apps</li>
+          <li>Cross-platform (React Native, Flutter)</li>
+          <li>Internal tools &amp; admin platforms</li>
+          <li>B2B SaaS product engineering</li>
+        </ul>
+      </div>
+      
+      <div class="capability">
+        <div class="capability-num">02 / MODERN</div>
+        <h3>Application Modernization</h3>
+        <p>Migrate legacy systems from monoliths, on-prem servers, or outdated frameworks to modern cloud-native architectures — without losing functionality or data integrity.</p>
+        <ul>
+          <li>Monolith to microservices</li>
+          <li>Legacy framework migrations</li>
+          <li>On-prem to cloud lift-and-shift</li>
+          <li>Database modernization</li>
+          <li>API-first re-platforming</li>
+        </ul>
+      </div>
+      
+      <div class="capability">
+        <div class="capability-num">03 / API</div>
+        <h3>Platform &amp; API Engineering</h3>
+        <p>Internal developer platforms, public APIs, partner integrations, and the infrastructure that lets your teams build faster on shared foundations.</p>
+        <ul>
+          <li>Public &amp; partner APIs</li>
+          <li>API gateways &amp; orchestration</li>
+          <li>Internal developer platforms (IDPs)</li>
+          <li>Event-driven architectures</li>
+          <li>GraphQL &amp; gRPC services</li>
+        </ul>
+      </div>
+      
+      <div class="capability">
+        <div class="capability-num">04 / QUALITY</div>
+        <h3>Quality &amp; DevEx</h3>
+        <p>Make your codebase a place engineers want to work. Automated testing, CI/CD, observability, and the developer-experience improvements that make teams productive.</p>
+        <ul>
+          <li>Test automation &amp; QA strategy</li>
+          <li>CI/CD pipeline engineering</li>
+          <li>Code quality &amp; review systems</li>
+          <li>Observability &amp; performance</li>
+          <li>Developer onboarding &amp; tooling</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Approach -->
+<section>
+  <div class="container">
+    <div class="section-head">
+      <div>
+        <div class="section-eyebrow">How we work</div>
+        <h2 class="section-title">A delivery model that <em>actually delivers.</em></h2>
+      </div>
+      <p class="section-desc">We work in 2-week sprints with weekly demos, full visibility, and a senior architect leading from start to finish. No phantom resources, no surprise scope creep.</p>
+    </div>
+    <div class="approach-grid">
+      
+      <div class="approach-step">
+        <div class="num">phase 01</div>
+        <h3>Discover</h3>
+        <p>Requirements clarification, technical feasibility, architectural plan, and a realistic budget and timeline before we write code.</p>
+      </div>
+      
+      <div class="approach-step">
+        <div class="num">phase 02</div>
+        <h3>Design</h3>
+        <p>System architecture, data model, API contracts, UX prototypes, and an explicit definition of “done” for each deliverable.</p>
+      </div>
+      
+      <div class="approach-step">
+        <div class="num">phase 03</div>
+        <h3>Build</h3>
+        <p>Agile sprints with weekly demos, continuous deployment to staging, and shipped-to-production releases at each milestone.</p>
+      </div>
+      
+      <div class="approach-step">
+        <div class="num">phase 04</div>
+        <h3>Operate</h3>
+        <p>Production support, monitoring, runbooks, and full handover to your team — with optional retainer for ongoing work.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Tech stack -->
+<section class="stack-section">
+  <div class="container">
+    <div class="section-head">
+      <div>
+        <div class="section-eyebrow">Technology</div>
+        <h2 class="section-title">The stack we <em>work in.</em></h2>
+      </div>
+      <p class="section-desc">We're polyglot but opinionated. These are the technologies we work in most often — chosen for reliability and team productivity, not novelty.</p>
+    </div>
+    <div class="stack-grid">
+      
+      <div class="stack-cell">
+        <div class="stack-cat">Backend</div>
+        <div class="stack-items">Java + Spring Boot<br/><span>Node.js, Python, Go</span></div>
+      </div>
+      
+      <div class="stack-cell">
+        <div class="stack-cat">Frontend</div>
+        <div class="stack-items">React + TypeScript<br/><span>Next.js, Vue, Svelte</span></div>
+      </div>
+      
+      <div class="stack-cell">
+        <div class="stack-cat">Mobile</div>
+        <div class="stack-items">React Native<br/><span>Swift, Kotlin, Flutter</span></div>
+      </div>
+      
+      <div class="stack-cell">
+        <div class="stack-cat">Database</div>
+        <div class="stack-items">PostgreSQL, Oracle<br/><span>MongoDB, DynamoDB</span></div>
+      </div>
+      
+      <div class="stack-cell">
+        <div class="stack-cat">API</div>
+        <div class="stack-items">REST, GraphQL<br/><span>gRPC, OpenAPI, AsyncAPI</span></div>
+      </div>
+      
+      <div class="stack-cell">
+        <div class="stack-cat">Infrastructure</div>
+        <div class="stack-items">Docker + Kubernetes<br/><span>AWS, GCP, Azure</span></div>
+      </div>
+      
+      <div class="stack-cell">
+        <div class="stack-cat">CI/CD</div>
+        <div class="stack-items">GitHub Actions<br/><span>GitLab CI, ArgoCD</span></div>
+      </div>
+      
+      <div class="stack-cell">
+        <div class="stack-cat">Testing</div>
+        <div class="stack-items">JUnit, Jest, Playwright<br/><span>Cypress, Pact, k6</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Case highlight -->
+<section class="case-highlight">
+  <div class="case-highlight-grid">
+    <div class="case-highlight-text">
+      <div class="tag">FEATURED CLIENT STORY</div>
+      <div class="metric">4.5<span class="metric-x">×</span></div>
+      <div class="metric-label">Faster time-to-market after monolith-to-microservices modernization for a global fintech</div>
+    </div>
+    <div class="case-highlight-card">
+      <h3>Modernizing the platform behind 12 million transactions a day</h3>
+      <p>A Tier-1 fintech client was constrained by a 15-year-old monolithic platform that took weeks to release a single feature. Working with Alpine Quantum, the platform was decomposed into independently deployable services, with full backwards compatibility throughout the migration.</p>
+      <a href="../../index.html#work" class="read-more">Read the full story →</a>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-band">
+  <div class="container">
+    <h2>Ready to build <em>what's next?</em></h2>
+    <p>Tell us about your initiative. A senior engineer will reply within one business day.</p>
+    <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
+      <a href="../../pages/contact.html" class="btn btn-primary">Start a conversation <span class="btn-arrow">→</span></a>
+      <a href="../../index.html#work" class="btn btn-ghost">See more client stories <span class="btn-arrow">→</span></a>
+    </div>
+  </div>
+</section>
+
+<!-- Other services -->
+<section class="other-services">
+  <div class="container">
+    <div class="section-head">
+      <div>
+        <div class="section-eyebrow">Other services</div>
+        <h2 class="section-title">Explore <em>more capabilities.</em></h2>
+      </div>
+      <p class="section-desc">Software Engineering rarely ships alone. Most engagements span at least one of these adjacent practices.</p>
+    </div>
+    <div class="other-services-grid">
+      
+      <a href="artificial-intelligence.html" class="other-service">
+        <span class="other-service-name">Artificial Intelligence</span>
+        <span class="arrow">→</span>
+      </a>
+      
+      <a href="cloud-devops.html" class="other-service">
+        <span class="other-service-name">Cloud & DevOps</span>
+        <span class="arrow">→</span>
+      </a>
+      
+      <a href="big-data-analytics.html" class="other-service">
+        <span class="other-service-name">Big Data &amp; Analytics</span>
+        <span class="arrow">→</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-bg"><img src="../../images/footer-mountains.png" alt="" /></div>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <a href="../../index.html" class="logo">
+        <svg width="32" height="32" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M6 42 L24 10 L42 42 Z" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"/>
+          <path d="M16 42 L28 22 L40 42 Z" fill="currentColor"/>
+          <circle cx="24" cy="10" r="3.2" fill="#FF5B2E"/>
+        </svg>
+        <span>Alpine <em>Quantum</em></span>
+      </a>
+      <p>A software development and digital services company building innovative solutions across AI, cloud, data, and engineering services for global enterprises.</p>
+      <div class="footer-social">
+        <a href="#" aria-label="LinkedIn">in</a>
+        <a href="#" aria-label="X / Twitter">𝕏</a>
+        <a href="#" aria-label="GitHub">⌘</a>
+        <a href="#" aria-label="YouTube">▶</a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>Services</h4>
+      <ul>
+        <li><a href="artificial-intelligence.html">Artificial Intelligence</a></li>
+        <li><a href="software-engineering.html">Software Engineering</a></li>
+        <li><a href="cloud-devops.html">Cloud &amp; DevOps</a></li>
+        <li><a href="big-data-analytics.html">Big Data &amp; Analytics</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Industries</h4>
+      <ul>
+        <li><a href="../industries/financial-services.html">Financial Services</a></li>
+        <li><a href="../industries/healthcare.html">Healthcare</a></li>
+        <li><a href="../industries/retail.html">Retail</a></li>
+        <li><a href="../industries/manufacturing.html">Manufacturing</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Company</h4>
+      <ul>
+        <li><a href="../../pages/about.html">About us</a></li>
+        <li><a href="../../index.html#work">Client stories</a></li>
+        <li><a href="../../pages/careers.html">Careers</a></li>
+        <li><a href="../../pages/contact.html">Contact</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div>© 2026 Alpine <em style="color: var(--accent); font-weight: 600;">Quantum</em> Inc. All rights reserved.</div>
+    <div>
+      <a href="../../pages/legal/privacy.html">Privacy</a>
+      <a href="../../pages/legal/terms.html">Terms</a>
+      <a href="#">Security</a>
+      <a href="#">Sitemap</a>
+    </div>
+  </div>
+</footer>
+<script src="../../site.js"></script>
+</body>
+</html>

@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Decomposing a 15-year-old monolith behind 12M daily transactions. — Veridia | Alpine Quantum</title>
+<meta name="description" content="A global fintech was constrained by a monolithic platform that took weeks to release a single feature. Working with Alpine Quantum, the platform was decomposed " />
+<link rel="icon" type="image/svg+xml" href="../../favicon.svg" />
+<link rel="icon" type="image/x-icon" href="../../favicon.ico" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../styles.css">
+<style>
+  .case-detail-hero {
+    background: linear-gradient(135deg, var(--ink) 0%, #1A1A1D 100%);
+    color: var(--paper);
+    padding: 180px 40px 100px;
+    position: relative; overflow: hidden;
+  }
+  .case-detail-hero::before {
+    content: ""; position: absolute; top: -30%; right: -10%; width: 60%; height: 200%;
+    background: radial-gradient(circle, rgba(255,91,46,0.18), transparent 60%);
+    pointer-events: none;
+  }
+  .case-detail-hero-content { max-width: 1280px; margin: 0 auto; position: relative; z-index: 1; }
+  .case-detail-hero .breadcrumb { margin-bottom: 32px; color: rgba(255,255,255,0.6); }
+  .case-detail-hero .breadcrumb a { color: rgba(255,255,255,0.6); }
+  .case-detail-hero .breadcrumb a:hover { color: var(--paper); }
+  .case-detail-hero .breadcrumb .current { color: var(--paper); }
+  .case-detail-meta {
+    font-family: var(--mono); font-size: 11px;
+    text-transform: uppercase; letter-spacing: 0.15em;
+    color: rgba(255,255,255,0.6); margin-bottom: 24px;
+    display: flex; gap: 16px; align-items: center; flex-wrap: wrap;
+  }
+  .case-detail-hero h1 {
+    font-family: var(--display); font-size: clamp(40px, 6vw, 72px);
+    font-weight: 700; line-height: 1.05; letter-spacing: -0.03em;
+    margin-bottom: 24px; max-width: 1000px;
+  }
+  .case-detail-hero h1 em { color: var(--accent); }
+  .case-detail-hero p.lede {
+    font-size: 19px; color: rgba(255,255,255,0.75);
+    max-width: 720px; line-height: 1.55;
+  }
+
+  .case-overview-grid {
+    background: var(--ink); color: var(--paper);
+    padding: 0 40px 80px;
+  }
+  .case-overview-grid-inner {
+    max-width: 1280px; margin: 0 auto;
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px;
+    padding-top: 40px;
+    border-top: 1px solid rgba(255,255,255,0.1);
+  }
+  .case-overview-item .label {
+    font-family: var(--mono); font-size: 10px;
+    text-transform: uppercase; letter-spacing: 0.12em;
+    color: rgba(255,255,255,0.5); margin-bottom: 8px;
+  }
+  .case-overview-item .value { font-size: 15px; font-weight: 500; color: var(--paper); line-height: 1.4; }
+
+  .case-body-section { padding: 100px 40px; }
+  .case-body-container { max-width: 800px; margin: 0 auto; }
+  .case-body-section h2 {
+    font-family: var(--display); font-size: clamp(32px, 4vw, 48px);
+    font-weight: 600; line-height: 1.1; letter-spacing: -0.02em;
+    margin-bottom: 24px;
+  }
+  .case-body-section h2 em { color: var(--accent); }
+  .case-body-section h3 {
+    font-family: var(--display); font-size: 22px; font-weight: 600;
+    line-height: 1.2; letter-spacing: -0.01em;
+    margin-top: 40px; margin-bottom: 16px;
+  }
+  .case-body-section p {
+    font-size: 17px; line-height: 1.65; color: var(--ink-soft);
+    margin-bottom: 20px;
+  }
+  .case-body-section ul { margin: 0 0 24px 24px; }
+  .case-body-section ul li {
+    font-size: 17px; line-height: 1.6; color: var(--ink-soft);
+    margin-bottom: 8px;
+  }
+
+  .metrics-band {
+    background: var(--surface-2);
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    padding: 80px 40px;
+  }
+  .metrics-band-inner {
+    max-width: 1280px; margin: 0 auto;
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;
+  }
+  .metric-card {
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: 24px;
+    padding: 40px; text-align: center;
+  }
+  .metric-card .value {
+    font-family: var(--display); font-size: 72px; font-weight: 700;
+    color: var(--accent); line-height: 1; margin-bottom: 16px;
+    letter-spacing: -0.03em;
+  }
+  .metric-card .label { font-size: 15px; color: var(--ink-soft); line-height: 1.5; }
+
+  .quote-block {
+    background: var(--paper);
+    border-left: 4px solid var(--accent);
+    padding: 32px 40px;
+    margin: 40px 0;
+    border-radius: 0 16px 16px 0;
+  }
+  .quote-block blockquote {
+    font-family: var(--display); font-size: 22px; font-weight: 500;
+    line-height: 1.4; letter-spacing: -0.01em;
+    margin: 0 0 20px 0; color: var(--ink);
+  }
+  .quote-attribution { font-size: 14px; color: var(--ink-soft); }
+  .quote-attribution strong { color: var(--ink); display: block; margin-bottom: 4px; }
+
+  .tech-stack-section {
+    background: var(--ink); color: var(--paper);
+    padding: 80px 40px;
+  }
+  .tech-stack-inner { max-width: 1280px; margin: 0 auto; }
+  .tech-stack-inner .section-eyebrow { color: rgba(255,255,255,0.6); }
+  .tech-stack-inner .section-eyebrow::before { background: var(--paper); }
+  .tech-stack-inner h2 {
+    font-family: var(--display); font-size: clamp(32px, 4vw, 48px);
+    font-weight: 600; line-height: 1.1; letter-spacing: -0.02em;
+    margin-bottom: 40px;
+  }
+  .tech-stack-inner h2 em { color: rgba(255,255,255,0.5); }
+  .tech-stack-grid {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px;
+  }
+  .tech-stack-item {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 12px;
+    padding: 20px;
+  }
+  .tech-stack-cat {
+    font-family: var(--mono); font-size: 10px;
+    text-transform: uppercase; letter-spacing: 0.12em;
+    color: var(--accent); margin-bottom: 10px;
+  }
+  .tech-stack-items { font-size: 14px; line-height: 1.5; color: rgba(255,255,255,0.85); }
+
+  @media (max-width: 1024px) {
+    .case-detail-hero { padding: 130px 24px 64px; }
+    .case-overview-grid { padding: 0 24px 64px; }
+    .case-overview-grid-inner { grid-template-columns: repeat(2, 1fr); }
+    .case-body-section { padding: 64px 24px; }
+    .metrics-band { padding: 64px 24px; }
+    .metrics-band-inner { grid-template-columns: 1fr; }
+    .tech-stack-section { padding: 64px 24px; }
+    .tech-stack-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <a href="../../index.html" class="logo">
+    <svg width="32" height="32" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <path d="M6 42 L24 10 L42 42 Z" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"/>
+      <path d="M16 42 L28 22 L40 42 Z" fill="currentColor"/>
+      <circle cx="24" cy="10" r="3.2" fill="#FF5B2E"/>
+    </svg>
+    <span>Alpine <em>Quantum</em></span>
+  </a>
+  <div class="nav-links">
+    <a href="../../index.html#services">Services</a>
+    <a href="../../index.html#industries">Industries</a>
+    <a href="../../pages/work/" class="active">Client Stories</a>
+    <a href="../../pages/about.html">About</a>
+    <a href="../../pages/insights/">Resources</a>
+  </div>
+  <a href="../../pages/contact.html" class="nav-cta">Contact us</a>
+  <button class="mobile-toggle" aria-label="Menu"><span></span><span></span><span></span></button>
+</nav>
+
+<section class="case-detail-hero">
+  <div class="case-detail-hero-content">
+    <div class="breadcrumb">
+      <a href="../../index.html">Home</a>
+      <span class="breadcrumb-sep">/</span>
+      <a href="index.html">Client Stories</a>
+      <span class="breadcrumb-sep">/</span>
+      <span class="current">Veridia</span>
+    </div>
+    <div class="case-detail-meta">
+      <span>Client Story</span>
+      <span>·</span>
+      <span>Technology / Fintech</span>
+      <span>·</span>
+      <span>34 weeks · phased migration</span>
+    </div>
+    <h1>Decomposing a <em>15-year-old monolith</em> behind 12M daily transactions.</h1>
+    <p class="lede">A global fintech was constrained by a monolithic platform that took weeks to release a single feature. Working with Alpine Quantum, the platform was decomposed into independently deployable services — with full backwards compatibility and zero data loss throughout the migration.</p>
+  </div>
+</section>
+
+<div class="case-overview-grid">
+  <div class="case-overview-grid-inner">
+    <div class="case-overview-item"><div class="label">Client</div><div class="value">Veridia Technologies</div></div>
+    <div class="case-overview-item"><div class="label">Industry</div><div class="value">Technology / Fintech</div></div>
+    <div class="case-overview-item"><div class="label">Services</div><div class="value">Application Modernization, Cloud Engineering, DevOps</div></div>
+    <div class="case-overview-item"><div class="label">Timeline</div><div class="value">34 weeks · phased migration</div></div>
+  </div>
+</div>
+
+<section class="case-body-section">
+  <div class="case-body-container">
+    <div class="section-eyebrow">The challenge</div>
+    
+    <h2>A monolith that <em>worked too well to replace, too poorly to extend.</em></h2>
+    <p>Veridia Technologies operates a payment platform that processes more than 12 million transactions per day across 23 countries. The platform was built in 2010 as a Java monolith. Over 15 years it had grown to nearly 2 million lines of code, 47 database tables tightly coupled through stored procedures, and a release cadence that had slowed from weekly to roughly every three weeks.</p>
+    <p>The platform worked. Uptime was excellent. Reliability was world-class. But the development team had grown to 80 engineers, all working on the same codebase, and the friction of coordinating their changes was killing velocity. Every release required a multi-hour deployment window. Test runs took 90 minutes. Onboarding a new engineer took two months.</p>
+    <p>Leadership had attempted modernization before. A consultancy had spent eight months and £2 million on a "strangler-fig" approach that produced very little working code and ended in mutual recrimination. The next attempt had to be different.</p>
+  
+  </div>
+</section>
+
+<section class="case-body-section" style="background: var(--surface-2); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line);">
+  <div class="case-body-container">
+    <div class="section-eyebrow">The approach</div>
+    <h2>How we did it.</h2>
+    
+    <p>We started by refusing to do the obvious. The board wanted "microservices." The architecture team wanted "Kubernetes." We told them they needed neither — at least not initially. What they needed was a working backbone for incremental decomposition, deployed without disrupting production.</p>
+
+    <h3>Phase 1: API gateway &amp; canary infrastructure (weeks 1–6)</h3>
+    <p>Before extracting any service, we built the infrastructure to support extraction. An API gateway (Kong) was placed in front of the monolith, with routing rules that could send specific endpoints to either the monolith or to a future replacement service. Canary deployment infrastructure allowed any new service to receive 1%, then 10%, then 100% of relevant traffic gradually.</p>
+    <p>This phase shipped nothing visible to users. It was pure infrastructure. But it was the precondition for everything else.</p>
+
+    <h3>Phase 2: First extraction — payments processing (weeks 7–18)</h3>
+    <p>We extracted the payments processing core as the first independent service. Payments was chosen deliberately: it was the most critical functionality (highest stakes for getting wrong), but it had the cleanest interface boundaries with the rest of the platform.</p>
+    <p>The new payments service ran in parallel with the monolith for six weeks, processing the same transactions and comparing outputs. We didn't switch traffic over until the parity check was 100% across millions of transactions.</p>
+
+    <h3>Phase 3: Subsequent extractions (weeks 19–30)</h3>
+    <p>With the pattern proven, we extracted six more services over twelve weeks: customer accounts, merchant management, transaction history, settlement, reporting, and identity. Each followed the same playbook: build the service, run in parallel, verify parity, gradually cut over traffic.</p>
+
+    <h3>Phase 4: Database decomposition (weeks 31–34)</h3>
+    <p>The hardest phase. The monolithic database was decomposed into service-owned databases via the "expand and contract" pattern. Each service got its own database while the monolithic schema continued to exist; cross-service queries were replaced with event-driven data replication.</p>
+  
+  </div>
+</section>
+
+<section class="metrics-band">
+  <div class="metrics-band-inner">
+    
+    <div class="metric-card">
+      <div class="value">4.5×</div>
+      <div class="label">Improvement in deployment frequency — from every 3 weeks to multiple times per day</div>
+    </div>
+    
+    <div class="metric-card">
+      <div class="value">99.99%</div>
+      <div class="label">Platform uptime maintained throughout the entire migration period</div>
+    </div>
+    
+    <div class="metric-card">
+      <div class="value">7</div>
+      <div class="label">Independently deployable services successfully extracted from the monolith</div>
+    </div>
+  </div>
+</section>
+
+<section class="case-body-section">
+  <div class="case-body-container">
+    <div class="quote-block">
+      <blockquote>"What set this apart from our previous attempts was that Alpine Quantum refused to start with the fashionable answer. They built the infrastructure to enable safe migration before extracting anything — which sounds obvious but is exactly the step every other firm wanted to skip."</blockquote>
+      <div class="quote-attribution">
+        <strong>CTO</strong>
+        Veridia Technologies
+      </div>
+    </div>
+
+    <div class="section-eyebrow" style="margin-top: 60px;">The outcome</div>
+    
+    <h2>What Veridia has <em>now.</em></h2>
+    <p>The modernization itself shipped. More importantly, Veridia now has the engineering capability to do the next modernization themselves.</p>
+    <p><strong>Independent team velocity.</strong> Each of the seven extracted services has a dedicated team that deploys on its own schedule. The cross-team coordination cost that dominated the old codebase has largely evaporated. Engineering throughput has roughly doubled.</p>
+    <p><strong>Reusable extraction pattern.</strong> The pattern (API gateway, parallel run, parity verification, gradual cut-over) is now Veridia's standard playbook for further decomposition. Two more services have been extracted by internal teams since the engagement ended.</p>
+    <p><strong>Better engineering hiring.</strong> The new architecture is easier to onboard into. Time-to-first-meaningful-PR for new engineers dropped from two months to ten days.</p>
+  
+  </div>
+</section>
+
+<section class="tech-stack-section">
+  <div class="tech-stack-inner">
+    <div class="section-eyebrow">Technology</div>
+    <h2>The <em>stack</em> behind it.</h2>
+    <div class="tech-stack-grid">
+      
+      <div class="tech-stack-item">
+        <div class="tech-stack-cat">Languages</div>
+        <div class="tech-stack-items">Java 21, Spring Boot 3, Kotlin (newer services)</div>
+      </div>
+      
+      <div class="tech-stack-item">
+        <div class="tech-stack-cat">API gateway</div>
+        <div class="tech-stack-items">Kong, OpenAPI specs, gRPC for internal</div>
+      </div>
+      
+      <div class="tech-stack-item">
+        <div class="tech-stack-cat">Data</div>
+        <div class="tech-stack-items">PostgreSQL, Oracle (legacy), Kafka for events</div>
+      </div>
+      
+      <div class="tech-stack-item">
+        <div class="tech-stack-cat">Containers</div>
+        <div class="tech-stack-items">Docker, Kubernetes (EKS), Helm</div>
+      </div>
+      
+      <div class="tech-stack-item">
+        <div class="tech-stack-cat">CI/CD</div>
+        <div class="tech-stack-items">GitHub Actions, ArgoCD, Flagger for canaries</div>
+      </div>
+      
+      <div class="tech-stack-item">
+        <div class="tech-stack-cat">Service mesh</div>
+        <div class="tech-stack-items">Istio, Envoy for traffic management</div>
+      </div>
+      
+      <div class="tech-stack-item">
+        <div class="tech-stack-cat">Observability</div>
+        <div class="tech-stack-items">Datadog, Jaeger, Prometheus, Grafana</div>
+      </div>
+      
+      <div class="tech-stack-item">
+        <div class="tech-stack-cat">Cloud</div>
+        <div class="tech-stack-items">AWS (eu-west-1), multi-account isolation</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="cta-band">
+  <div class="container">
+    <h2>Want a similar story <em>for your business?</em></h2>
+    <p>Tell us what you're trying to solve. A senior engineer will reply within one business day.</p>
+    <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
+      <a href="../../pages/contact.html" class="btn btn-primary">Start a conversation <span class="btn-arrow">→</span></a>
+      <a href="index.html" class="btn btn-ghost">More client stories <span class="btn-arrow">→</span></a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-bg"><img src="../../images/footer-mountains.png" alt="" /></div>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <a href="../../index.html" class="logo">
+        <svg width="32" height="32" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M6 42 L24 10 L42 42 Z" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"/>
+          <path d="M16 42 L28 22 L40 42 Z" fill="currentColor"/>
+          <circle cx="24" cy="10" r="3.2" fill="#FF5B2E"/>
+        </svg>
+        <span>Alpine <em>Quantum</em></span>
+      </a>
+      <p>A software development and digital services company building innovative solutions across AI, cloud, data, and engineering services for global enterprises.</p>
+      <div class="footer-social"><a href="#" aria-label="LinkedIn">in</a><a href="#" aria-label="X / Twitter">𝕏</a><a href="#" aria-label="GitHub">⌘</a><a href="#" aria-label="YouTube">▶</a></div>
+    </div>
+    <div class="footer-col"><h4>Services</h4><ul>
+      <li><a href="../../pages/services/artificial-intelligence.html">Artificial Intelligence</a></li>
+      <li><a href="../../pages/services/software-engineering.html">Software Engineering</a></li>
+      <li><a href="../../pages/services/cloud-devops.html">Cloud &amp; DevOps</a></li>
+      <li><a href="../../pages/services/big-data-analytics.html">Big Data &amp; Analytics</a></li>
+    </ul></div>
+    <div class="footer-col"><h4>Industries</h4><ul>
+      <li><a href="../../pages/industries/financial-services.html">Financial Services</a></li>
+      <li><a href="../../pages/industries/healthcare.html">Healthcare</a></li>
+      <li><a href="../../pages/industries/retail.html">Retail</a></li>
+      <li><a href="../../pages/industries/manufacturing.html">Manufacturing</a></li>
+    </ul></div>
+    <div class="footer-col"><h4>Company</h4><ul>
+      <li><a href="../../pages/about.html">About us</a></li>
+      <li><a href="../../pages/work/">Client stories</a></li>
+      <li><a href="../../pages/careers.html">Careers</a></li>
+      <li><a href="../../pages/contact.html">Contact</a></li>
+    </ul></div>
+  </div>
+  <div class="footer-bottom">
+    <div>© 2026 Alpine <em style="color: var(--accent); font-weight: 600;">Quantum</em> Inc. All rights reserved.</div>
+    <div><a href="../../pages/legal/privacy.html">Privacy</a><a href="../../pages/legal/terms.html">Terms</a><a href="#">Security</a><a href="#">Sitemap</a></div>
+  </div>
+</footer>
+<script src="../../site.js"></script>
+</body>
+</html>

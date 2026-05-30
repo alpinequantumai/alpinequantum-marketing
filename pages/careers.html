@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Careers — Alpine Quantum</title>
+<meta name="description" content="Join Alpine Quantum. Senior engineers, architects, and operators shipping production AI and software for global enterprises." />
+<link rel="icon" type="image/svg+xml" href="../favicon.svg" />
+<link rel="icon" type="image/x-icon" href="../favicon.ico" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../styles.css">
+<style>
+  /* "Why work here" values */
+  .why-section { padding: 100px 40px; }
+  .why-grid {
+    max-width: 1280px; margin: 0 auto;
+    display: grid; grid-template-columns: 1fr 1.5fr;
+    gap: 64px;
+  }
+  .why-intro h2 {
+    font-family: var(--display); font-size: clamp(36px, 5vw, 56px);
+    font-weight: 600; line-height: 1.05; letter-spacing: -0.02em;
+    margin-bottom: 24px;
+  }
+  .why-intro h2 em { color: var(--accent); }
+  .why-intro p {
+    font-size: 17px; line-height: 1.6; color: var(--ink-soft);
+    margin-bottom: 18px;
+  }
+
+  .why-cards {
+    display: grid;
+    gap: 16px;
+  }
+  .why-card {
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    padding: 28px 32px;
+    transition: all 0.3s;
+  }
+  .why-card:hover {
+    border-color: var(--ink);
+    transform: translateX(8px);
+  }
+  .why-card-row {
+    display: grid; grid-template-columns: 60px 1fr; gap: 24px; align-items: start;
+  }
+  .why-card-num {
+    font-family: var(--mono); font-size: 11px;
+    color: var(--accent); font-weight: 500;
+    letter-spacing: 0.1em;
+    padding-top: 4px;
+  }
+  .why-card-content h3 {
+    font-family: var(--display); font-size: 20px; font-weight: 600;
+    letter-spacing: -0.01em; margin-bottom: 8px;
+  }
+  .why-card-content p {
+    font-size: 14px; line-height: 1.55; color: var(--ink-soft);
+  }
+
+  /* Benefits */
+  .benefits-section {
+    background: var(--surface-2);
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    padding: 100px 40px;
+  }
+  .benefits-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--line);
+    border: 1px solid var(--line);
+    border-radius: 24px;
+    overflow: hidden;
+  }
+  .benefit {
+    background: var(--paper);
+    padding: 32px;
+  }
+  .benefit-icon {
+    width: 40px; height: 40px;
+    border-radius: 10px;
+    background: var(--accent-soft);
+    color: var(--accent);
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 16px;
+    font-size: 18px; font-weight: 600;
+  }
+  .benefit h3 {
+    font-family: var(--display); font-size: 17px; font-weight: 600;
+    margin-bottom: 8px;
+  }
+  .benefit p {
+    font-size: 13.5px; line-height: 1.5; color: var(--ink-soft);
+  }
+
+  /* Open roles */
+  .roles-section { padding: 100px 40px; }
+  .roles-filter {
+    display: flex; gap: 8px; flex-wrap: wrap;
+    margin-bottom: 32px;
+  }
+  .filter-pill {
+    padding: 6px 12px; border-radius: 100px;
+    font-size: 12px; font-weight: 500;
+    border: 1px solid var(--line);
+    background: var(--paper); color: var(--ink-soft);
+    cursor: pointer; transition: all 0.2s;
+  }
+  .filter-pill:hover { border-color: var(--ink); color: var(--ink); }
+  .filter-pill.active { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+
+  .roles-list { display: flex; flex-direction: column; gap: 12px; }
+  .role-card {
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    padding: 24px 32px;
+    display: grid; grid-template-columns: 1fr auto auto auto auto; gap: 32px;
+    align-items: center;
+    transition: all 0.2s;
+  }
+  .role-card:hover {
+    border-color: var(--ink);
+    transform: translateX(8px);
+  }
+  .role-title {
+    font-family: var(--display); font-size: 18px; font-weight: 600;
+    letter-spacing: -0.01em;
+    margin-bottom: 4px;
+  }
+  .role-desc { font-size: 13px; color: var(--ink-muted); }
+  .role-meta {
+    font-family: var(--mono); font-size: 11px;
+    text-transform: uppercase; letter-spacing: 0.1em;
+    color: var(--ink-muted);
+  }
+  .role-arrow {
+    width: 40px; height: 40px;
+    border: 1px solid var(--line);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--ink-soft);
+    transition: all 0.25s;
+  }
+  .role-card:hover .role-arrow {
+    background: var(--accent); color: var(--paper); border-color: var(--accent);
+    transform: rotate(-45deg);
+  }
+
+  /* Process */
+  .process-section {
+    background: var(--ink); color: var(--paper);
+    padding: 120px 40px;
+  }
+  .process-section .section-eyebrow { color: rgba(255,255,255,0.6); }
+  .process-section .section-eyebrow::before { background: var(--paper); }
+  .process-section .section-title em { color: rgba(255,255,255,0.5); }
+  .process-section .section-desc { color: rgba(255,255,255,0.75); }
+  .process-grid {
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+  }
+  .process-step {
+    border-top: 2px solid var(--accent);
+    padding-top: 24px;
+  }
+  .process-step .num {
+    font-family: var(--mono); font-size: 11px;
+    text-transform: uppercase; letter-spacing: 0.12em;
+    color: var(--accent);
+    margin-bottom: 16px;
+  }
+  .process-step h3 {
+    font-family: var(--display); font-size: 22px; font-weight: 600;
+    line-height: 1.15; letter-spacing: -0.01em;
+    margin-bottom: 12px;
+  }
+  .process-step p {
+    font-size: 14px; line-height: 1.55;
+    color: rgba(255,255,255,0.7);
+  }
+
+  /* No openings application form */
+  .no-fit-section {
+    padding: 100px 40px;
+    text-align: center;
+  }
+  .no-fit-section h2 {
+    font-family: var(--display); font-size: clamp(28px, 4vw, 40px);
+    font-weight: 600; letter-spacing: -0.02em;
+    margin-bottom: 16px;
+    max-width: 720px; margin-left: auto; margin-right: auto;
+  }
+  .no-fit-section h2 em { color: var(--accent); }
+  .no-fit-section p {
+    font-size: 17px; color: var(--ink-soft);
+    max-width: 540px; margin: 0 auto 32px; line-height: 1.55;
+  }
+
+  @media (max-width: 1024px) {
+    .why-grid { grid-template-columns: 1fr; gap: 32px; }
+    .benefits-grid { grid-template-columns: 1fr; }
+    .role-card { grid-template-columns: 1fr; gap: 12px; padding: 20px 24px; }
+    .role-card .role-arrow { display: none; }
+    .process-grid { grid-template-columns: 1fr; }
+    .why-section, .benefits-section, .roles-section, .process-section, .no-fit-section { padding-left: 24px; padding-right: 24px; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <a href="../index.html" class="logo">
+    <svg width="32" height="32" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <path d="M6 42 L24 10 L42 42 Z" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"/>
+      <path d="M16 42 L28 22 L40 42 Z" fill="currentColor"/>
+      <circle cx="24" cy="10" r="3.2" fill="#FF5B2E"/>
+    </svg>
+    <span>Alpine <em>Quantum</em></span>
+  </a>
+  <div class="nav-links">
+    <a href="index.html#services">Services</a>
+    <a href="index.html#industries">Industries</a>
+    <a href="index.html#work" >Client Stories</a>
+    <a href="pages/about.html">About</a>
+    <a href="pages/insights/" >Resources</a>
+    <a href="#" class="active">Careers</a>
+  </div>
+  <a href="pages/contact.html" class="nav-cta">Contact us</a>
+  <button class="mobile-toggle" aria-label="Menu"><span></span><span></span><span></span></button>
+</nav>
+
+<section class="page-hero">
+  <div class="page-hero-content">
+    <div class="breadcrumb">
+      <a href="../index.html">Home</a>
+      <span class="breadcrumb-sep">/</span>
+      <span class="current">Careers</span>
+    </div>
+    <div class="page-hero-eyebrow">Careers</div>
+    <h1>Join engineers who <em>actually ship.</em></h1>
+    <p class="lede">We're building a small team of senior engineers, architects, and operators who want to do the best work of their careers — on production systems that matter to real businesses.</p>
+  </div>
+</section>
+
+<!-- Why work here -->
+<section class="why-section">
+  <div class="why-grid">
+    <div class="why-intro">
+      <div class="section-eyebrow">Why us</div>
+      <h2>Five reasons to <em>join.</em></h2>
+      <p>We're deliberately a small, senior team. The bar for joining is high — but so is what you'll work on, who you'll work with, and how much your work will compound on itself.</p>
+      <p>If you're a junior engineer looking for mentorship, this isn't the right place. If you're a senior engineer tired of slide-deck consulting and want to ship real systems again, read on.</p>
+    </div>
+    <div class="why-cards">
+      <div class="why-card">
+        <div class="why-card-row">
+          <div class="why-card-num">01</div>
+          <div class="why-card-content">
+            <h3>Hands-on work, all the way up</h3>
+            <p>Even our most senior engineers stay in code. No "architecture astronauts," no PowerPoint principals. If you stop writing code, you stop being effective at what we do.</p>
+          </div>
+        </div>
+      </div>
+      <div class="why-card">
+        <div class="why-card-row">
+          <div class="why-card-num">02</div>
+          <div class="why-card-content">
+            <h3>Small teams, big problems</h3>
+            <p>Most engagements are run by 3-5 engineers. You'll own real scope, make real decisions, and see real outcomes. No 50-person pyramid where you contribute to a single slide.</p>
+          </div>
+        </div>
+      </div>
+      <div class="why-card">
+        <div class="why-card-row">
+          <div class="why-card-num">03</div>
+          <div class="why-card-content">
+            <h3>Senior colleagues you'll learn from</h3>
+            <p>Everyone you'll work with has shipped production systems at scale. The level of conversation, design review, and code review reflects that. You'll grow faster than at most places.</p>
+          </div>
+        </div>
+      </div>
+      <div class="why-card">
+        <div class="why-card-row">
+          <div class="why-card-num">04</div>
+          <div class="why-card-content">
+            <h3>Compensation that respects expertise</h3>
+            <p>We pay at the top of the Indian market for senior engineers. We don't do equity (you've already worked at startups), but we do annual performance bonuses tied to project outcomes.</p>
+          </div>
+        </div>
+      </div>
+      <div class="why-card">
+        <div class="why-card-row">
+          <div class="why-card-num">05</div>
+          <div class="why-card-content">
+            <h3>Work that gets harder over time</h3>
+            <p>The intentional design of our portfolio is that each engagement teaches the team something we didn't know before. Boredom is the failure mode we work hardest to prevent.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Benefits -->
+<section class="benefits-section">
+  <div class="container">
+    <div class="section-head">
+      <div>
+        <div class="section-eyebrow">Benefits</div>
+        <h2 class="section-title">What we <em>offer.</em></h2>
+      </div>
+      <p class="section-desc">The fundamentals of working here. The specifics of compensation come up in the first conversation.</p>
+    </div>
+    <div class="benefits-grid">
+      <div class="benefit">
+        <div class="benefit-icon">₹</div>
+        <h3>Top-of-market salary</h3>
+        <p>Compensation benchmarked against top product companies in India. Annual review with real revisions — not 5% rubber-stamps.</p>
+      </div>
+      <div class="benefit">
+        <div class="benefit-icon">⌂</div>
+        <h3>Hybrid work</h3>
+        <p>2-3 days in office, the rest remote. We trust adults to manage their time. Full remote possible for some roles.</p>
+      </div>
+      <div class="benefit">
+        <div class="benefit-icon">⊕</div>
+        <h3>Health insurance</h3>
+        <p>Comprehensive coverage for you, your spouse, two children, and parents. Top-tier private hospital network.</p>
+      </div>
+      <div class="benefit">
+        <div class="benefit-icon">∞</div>
+        <h3>Learning &amp; conferences</h3>
+        <p>Annual L&amp;D budget for courses, books, certifications. Speak at a conference, we cover travel.</p>
+      </div>
+      <div class="benefit">
+        <div class="benefit-icon">⌐</div>
+        <h3>Modern equipment</h3>
+        <p>MacBook Pro M-series, external monitor, ergonomic chair allowance. The tools to do your best work.</p>
+      </div>
+      <div class="benefit">
+        <div class="benefit-icon">●</div>
+        <h3>21 days annual leave</h3>
+        <p>Plus 10 sick/casual days, 12 public holidays, and discretionary leave when you genuinely need it.</p>
+      </div>
+      <div class="benefit">
+        <div class="benefit-icon">★</div>
+        <h3>Performance bonus</h3>
+        <p>Annual bonus tied to individual and company performance. Real numbers — not just a token gesture.</p>
+      </div>
+      <div class="benefit">
+        <div class="benefit-icon">↺</div>
+        <h3>Parental leave</h3>
+        <p>26 weeks maternity, 4 weeks paternity. Plus a phased return-to-work program for new parents.</p>
+      </div>
+      <div class="benefit">
+        <div class="benefit-icon">⚒</div>
+        <h3>Hardware allowance</h3>
+        <p>Annual allowance for keyboards, mice, monitors, home-office upgrades. Quality tools matter.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Open roles -->
+<section class="roles-section">
+  <div class="container">
+    <div class="section-head">
+      <div>
+        <div class="section-eyebrow">Open roles</div>
+        <h2 class="section-title">Currently <em>hiring.</em></h2>
+      </div>
+      <p class="section-desc">A small set of carefully scoped roles. If you don't see your fit, scroll down — we still want to hear from you.</p>
+    </div>
+
+    <div class="roles-filter">
+      <span class="filter-pill active">All</span>
+      <span class="filter-pill">Engineering</span>
+      <span class="filter-pill">AI &amp; ML</span>
+      <span class="filter-pill">Design</span>
+      <span class="filter-pill">Operations</span>
+    </div>
+
+    <div class="roles-list">
+      <a href="#" class="role-card">
+        <div>
+          <div class="role-title">Senior AI/ML Engineer</div>
+          <div class="role-desc">Production ML systems — modeling, deployment, MLOps. 5+ years experience.</div>
+        </div>
+        <div class="role-meta">Engineering</div>
+        <div class="role-meta">Mumbai / Hybrid</div>
+        <div class="role-meta">Full-time</div>
+        <div class="role-arrow">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </div>
+      </a>
+
+      <a href="#" class="role-card">
+        <div>
+          <div class="role-title">Senior Full-Stack Engineer</div>
+          <div class="role-desc">React, Spring Boot, modern cloud. End-to-end ownership. 5+ years experience.</div>
+        </div>
+        <div class="role-meta">Engineering</div>
+        <div class="role-meta">Mumbai / Hybrid</div>
+        <div class="role-meta">Full-time</div>
+        <div class="role-arrow">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </div>
+      </a>
+
+      <a href="#" class="role-card">
+        <div>
+          <div class="role-title">Cloud Architect</div>
+          <div class="role-desc">AWS / Azure / GCP, Kubernetes, IaC, FinOps. Hands-on architecture lead.</div>
+        </div>
+        <div class="role-meta">Engineering</div>
+        <div class="role-meta">Mumbai / Hybrid</div>
+        <div class="role-meta">Full-time</div>
+        <div class="role-arrow">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </div>
+      </a>
+
+      <a href="#" class="role-card">
+        <div>
+          <div class="role-title">Data Engineer</div>
+          <div class="role-desc">Lakehouse design, streaming pipelines, modern data stack. 4+ years experience.</div>
+        </div>
+        <div class="role-meta">Engineering</div>
+        <div class="role-meta">Mumbai / Hybrid</div>
+        <div class="role-meta">Full-time</div>
+        <div class="role-arrow">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </div>
+      </a>
+
+      <a href="#" class="role-card">
+        <div>
+          <div class="role-title">Senior Product Designer</div>
+          <div class="role-desc">B2B / enterprise product design. Comfort with complex systems and data-heavy UI.</div>
+        </div>
+        <div class="role-meta">Design</div>
+        <div class="role-meta">Mumbai / Hybrid</div>
+        <div class="role-meta">Full-time</div>
+        <div class="role-arrow">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </div>
+      </a>
+
+      <a href="#" class="role-card">
+        <div>
+          <div class="role-title">Engagement Lead</div>
+          <div class="role-desc">Client-facing PM/architect hybrid. Run engagements end-to-end. 8+ years experience.</div>
+        </div>
+        <div class="role-meta">Operations</div>
+        <div class="role-meta">Mumbai / Hybrid</div>
+        <div class="role-meta">Full-time</div>
+        <div class="role-arrow">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- Process -->
+<section class="process-section">
+  <div class="container">
+    <div class="section-head">
+      <div>
+        <div class="section-eyebrow">The process</div>
+        <h2 class="section-title">What to <em>expect.</em></h2>
+      </div>
+      <p class="section-desc">A short, respectful process — typically 2-3 weeks from first conversation to offer. We move fast for strong candidates.</p>
+    </div>
+
+    <div class="process-grid">
+      <div class="process-step">
+        <div class="num">step 01</div>
+        <h3>Intro call</h3>
+        <p>30 min with a senior engineer. We learn about your work; you learn about ours. No technical screening — just a real conversation about whether this is interesting to both sides.</p>
+      </div>
+      <div class="process-step">
+        <div class="num">step 02</div>
+        <h3>Technical conversation</h3>
+        <p>90 min walking through a real problem from our work. No whiteboarding algorithms, no LeetCode. We're looking for how you think — how you'd approach an actual system.</p>
+      </div>
+      <div class="process-step">
+        <div class="num">step 03</div>
+        <h3>Take-home (optional)</h3>
+        <p>A short engineering exercise you can do in 3-4 hours. Optional — we'll skip this if your existing work history makes it unnecessary. You'll be paid for your time.</p>
+      </div>
+      <div class="process-step">
+        <div class="num">step 04</div>
+        <h3>Founder conversation</h3>
+        <p>A final conversation with one of the founders. We talk about what you're looking for next, what we can offer, and decide if there's a match.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Don't see a fit -->
+<section class="no-fit-section">
+  <h2>Don't see <em>your role?</em></h2>
+  <p>We're growing thoughtfully. If you're a senior engineer, architect, or operator who'd be a fit for what we do, we'd still like to hear from you — even if there's no current opening.</p>
+  <a href="contact.html" class="btn btn-primary">Tell us about yourself <span class="btn-arrow">→</span></a>
+</section>
+
+<footer>
+  <div class="footer-bg"><img src="images/footer-mountains.png" alt="" /></div>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <a href="index.html" class="logo">
+        <svg width="32" height="32" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M6 42 L24 10 L42 42 Z" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"/>
+          <path d="M16 42 L28 22 L40 42 Z" fill="currentColor"/>
+          <circle cx="24" cy="10" r="3.2" fill="#FF5B2E"/>
+        </svg>
+        <span>Alpine <em>Quantum</em></span>
+      </a>
+      <p>A software development and digital services company building innovative solutions across AI, cloud, data, and engineering services for global enterprises.</p>
+      <div class="footer-social">
+        <a href="#" aria-label="LinkedIn">in</a>
+        <a href="#" aria-label="X / Twitter">𝕏</a>
+        <a href="#" aria-label="GitHub">⌘</a>
+        <a href="#" aria-label="YouTube">▶</a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>Services</h4>
+      <ul>
+        <li><a href="pages/services/artificial-intelligence.html">Artificial Intelligence</a></li>
+        <li><a href="pages/services/software-engineering.html">Software Engineering</a></li>
+        <li><a href="pages/services/cloud-devops.html">Cloud &amp; DevOps</a></li>
+        <li><a href="pages/services/big-data-analytics.html">Big Data &amp; Analytics</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Industries</h4>
+      <ul>
+        <li><a href="pages/industries/financial-services.html">Financial Services</a></li>
+        <li><a href="pages/industries/healthcare.html">Healthcare</a></li>
+        <li><a href="pages/industries/retail.html">Retail</a></li>
+        <li><a href="pages/industries/manufacturing.html">Manufacturing</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Company</h4>
+      <ul>
+        <li><a href="pages/about.html">About us</a></li>
+        <li><a href="pages/work/">Client stories</a></li>
+        <li><a href="pages/careers.html">Careers</a></li>
+        <li><a href="pages/contact.html">Contact</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div>© 2026 Alpine <em style="color: var(--accent); font-weight: 600;">Quantum</em> Inc. All rights reserved.</div>
+    <div>
+      <a href="pages/legal/privacy.html">Privacy</a>
+      <a href="pages/legal/terms.html">Terms</a>
+      <a href="#">Security</a>
+      <a href="#">Sitemap</a>
+    </div>
+  </div>
+</footer>
+<script src="../site.js"></script>
+</body>
+</html>

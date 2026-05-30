@@ -1,0 +1,35 @@
+# Alpine Quantum Site — .gitignore
+
+# OS
+.DS_Store
+Thumbs.db
+*.swp
+*~
+
+# Editor
+.idea/
+.vscode/
+*.code-workspace
+
+# Build artifacts (in case someone adds a build step later)
+node_modules/
+dist/
+build/
+.cache/
+
+# Local server pid files / sessions
+.python_*
+*.pid
+
+# Cloudflare Pages / deployment artifacts
+.wrangler/
+.vercel/
+.netlify/
+
+# Logs
+*.log
+
+# Editor swap / backup
+*~
+*.bak
+*.tmp

@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Manufacturing — Alpine Quantum</title>
+<meta name="description" content="Digital manufacturing, Industry 4.0, predictive maintenance, and supply chain platforms for industrial leaders — engineered for the realities of plant-floor and global supply chain operations." />
+<link rel="icon" type="image/svg+xml" href="../../favicon.svg" />
+<link rel="icon" type="image/x-icon" href="../../favicon.ico" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../styles.css">
+<style>
+  .industry-intro { padding: 100px 40px; }
+  .intro-grid { max-width: 1280px; margin: 0 auto; display: grid; grid-template-columns: 1.2fr 1fr; gap: 80px; align-items: start; }
+  .intro-text h2 { font-family: var(--display); font-size: clamp(36px, 5vw, 56px); font-weight: 600; line-height: 1.05; letter-spacing: -0.02em; margin-bottom: 24px; }
+  .intro-text h2 em { color: var(--accent); }
+  .intro-text p { font-size: 17px; line-height: 1.6; color: var(--ink-soft); margin-bottom: 18px; }
+
+  .stats-box { background: var(--ink); color: var(--paper); border-radius: 24px; padding: 40px; }
+  .stats-box-eyebrow { font-family: var(--mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.12em; color: rgba(255,255,255,0.5); margin-bottom: 24px; }
+  .stat-item { padding: 20px 0; border-bottom: 1px solid rgba(255,255,255,0.1); }
+  .stat-item:last-child { border-bottom: none; padding-bottom: 0; }
+  .stat-item:first-child { padding-top: 0; }
+  .stat-item-value { font-family: var(--display); font-size: 36px; font-weight: 700; line-height: 1; letter-spacing: -0.02em; color: var(--accent); margin-bottom: 6px; }
+  .stat-item-label { font-size: 13px; color: rgba(255,255,255,0.75); line-height: 1.4; }
+
+  .challenges { background: var(--surface-2); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); padding: 120px 40px; }
+  .challenges-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+  .challenge { background: var(--paper); border: 1px solid var(--line); border-radius: 24px; padding: 32px; }
+  .challenge-num { font-family: var(--display); font-size: 48px; font-weight: 700; color: var(--accent); line-height: 1; margin-bottom: 16px; letter-spacing: -0.02em; }
+  .challenge h3 { font-family: var(--display); font-size: 22px; font-weight: 600; line-height: 1.15; letter-spacing: -0.01em; margin-bottom: 12px; }
+  .challenge p { font-size: 14px; line-height: 1.55; color: var(--ink-soft); }
+
+  .services-section { padding: 120px 40px; }
+  .services-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; }
+  .service-card { background: var(--paper); border: 1px solid var(--line); border-radius: 24px; padding: 40px; transition: all 0.3s; display: flex; flex-direction: column; }
+  .service-card:hover { border-color: var(--ink); transform: translateY(-4px); }
+  .service-card-eyebrow { font-family: var(--mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--accent); margin-bottom: 16px; }
+  .service-card h3 { font-family: var(--display); font-size: 24px; font-weight: 600; line-height: 1.15; letter-spacing: -0.01em; margin-bottom: 12px; }
+  .service-card p { font-size: 14px; line-height: 1.55; color: var(--ink-soft); margin-bottom: 20px; }
+  .service-card .link { margin-top: auto; font-size: 13px; color: var(--accent); font-weight: 500; display: inline-flex; align-items: center; gap: 6px; transition: gap 0.25s; }
+  .service-card:hover .link { gap: 10px; }
+
+  .case-highlight { padding: 120px 40px; background: var(--surface-2); border-top: 1px solid var(--line); }
+  .case-highlight-grid { max-width: 1280px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center; }
+  .case-highlight-text .tag { font-family: var(--mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent); margin-bottom: 16px; }
+  .case-highlight-text .metric { font-family: var(--display); font-size: clamp(72px, 10vw, 140px); font-weight: 700; line-height: 0.9; letter-spacing: -0.03em; margin-bottom: 8px; }
+  .case-highlight-text .metric-x { color: var(--accent); }
+  .case-highlight-text .metric-label { font-size: 16px; color: var(--ink-soft); margin-bottom: 32px; max-width: 360px; line-height: 1.5; }
+  .case-highlight-card { background: var(--paper); border: 1px solid var(--line); border-radius: 24px; padding: 40px; }
+  .case-highlight-card h3 { font-family: var(--display); font-size: 28px; font-weight: 600; line-height: 1.15; letter-spacing: -0.01em; margin-bottom: 16px; }
+  .case-highlight-card p { font-size: 15px; color: var(--ink-soft); line-height: 1.55; margin-bottom: 24px; }
+  .case-highlight-card .read-more { font-size: 13px; color: var(--accent); font-weight: 500; display: inline-flex; align-items: center; gap: 8px; transition: gap 0.25s; }
+  .case-highlight-card .read-more:hover { gap: 12px; }
+
+  .other-industries { background: var(--paper); border-top: 1px solid var(--line); }
+  .other-industries-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .other-industry { background: var(--paper); border: 1px solid var(--line); border-radius: 16px; padding: 32px; display: flex; justify-content: space-between; align-items: center; transition: all 0.3s; }
+  .other-industry:hover { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+  .other-industry-name { font-family: var(--display); font-size: 20px; font-weight: 600; letter-spacing: -0.01em; }
+  .other-industry .arrow { font-size: 20px; color: var(--accent); transition: transform 0.25s; }
+  .other-industry:hover .arrow { transform: translateX(6px); }
+
+  @media (max-width: 1024px) {
+    .intro-grid { grid-template-columns: 1fr; gap: 48px; }
+    .challenges-grid { grid-template-columns: 1fr; }
+    .services-grid { grid-template-columns: 1fr; }
+    .case-highlight-grid { grid-template-columns: 1fr; }
+    .other-industries-grid { grid-template-columns: 1fr; }
+    .industry-intro, .challenges, .services-section, .case-highlight { padding-left: 24px; padding-right: 24px; }
+    .challenges, .services-section, .case-highlight { padding-top: 80px; padding-bottom: 80px; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <a href="../../index.html" class="logo">
+    <svg width="32" height="32" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <path d="M6 42 L24 10 L42 42 Z" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"/>
+      <path d="M16 42 L28 22 L40 42 Z" fill="currentColor"/>
+      <circle cx="24" cy="10" r="3.2" fill="#FF5B2E"/>
+    </svg>
+    <span>Alpine <em>Quantum</em></span>
+  </a>
+  <div class="nav-links">
+    <a href="../../index.html#services" >Services</a>
+    <a href="../../index.html#industries" class="active">Industries</a>
+    <a href="../../index.html#work">Client Stories</a>
+    <a href="../../pages/about.html" >About</a>
+    <a href="../../index.html#insights">Resources</a>
+  </div>
+  <a href="../../pages/contact.html" class="nav-cta">Contact us</a>
+  <button class="mobile-toggle" aria-label="Menu"><span></span><span></span><span></span></button>
+</nav>
+
+<section class="page-hero">
+  <div class="page-hero-content">
+    <div class="breadcrumb">
+      <a href="../../index.html">Home</a>
+      <span class="breadcrumb-sep">/</span>
+      <a href="../../index.html#industries">Industries</a>
+      <span class="breadcrumb-sep">/</span>
+      <span class="current">Manufacturing</span>
+    </div>
+    <div class="page-hero-eyebrow">04 / Industry</div>
+    <h1>Software for <em>industrial scale.</em></h1>
+    <p class="lede">Digital manufacturing, Industry 4.0, predictive maintenance, and supply chain platforms for industrial leaders — engineered for the realities of plant-floor and global supply chain operations.</p>
+  </div>
+</section>
+
+<!-- Intro + Stats -->
+<section class="industry-intro">
+  <div class="intro-grid">
+    <div class="intro-text">
+      <div class="section-eyebrow">The landscape</div>
+      <h2>Where digital <em>meets industrial.</em></h2>
+      <p>Manufacturing is mid-transformation. Industry 4.0 has moved from buzzword to budget line; AI is showing up on plant floors; supply chains have become a board-level concern. Yet the gap between digital ambition and operational reality remains wide — software in industrial settings is harder than it looks.</p>
+      <p>Alpine Quantum brings engineering experience in this exact territory. Our team has shipped systems for global manufacturers, industrial OEMs, and supply chain operators — work where uptime, integration with operational technology, and the gritty realities of plant-floor data are non-negotiable.</p>
+      <p>We work across discrete manufacturing, process industries, industrial OEMs, supply chain operators, and the digital products manufacturers increasingly bundle with physical goods.</p>
+    </div>
+    <div class="stats-box">
+      <div class="stats-box-eyebrow">Industry stats we work with</div>
+      
+      <div class="stat-item">
+        <div class="stat-item-value">180+</div>
+        <div class="stat-item-label">Plants and facilities served by platforms we've helped engineer</div>
+      </div>
+      
+      <div class="stat-item">
+        <div class="stat-item-value">99.9%</div>
+        <div class="stat-item-label">Uptime SLAs maintained on production-floor systems</div>
+      </div>
+      
+      <div class="stat-item">
+        <div class="stat-item-value">40%</div>
+        <div class="stat-item-label">Average downtime reduction achieved through predictive maintenance</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Challenges we solve -->
+<section class="challenges">
+  <div class="container">
+    <div class="section-head">
+      <div>
+        <div class="section-eyebrow">What we solve</div>
+        <h2 class="section-title">Common <em>challenges.</em></h2>
+      </div>
+      <p class="section-desc">Recurring engineering problems we see in manufacturing. Most engagements address two or three.</p>
+    </div>
+    <div class="challenges-grid">
+      
+      <div class="challenge">
+        <div class="challenge-num">01</div>
+        <h3>IT-OT integration</h3>
+        <p>Connecting plant-floor systems (SCADA, MES, historians) to enterprise systems (ERP, SCM, analytics) — without breaking the operational systems that production depends on.</p>
+      </div>
+      
+      <div class="challenge">
+        <div class="challenge-num">02</div>
+        <h3>Predictive maintenance &amp; reliability</h3>
+        <p>Sensor-driven predictive maintenance that actually predicts. Real engineering — not just dashboards on top of historian data — to drive measurable downtime reduction.</p>
+      </div>
+      
+      <div class="challenge">
+        <div class="challenge-num">03</div>
+        <h3>Digital twin &amp; simulation</h3>
+        <p>Digital twins of products, processes, and supply chains — built to support real engineering decisions, not just executive demos.</p>
+      </div>
+      
+      <div class="challenge">
+        <div class="challenge-num">04</div>
+        <h3>Supply chain visibility &amp; planning</h3>
+        <p>End-to-end visibility from raw materials to delivery, with the planning systems and AI models to optimize across complexity.</p>
+      </div>
+      
+      <div class="challenge">
+        <div class="challenge-num">05</div>
+        <h3>Quality &amp; defect detection</h3>
+        <p>Computer vision systems for inline quality inspection, defect detection, and root-cause analysis — deployed at line speed, not in batch.</p>
+      </div>
+      
+      <div class="challenge">
+        <div class="challenge-num">06</div>
+        <h3>Connected products &amp; aftermarket services</h3>
+        <p>IoT-enabled products that generate operational data and aftermarket service revenue. The platforms that ingest, model, and act on that data.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Services for this industry -->
+<section class="services-section">
+  <div class="container">
+    <div class="section-head">
+      <div>
+        <div class="section-eyebrow">How we help</div>
+        <h2 class="section-title">What we build for manufacturing <em>specifically.</em></h2>
+      </div>
+      <p class="section-desc">Our core practice areas, applied to manufacturing contexts.</p>
+    </div>
+    <div class="services-grid">
+      
+      <div class="service-card">
+        <div class="service-card-eyebrow">AI &amp; ML</div>
+        <h3>Industrial AI &amp; computer vision</h3>
+        <p>Predictive maintenance, quality inspection, demand forecasting, and the MLOps practice to operate AI in plant and supply chain contexts.</p>
+        <a href="../../pages/services/artificial-intelligence.html" class="link">Explore AI services →</a>
+      </div>
+      
+      <div class="service-card">
+        <div class="service-card-eyebrow">SOFTWARE</div>
+        <h3>Industrial software &amp; connected products</h3>
+        <p>Plant-floor applications, supply chain tools, connected product platforms, aftermarket service apps — engineered for the reliability that operational settings demand.</p>
+        <a href="../../pages/services/software-engineering.html" class="link">Explore software engineering →</a>
+      </div>
+      
+      <div class="service-card">
+        <div class="service-card-eyebrow">CLOUD</div>
+        <h3>Industrial cloud &amp; edge</h3>
+        <p>Hybrid architectures spanning plant edge, regional infrastructure, and cloud — with the network resilience, security, and OT integration that manufacturing requires.</p>
+        <a href="../../pages/services/cloud-devops.html" class="link">Explore cloud &amp; DevOps →</a>
+      </div>
+      
+      <div class="service-card">
+        <div class="service-card-eyebrow">DATA</div>
+        <h3>Industrial data &amp; analytics platforms</h3>
+        <p>Historian-to-lakehouse pipelines, time-series analytics, IoT data platforms, and the supply chain analytics that drive real operational decisions.</p>
+        <a href="../../pages/services/big-data-analytics.html" class="link">Explore data &amp; analytics →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Case highlight -->
+<section class="case-highlight">
+  <div class="case-highlight-grid">
+    <div class="case-highlight-text">
+      <div class="tag">MANUFACTURING CASE STUDY</div>
+      <div class="metric">37<span class="metric-x">%</span></div>
+      <div class="metric-label">Reduction in unplanned downtime across 23 plants after a predictive-maintenance platform deployment</div>
+    </div>
+    <div class="case-highlight-card">
+      <h3>Deploying predictive maintenance across 23 manufacturing plants</h3>
+      <p>A global industrial OEM was losing millions per quarter to unplanned downtime across 23 plants. Alpine Quantum built a sensor-to-prediction-to-work-order pipeline using historian data, deployed the platform in waves over 6 months, and delivered measurable downtime reduction across every site.</p>
+      <a href="../../index.html#work" class="read-more">Read the full story →</a>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-band">
+  <div class="container">
+    <h2>Let's talk about <em>your manufacturing initiative.</em></h2>
+    <p>Tell us about your goals. A senior engineer with manufacturing experience will reply within one business day.</p>
+    <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
+      <a href="../../pages/contact.html" class="btn btn-primary">Start a conversation <span class="btn-arrow">→</span></a>
+      <a href="../../index.html#work" class="btn btn-ghost">See more client stories <span class="btn-arrow">→</span></a>
+    </div>
+  </div>
+</section>
+
+<!-- Other industries -->
+<section class="other-industries">
+  <div class="container">
+    <div class="section-head">
+      <div>
+        <div class="section-eyebrow">Other industries</div>
+        <h2 class="section-title">Where else <em>we work.</em></h2>
+      </div>
+      <p class="section-desc">We bring cross-industry pattern recognition. Solutions that worked in one sector often translate beautifully to another.</p>
+    </div>
+    <div class="other-industries-grid">
+      
+      <a href="financial-services.html" class="other-industry">
+        <span class="other-industry-name">Financial Services</span>
+        <span class="arrow">→</span>
+      </a>
+      
+      <a href="healthcare.html" class="other-industry">
+        <span class="other-industry-name">Healthcare</span>
+        <span class="arrow">→</span>
+      </a>
+      
+      <a href="retail.html" class="other-industry">
+        <span class="other-industry-name">Retail</span>
+        <span class="arrow">→</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-bg"><img src="../../images/footer-mountains.png" alt="" /></div>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <a href="../../index.html" class="logo">
+        <svg width="32" height="32" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M6 42 L24 10 L42 42 Z" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"/>
+          <path d="M16 42 L28 22 L40 42 Z" fill="currentColor"/>
+          <circle cx="24" cy="10" r="3.2" fill="#FF5B2E"/>
+        </svg>
+        <span>Alpine <em>Quantum</em></span>
+      </a>
+      <p>A software development and digital services company building innovative solutions across AI, cloud, data, and engineering services for global enterprises.</p>
+      <div class="footer-social">
+        <a href="#" aria-label="LinkedIn">in</a>
+        <a href="#" aria-label="X / Twitter">𝕏</a>
+        <a href="#" aria-label="GitHub">⌘</a>
+        <a href="#" aria-label="YouTube">▶</a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>Services</h4>
+      <ul>
+        <li><a href="artificial-intelligence.html">Artificial Intelligence</a></li>
+        <li><a href="software-engineering.html">Software Engineering</a></li>
+        <li><a href="cloud-devops.html">Cloud &amp; DevOps</a></li>
+        <li><a href="big-data-analytics.html">Big Data &amp; Analytics</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Industries</h4>
+      <ul>
+        <li><a href="../industries/financial-services.html">Financial Services</a></li>
+        <li><a href="../industries/healthcare.html">Healthcare</a></li>
+        <li><a href="../industries/retail.html">Retail</a></li>
+        <li><a href="../industries/manufacturing.html">Manufacturing</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Company</h4>
+      <ul>
+        <li><a href="../../pages/about.html">About us</a></li>
+        <li><a href="../../index.html#work">Client stories</a></li>
+        <li><a href="../../pages/careers.html">Careers</a></li>
+        <li><a href="../../pages/contact.html">Contact</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div>© 2026 Alpine <em style="color: var(--accent); font-weight: 600;">Quantum</em> Inc. All rights reserved.</div>
+    <div>
+      <a href="../../pages/legal/privacy.html">Privacy</a>
+      <a href="../../pages/legal/terms.html">Terms</a>
+      <a href="#">Security</a>
+      <a href="#">Sitemap</a>
+    </div>
+  </div>
+</footer>
+<script src="../../site.js"></script>
+</body>
+</html>

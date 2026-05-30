@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Privacy Policy — Alpine Quantum</title>
+<meta name="description" content="Alpine Quantum's Privacy Policy. How we collect, use, and protect your personal information." />
+<link rel="icon" type="image/svg+xml" href="../../favicon.svg" />
+<link rel="icon" type="image/x-icon" href="../../favicon.ico" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../styles.css">
+<style>
+  .legal-layout {
+    max-width: 1280px; margin: 0 auto;
+    padding: 64px 40px 100px;
+    display: grid; grid-template-columns: 240px 1fr;
+    gap: 64px;
+    align-items: start;
+  }
+
+  .legal-toc {
+    position: sticky; top: 100px;
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    padding: 20px;
+  }
+  .legal-toc-label {
+    font-family: var(--mono); font-size: 10px;
+    text-transform: uppercase; letter-spacing: 0.12em;
+    color: var(--ink-muted);
+    margin-bottom: 16px;
+  }
+  .legal-toc ol {
+    list-style: none; counter-reset: section;
+    padding: 0; margin: 0;
+  }
+  .legal-toc ol li {
+    counter-increment: section;
+    margin: 0;
+  }
+  .legal-toc ol li a {
+    display: flex; gap: 8px;
+    padding: 8px 0;
+    font-size: 13px;
+    color: var(--ink-soft);
+    border-bottom: 1px solid var(--line);
+    transition: color 0.15s;
+    line-height: 1.4;
+  }
+  .legal-toc ol li:last-child a { border-bottom: none; }
+  .legal-toc ol li a::before {
+    content: counter(section, decimal-leading-zero);
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--ink-muted);
+    flex-shrink: 0;
+  }
+  .legal-toc ol li a:hover { color: var(--accent); }
+
+  .legal-content {
+    max-width: 760px;
+  }
+  .legal-meta {
+    padding: 16px 24px;
+    background: var(--surface-2);
+    border-radius: 12px;
+    margin-bottom: 48px;
+    font-size: 13px;
+    color: var(--ink-soft);
+    display: flex; gap: 24px; flex-wrap: wrap;
+  }
+  .legal-meta strong { color: var(--ink); font-weight: 500; }
+
+  .legal-content h2 {
+    font-family: var(--display); font-size: 28px; font-weight: 600;
+    line-height: 1.15; letter-spacing: -0.01em;
+    margin-top: 56px; margin-bottom: 20px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--line);
+    counter-increment: heading;
+    display: flex; gap: 16px; align-items: baseline;
+  }
+  .legal-content h2::before {
+    content: counter(heading, decimal-leading-zero);
+    font-family: var(--mono);
+    font-size: 14px;
+    color: var(--accent);
+    font-weight: 500;
+  }
+  .legal-content h2:first-of-type { margin-top: 0; }
+  .legal-content h3 {
+    font-family: var(--display); font-size: 18px; font-weight: 600;
+    line-height: 1.3;
+    margin-top: 32px; margin-bottom: 12px;
+  }
+  .legal-content p {
+    font-size: 15px; line-height: 1.6;
+    color: var(--ink-soft);
+    margin-bottom: 16px;
+  }
+  .legal-content ul, .legal-content ol {
+    margin: 0 0 16px 24px;
+  }
+  .legal-content li {
+    font-size: 15px; line-height: 1.55;
+    color: var(--ink-soft);
+    margin-bottom: 8px;
+  }
+  .legal-content strong { color: var(--ink); font-weight: 500; }
+  .legal-content a { color: var(--accent); text-decoration: underline; }
+  .legal-content { counter-reset: heading; }
+
+  @media (max-width: 1024px) {
+    .legal-layout { grid-template-columns: 1fr; padding: 48px 24px 80px; gap: 32px; }
+    .legal-toc { position: relative; top: 0; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <a href="../../index.html" class="logo">
+    <svg width="32" height="32" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <path d="M6 42 L24 10 L42 42 Z" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"/>
+      <path d="M16 42 L28 22 L40 42 Z" fill="currentColor"/>
+      <circle cx="24" cy="10" r="3.2" fill="#FF5B2E"/>
+    </svg>
+    <span>Alpine <em>Quantum</em></span>
+  </a>
+  <div class="nav-links">
+    <a href="../../index.html#services">Services</a>
+    <a href="../../index.html#industries">Industries</a>
+    <a href="../../pages/work/">Client Stories</a>
+    <a href="../../pages/about.html">About</a>
+    <a href="../../pages/insights/">Resources</a>
+  </div>
+  <a href="../../pages/contact.html" class="nav-cta">Contact us</a>
+  <button class="mobile-toggle" aria-label="Menu"><span></span><span></span><span></span></button>
+</nav>
+
+<section class="page-hero">
+  <div class="page-hero-content">
+    <div class="breadcrumb">
+      <a href="../../index.html">Home</a>
+      <span class="breadcrumb-sep">/</span>
+      <span class="breadcrumb-sep">Legal</span>
+      <span class="breadcrumb-sep">/</span>
+      <span class="current">Privacy Policy</span>
+    </div>
+    <div class="page-hero-eyebrow">Legal</div>
+    <h1>Privacy <em>Policy.</em></h1>
+    <p class="lede">How we collect, use, share, and protect your personal information when you visit our website, engage with our services, or apply for a role with us.</p>
+  </div>
+</section>
+
+<div class="legal-layout">
+  <!-- TOC -->
+  <aside class="legal-toc">
+    <div class="legal-toc-label">Contents</div>
+    <ol>
+      <li><a href="#overview">Overview</a></li>
+      <li><a href="#who-we-are">Who we are</a></li>
+      <li><a href="#information-we-collect">Information we collect</a></li>
+      <li><a href="#how-we-use">How we use your information</a></li>
+      <li><a href="#legal-basis">Legal basis for processing</a></li>
+      <li><a href="#cookies">Cookies &amp; tracking</a></li>
+      <li><a href="#sharing">How we share information</a></li>
+      <li><a href="#international-transfers">International data transfers</a></li>
+      <li><a href="#retention">Data retention</a></li>
+      <li><a href="#security">Information security</a></li>
+      <li><a href="#your-rights">Your rights</a></li>
+      <li><a href="#children">Children's privacy</a></li>
+      <li><a href="#changes">Changes to this policy</a></li>
+      <li><a href="#contact">Contact &amp; complaints</a></li>
+    </ol>
+  </aside>
+
+  <!-- Content -->
+  <div class="legal-content">
+    <div class="legal-meta">
+      <div><strong>Effective:</strong> 1 January 2026</div>
+      <div><strong>Last updated:</strong> 27 May 2026</div>
+      <div><strong>Version:</strong> 1.2</div>
+    </div>
+
+    <h2 id="overview">Overview</h2>
+    <p>Alpine Quantum Private Limited and its affiliates (collectively, <strong>"Alpine Quantum,"</strong> <strong>"we,"</strong> <strong>"our,"</strong> or <strong>"us"</strong>) are committed to protecting your privacy. This Privacy Policy explains what personal information we collect when you interact with us, how we use it, with whom we share it, and the rights and choices you have regarding your information.</p>
+    <p>This policy applies to information collected through our website at <a href="https://alpinequantum.com">alpinequantum.com</a> and any related sub-domains, applications, or services we provide.</p>
+    <p>If you do not agree with this Privacy Policy, please do not use our website or services.</p>
+
+    <h2 id="who-we-are">Who we are</h2>
+    <p>Alpine Quantum is a digital engineering services company providing software development, artificial intelligence, cloud, and data services to enterprise clients globally. We operate through:</p>
+    <ul>
+      <li><strong>Alpine Quantum Private Limited</strong> — registered in India under the Companies Act, 2013, with registered office at [Provider India Address]</li>
+      <li><strong>Alpine Quantum, LLC</strong> — registered in the United States, with offices at [Provider US Address]</li>
+    </ul>
+    <p>For the purposes of the EU General Data Protection Regulation (GDPR), the controller of your personal data depends on the entity you engage with. For visitors from India, Alpine Quantum Private Limited is the data fiduciary under the Digital Personal Data Protection Act, 2023.</p>
+
+    <h2 id="information-we-collect">Information we collect</h2>
+    <p>We collect personal information in three main contexts:</p>
+
+    <h3>Information you provide directly</h3>
+    <ul>
+      <li><strong>Contact information</strong> — Name, email address, phone number, company name, and job title when you submit a contact form, request information, or correspond with us.</li>
+      <li><strong>Application information</strong> — Resume, work history, education, references, and other information you share when applying for a role with us.</li>
+      <li><strong>Newsletter subscriptions</strong> — Email address when you subscribe to our Insights newsletter.</li>
+      <li><strong>Client engagement data</strong> — Information you or your organization share with us during the course of providing services, governed by the relevant Master Services Agreement.</li>
+    </ul>
+
+    <h3>Information collected automatically</h3>
+    <ul>
+      <li><strong>Device &amp; browsing information</strong> — IP address, browser type, operating system, referring URL, pages visited, and timestamps.</li>
+      <li><strong>Usage information</strong> — Interactions with our website, including content viewed, time spent, and search queries.</li>
+      <li><strong>Cookies &amp; similar technologies</strong> — As described in the Cookies section below.</li>
+    </ul>
+
+    <h3>Information from third parties</h3>
+    <ul>
+      <li><strong>Marketing &amp; analytics providers</strong> — Aggregated information about visitors and prospects from analytics tools.</li>
+      <li><strong>Recruitment partners</strong> — When candidates are introduced through recruitment agencies or partners.</li>
+      <li><strong>Public sources</strong> — LinkedIn, public corporate websites, and similar professional sources we may consult during business outreach.</li>
+    </ul>
+
+    <h2 id="how-we-use">How we use your information</h2>
+    <p>We use personal information for the following purposes:</p>
+    <ul>
+      <li><strong>To provide our services</strong> — Engaging with clients, delivering project work, and managing the lifecycle of client engagements.</li>
+      <li><strong>To respond to inquiries</strong> — Replying to contact form submissions, RFPs, and other correspondence.</li>
+      <li><strong>To recruit and evaluate candidates</strong> — Reviewing applications, conducting interviews, and managing the hiring process.</li>
+      <li><strong>To improve our website and services</strong> — Analyzing usage patterns to improve user experience and content.</li>
+      <li><strong>To send marketing communications</strong> — Sending our Insights newsletter, event invitations, and other materials, subject to your preferences and applicable law.</li>
+      <li><strong>To comply with legal obligations</strong> — Meeting requirements under applicable tax, employment, and corporate law.</li>
+      <li><strong>To protect against fraud and abuse</strong> — Detecting and preventing fraudulent or unlawful use of our website or services.</li>
+    </ul>
+
+    <h2 id="legal-basis">Legal basis for processing</h2>
+    <p>Where the GDPR or similar laws apply, we process personal information on the following legal bases:</p>
+    <ul>
+      <li><strong>Contract</strong> — To perform contractual obligations with clients or fulfill pre-contractual requests (e.g., responding to an RFP).</li>
+      <li><strong>Legitimate interests</strong> — To operate, improve, and market our business, where these interests are not overridden by your rights.</li>
+      <li><strong>Consent</strong> — Where you have consented to specific processing (e.g., subscribing to newsletters).</li>
+      <li><strong>Legal obligation</strong> — Where processing is required to comply with applicable law.</li>
+    </ul>
+
+    <h2 id="cookies">Cookies &amp; tracking</h2>
+    <p>Our website uses cookies and similar technologies for essential functionality, analytics, and (with your consent) marketing purposes. The categories of cookies we use include:</p>
+    <ul>
+      <li><strong>Strictly necessary cookies</strong> — Required for the website to function, including session and security cookies. These cannot be disabled.</li>
+      <li><strong>Analytics cookies</strong> — Help us understand how visitors use our website (e.g., Google Analytics, with IP anonymization enabled).</li>
+      <li><strong>Marketing cookies</strong> — Used to deliver more relevant marketing messages on third-party platforms. Only set with your consent.</li>
+    </ul>
+    <p>You can manage your cookie preferences via your browser settings or by using the cookie preferences link in our website footer. Blocking cookies may affect website functionality.</p>
+
+    <h2 id="sharing">How we share information</h2>
+    <p>We do not sell personal information. We may share your information with:</p>
+    <ul>
+      <li><strong>Service providers</strong> — Vendors that provide hosting, analytics, email delivery, CRM, payment processing, and similar services, under contract to use information only for the services they provide to us.</li>
+      <li><strong>Clients (in the context of engagements)</strong> — When we are providing services to a client, personnel information of our team members may be shared as required for the engagement.</li>
+      <li><strong>Professional advisors</strong> — Including lawyers, accountants, auditors, and insurers, where reasonably necessary.</li>
+      <li><strong>Government &amp; regulators</strong> — Where required by applicable law, court order, or governmental request.</li>
+      <li><strong>Successors in business</strong> — In the context of a merger, acquisition, financing, or sale of assets.</li>
+    </ul>
+
+    <h2 id="international-transfers">International data transfers</h2>
+    <p>Alpine Quantum operates internationally, with offices in India, the United States, and Europe. Your personal information may be transferred to, processed in, and stored in countries other than your country of residence, including countries that may not provide the same level of protection as your home country.</p>
+    <p>Where personal data is transferred from the European Economic Area (EEA), the United Kingdom, or Switzerland to countries that do not have an adequacy decision, we rely on appropriate safeguards such as the European Commission's Standard Contractual Clauses.</p>
+
+    <h2 id="retention">Data retention</h2>
+    <p>We retain personal information for as long as necessary to fulfill the purposes for which it was collected, including:</p>
+    <ul>
+      <li><strong>Contact &amp; inquiry data</strong> — Up to 3 years after last interaction, unless you request earlier deletion.</li>
+      <li><strong>Newsletter subscriptions</strong> — Until you unsubscribe, plus 12 months for record-keeping.</li>
+      <li><strong>Applicant data</strong> — Up to 24 months after application close, or longer if you ask us to retain your profile for future opportunities.</li>
+      <li><strong>Client engagement records</strong> — Retained per the terms of the relevant Master Services Agreement and applicable legal requirements.</li>
+      <li><strong>Financial records</strong> — Retained per applicable tax and corporate law (typically 7-10 years).</li>
+    </ul>
+
+    <h2 id="security">Information security</h2>
+    <p>We implement reasonable technical and organizational measures to protect personal information against accidental or unlawful destruction, loss, alteration, unauthorized disclosure, or access. These measures include encryption in transit and at rest, access controls, employee training, and regular security reviews.</p>
+    <p>No method of transmission or storage is completely secure, however, and we cannot guarantee absolute security. If we become aware of a security incident affecting your personal information, we will notify you and applicable authorities as required by law.</p>
+
+    <h2 id="your-rights">Your rights</h2>
+    <p>Depending on your jurisdiction, you may have the following rights regarding your personal information:</p>
+    <ul>
+      <li><strong>Access</strong> — Request a copy of the personal information we hold about you.</li>
+      <li><strong>Correction</strong> — Request that we correct inaccurate or incomplete information.</li>
+      <li><strong>Deletion</strong> — Request that we delete your personal information, subject to legal exceptions.</li>
+      <li><strong>Restriction</strong> — Request that we restrict the processing of your information in certain circumstances.</li>
+      <li><strong>Portability</strong> — Request a copy of your information in a structured, machine-readable format.</li>
+      <li><strong>Objection</strong> — Object to processing based on legitimate interests or for direct marketing purposes.</li>
+      <li><strong>Consent withdrawal</strong> — Withdraw consent where we rely on consent for processing.</li>
+      <li><strong>Complaint</strong> — Lodge a complaint with the supervisory authority in your country.</li>
+    </ul>
+    <p>To exercise any of these rights, contact us at <a href="mailto:privacy@alpinequantum.com">privacy@alpinequantum.com</a>. We will respond within the timeframes required by applicable law (typically 30 days).</p>
+
+    <h2 id="children">Children's privacy</h2>
+    <p>Our website and services are not directed at children under the age of 18. We do not knowingly collect personal information from children. If you believe we have collected information from a child, please contact us so we can investigate and delete the information if appropriate.</p>
+
+    <h2 id="changes">Changes to this policy</h2>
+    <p>We may update this Privacy Policy from time to time. When we do, we will revise the "Last updated" date at the top of this page. For material changes, we will provide additional notice (such as a website banner or, where applicable, email notification). Your continued use of our website after the effective date of any update constitutes acceptance of the revised policy.</p>
+
+    <h2 id="contact">Contact &amp; complaints</h2>
+    <p>For questions about this Privacy Policy or how we handle your personal information, please contact us:</p>
+    <ul>
+      <li><strong>Email:</strong> <a href="mailto:privacy@alpinequantum.com">privacy@alpinequantum.com</a></li>
+      <li><strong>Postal mail:</strong> Data Privacy Officer, Alpine Quantum Private Limited, [Provider India Address]</li>
+    </ul>
+    <p>If you are located in the European Economic Area, the United Kingdom, or Switzerland, and you believe we have not adequately addressed your concerns, you also have the right to lodge a complaint with your local data protection authority.</p>
+    <p>If you are located in India, you may also lodge a complaint with the Data Protection Board of India under the Digital Personal Data Protection Act, 2023.</p>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-bg"><img src="../../images/footer-mountains.png" alt="" /></div>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <a href="../../index.html" class="logo">
+        <svg width="32" height="32" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M6 42 L24 10 L42 42 Z" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"/>
+          <path d="M16 42 L28 22 L40 42 Z" fill="currentColor"/>
+          <circle cx="24" cy="10" r="3.2" fill="#FF5B2E"/>
+        </svg>
+        <span>Alpine <em>Quantum</em></span>
+      </a>
+      <p>A software development and digital services company building innovative solutions across AI, cloud, data, and engineering services for global enterprises.</p>
+      <div class="footer-social">
+        <a href="#" aria-label="LinkedIn">in</a>
+        <a href="#" aria-label="X / Twitter">𝕏</a>
+        <a href="#" aria-label="GitHub">⌘</a>
+        <a href="#" aria-label="YouTube">▶</a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>Services</h4>
+      <ul>
+        <li><a href="../../pages/services/artificial-intelligence.html">Artificial Intelligence</a></li>
+        <li><a href="../../pages/services/software-engineering.html">Software Engineering</a></li>
+        <li><a href="../../pages/services/cloud-devops.html">Cloud &amp; DevOps</a></li>
+        <li><a href="../../pages/services/big-data-analytics.html">Big Data &amp; Analytics</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Industries</h4>
+      <ul>
+        <li><a href="../../pages/industries/financial-services.html">Financial Services</a></li>
+        <li><a href="../../pages/industries/healthcare.html">Healthcare</a></li>
+        <li><a href="../../pages/industries/retail.html">Retail</a></li>
+        <li><a href="../../pages/industries/manufacturing.html">Manufacturing</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Company</h4>
+      <ul>
+        <li><a href="../../pages/about.html">About us</a></li>
+        <li><a href="../../pages/work/">Client stories</a></li>
+        <li><a href="../../pages/careers.html">Careers</a></li>
+        <li><a href="../../pages/contact.html">Contact</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div>© 2026 Alpine <em style="color: var(--accent); font-weight: 600;">Quantum</em> Inc. All rights reserved.</div>
+    <div>
+      <a href="privacy.html">Privacy</a>
+      <a href="terms.html">Terms</a>
+      <a href="#">Security</a>
+      <a href="#">Sitemap</a>
+    </div>
+  </div>
+</footer>
+<script src="../../site.js"></script>
+</body>
+</html>

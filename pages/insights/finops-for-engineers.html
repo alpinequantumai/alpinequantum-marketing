@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>FinOps for engineers who hate spreadsheets. — Alpine Quantum</title>
+<meta name="description" content="A practical, code-first approach to cloud cost optimization that engineering teams will actually maintain — no quarterly review meetings required." />
+<link rel="icon" type="image/svg+xml" href="../../favicon.svg" />
+<link rel="icon" type="image/x-icon" href="../../favicon.ico" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../styles.css">
+<style>
+  .article-hero {
+    padding: 160px 40px 80px;
+    background: var(--surface-2);
+    border-bottom: 1px solid var(--line);
+  }
+  .article-hero-content { max-width: 800px; margin: 0 auto; }
+  .article-hero .category-tag {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-family: var(--mono); font-size: 11px;
+    text-transform: uppercase; letter-spacing: 0.15em;
+    color: var(--accent); margin-bottom: 24px;
+  }
+  .article-hero .category-tag::before {
+    content: ""; width: 32px; height: 1px; background: var(--accent);
+  }
+  .article-hero h1 {
+    font-family: var(--display); font-size: clamp(36px, 5vw, 56px);
+    font-weight: 700; line-height: 1.1; letter-spacing: -0.02em;
+    margin-bottom: 24px;
+  }
+  .article-hero h1 em { color: var(--accent); }
+  .article-hero .article-lede {
+    font-size: 20px; line-height: 1.5; color: var(--ink-soft);
+    margin-bottom: 40px;
+  }
+  .article-meta-row {
+    display: flex; align-items: center; gap: 16px;
+    padding-top: 32px; border-top: 1px solid var(--line);
+  }
+  .article-author { display: flex; align-items: center; gap: 12px; flex: 1; }
+  .article-author-avatar {
+    width: 44px; height: 44px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    color: white; font-weight: 600;
+    font-family: var(--display);
+  }
+  .article-author-info { line-height: 1.3; }
+  .article-author-name { font-size: 14px; font-weight: 500; color: var(--ink); }
+  .article-author-title { font-size: 12px; color: var(--ink-muted); }
+  .article-meta-stats {
+    display: flex; gap: 24px;
+    font-family: var(--mono); font-size: 12px;
+    color: var(--ink-muted);
+  }
+  .article-body {
+    max-width: 720px; margin: 0 auto;
+    padding: 80px 40px;
+  }
+  .article-body p {
+    font-size: 18px; line-height: 1.65;
+    color: var(--ink); margin-bottom: 24px;
+  }
+  .article-body h2 {
+    font-family: var(--display); font-size: 32px; font-weight: 600;
+    line-height: 1.15; letter-spacing: -0.02em;
+    margin-top: 56px; margin-bottom: 20px;
+  }
+  .article-body h2 em { color: var(--accent); }
+  .article-body h3 {
+    font-family: var(--display); font-size: 22px; font-weight: 600;
+    line-height: 1.2; margin-top: 40px; margin-bottom: 12px;
+  }
+  .article-body ul, .article-body ol { margin: 0 0 24px 24px; }
+  .article-body ul li, .article-body ol li {
+    font-size: 18px; line-height: 1.6; color: var(--ink);
+    margin-bottom: 10px;
+  }
+  .article-body strong { color: var(--ink); font-weight: 600; }
+  .article-body code {
+    background: var(--surface-2); padding: 2px 6px;
+    border-radius: 4px; font-family: var(--mono); font-size: 0.9em;
+  }
+  .article-body blockquote {
+    border-left: 4px solid var(--accent);
+    padding: 12px 24px; margin: 32px 0;
+    background: var(--surface-2); border-radius: 0 12px 12px 0;
+    font-family: var(--display); font-size: 22px; font-weight: 500;
+    line-height: 1.4; color: var(--ink);
+  }
+  .pull-quote {
+    margin: 48px -40px; padding: 32px;
+    background: var(--ink); color: var(--paper);
+    border-radius: 16px;
+    font-family: var(--display); font-size: 24px; font-weight: 500;
+    line-height: 1.3; letter-spacing: -0.01em; text-align: center;
+  }
+  .pull-quote em { color: var(--accent); font-weight: 600; }
+  .article-footer-section {
+    background: var(--surface-2);
+    border-top: 1px solid var(--line);
+    padding: 80px 40px;
+  }
+  .article-footer-inner { max-width: 800px; margin: 0 auto; }
+  .author-bio-card {
+    background: var(--paper); border: 1px solid var(--line);
+    border-radius: 24px; padding: 32px;
+    display: grid; grid-template-columns: 80px 1fr; gap: 24px;
+  }
+  .author-bio-avatar {
+    width: 80px; height: 80px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    color: white; font-weight: 600;
+    font-family: var(--display); font-size: 32px;
+  }
+  .author-bio-info h4 {
+    font-family: var(--display); font-size: 20px; font-weight: 600;
+    margin-bottom: 4px;
+  }
+  .author-bio-title {
+    font-size: 13px; color: var(--accent); font-weight: 500;
+    margin-bottom: 12px;
+  }
+  .author-bio-info p { font-size: 14px; line-height: 1.5; color: var(--ink-soft); }
+  @media (max-width: 1024px) {
+    .article-hero { padding: 120px 24px 64px; }
+    .article-body { padding: 64px 24px; }
+    .pull-quote { margin-left: -24px; margin-right: -24px; }
+    .article-footer-section { padding: 64px 24px; }
+    .author-bio-card { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <a href="../../index.html" class="logo">
+    <svg width="32" height="32" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <path d="M6 42 L24 10 L42 42 Z" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"/>
+      <path d="M16 42 L28 22 L40 42 Z" fill="currentColor"/>
+      <circle cx="24" cy="10" r="3.2" fill="#FF5B2E"/>
+    </svg>
+    <span>Alpine <em>Quantum</em></span>
+  </a>
+  <div class="nav-links">
+    <a href="../../index.html#services">Services</a>
+    <a href="../../index.html#industries">Industries</a>
+    <a href="../../pages/work/">Client Stories</a>
+    <a href="../../pages/about.html">About</a>
+    <a href="../../pages/insights/" class="active">Resources</a>
+  </div>
+  <a href="../../pages/contact.html" class="nav-cta">Contact us</a>
+  <button class="mobile-toggle" aria-label="Menu"><span></span><span></span><span></span></button>
+</nav>
+
+<section class="article-hero">
+  <div class="article-hero-content">
+    <div class="breadcrumb">
+      <a href="../../index.html">Home</a>
+      <span class="breadcrumb-sep">/</span>
+      <a href="index.html">Insights</a>
+      <span class="breadcrumb-sep">/</span>
+      <span class="current">FinOps for engineers who hate spreadshee...</span>
+    </div>
+    <div class="category-tag">Cloud</div>
+    <h1>FinOps for engineers who <em>hate spreadsheets.</em></h1>
+    <p class="article-lede">A practical, code-first approach to cloud cost optimization that engineering teams will actually maintain — no quarterly review meetings required.</p>
+    <div class="article-meta-row">
+      <div class="article-author">
+        <div class="article-author-avatar" style="background: linear-gradient(135deg, #65A30D, #84CC16);">JK</div>
+        <div class="article-author-info">
+          <div class="article-author-name">[Cloud Practice Lead]</div>
+          <div class="article-author-title">Cloud Practice Lead · Alpine Quantum</div>
+        </div>
+      </div>
+      <div class="article-meta-stats">
+        <span>March 24, 2026</span>
+        <span>10 min read</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<article class="article-body">
+
+    <p>FinOps is in a strange position. Most engineering teams know they should care about cloud costs. Most engineering teams also actively dislike the standard FinOps practices: quarterly review meetings, spreadsheets full of usage data, accountability conversations with finance.</p>
+    <p>The result is predictable: cloud costs balloon until someone in finance flags them, the engineering team spends a panicked few weeks optimizing, and then everyone goes back to ignoring costs until the next ballooning. Repeat.</p>
+    <p>This post is about the alternative we've developed across client engagements: a code-first FinOps practice that engineering teams will actually maintain because it feels like engineering work, not finance work.</p>
+
+    <h2>The core insight.</h2>
+    <p>FinOps practices fail in engineering teams because they import the wrong cultural patterns. Quarterly reviews are a finance pattern. Spreadsheet-based analysis is a finance pattern. Sit-down conversations with stakeholders are a finance pattern.</p>
+    <p>Engineering culture works differently. Engineers care about code, dashboards, alerts, automation, and metrics. So a FinOps practice that survives in engineering culture has to look like engineering work — code-based, automated, dashboarded, alerted.</p>
+
+    <div class="pull-quote">If your cost optimization practice <em>requires a quarterly meeting,</em> it's not going to survive contact with a busy engineering team. <em>Build it as engineering.</em></div>
+
+    <h2>The four practices.</h2>
+    <p>Concretely, here are the four practices we set up on every cost-focused engagement:</p>
+
+    <h3>1. Cost as a metric in your normal observability stack</h3>
+    <p>Pipe AWS Cost Explorer (or GCP Billing, or Azure Cost Management) data into the same Grafana/Datadog dashboards where you track latency, throughput, and error rates. Cost belongs alongside other operational metrics, not in a separate finance tool.</p>
+    <p>The reason this matters: engineers look at their service dashboards every day. They don't look at the AWS billing console. Move the cost data to where engineers' attention already is.</p>
+
+    <h3>2. Cost alerts with the same discipline as latency alerts</h3>
+    <p>You almost certainly have alerts when latency spikes. Set up the same kind of alerts for cost: alerts when a service's daily spend exceeds a threshold, alerts when monthly spend trends substantially above projection, alerts when a previously-cheap resource gets expensive.</p>
+    <p>The trick is calibrating these. Too sensitive and you get alert fatigue. Too coarse and you miss real problems. Start with a few high-value alerts (e.g., "monthly spend is more than 20% above last month") and tune from there.</p>
+
+    <h3>3. Tags as code</h3>
+    <p>The single biggest source of cost-attribution confusion is bad tagging. The fix is to make tagging part of the deployment process, not a manual housekeeping task. Use Terraform/Pulumi/CDK to enforce tagging at resource creation, with required tags (Owner, Service, Environment, Cost-Center) that the deployment will fail without.</p>
+    <p>Once tags are enforced as code, every dashboard, alert, and report can filter by them reliably. Cost attribution becomes a deterministic engineering output, not a quarterly cleanup project.</p>
+
+    <h3>4. Right-sizing as a CI check</h3>
+    <p>Most cloud spend bloat comes from right-sizing problems — instances that are oversized, capacity that's unused, autoscaling thresholds that are too generous. Build right-sizing analysis into your CI/CD pipeline.</p>
+    <p>For Kubernetes workloads: Kubecost, Vertical Pod Autoscaler in recommendation mode, or custom analysis. Generate a PR comment on every deployment showing the projected resource usage vs. provisioned resources. Engineers see right-sizing data at the moment of code review, when it's actionable.</p>
+
+    <h2>Specific tools <em>we reach for.</em></h2>
+
+    <h3>For AWS:</h3>
+    <ul>
+      <li><strong>AWS Cost Explorer + Cost &amp; Usage Reports</strong> as the raw data source</li>
+      <li><strong>Cloud Custodian</strong> for automated remediation policies (e.g., shut down unused resources, enforce tagging)</li>
+      <li><strong>Vantage</strong> or <strong>CloudHealth</strong> when the cost surface is too complex to manage manually</li>
+      <li><strong>Custom Athena queries</strong> over the Cost &amp; Usage Reports for ad-hoc analysis</li>
+    </ul>
+
+    <h3>For Kubernetes:</h3>
+    <ul>
+      <li><strong>Kubecost</strong> for per-workload cost attribution and right-sizing recommendations</li>
+      <li><strong>VPA in recommendation mode</strong> for ongoing right-sizing</li>
+      <li><strong>Karpenter</strong> for efficient node provisioning</li>
+    </ul>
+
+    <h3>For multi-cloud:</h3>
+    <ul>
+      <li><strong>Vantage</strong> if you have meaningful spend across two or more clouds</li>
+      <li><strong>OpenCost</strong> as the open-source alternative</li>
+    </ul>
+
+    <h2>The mindset shift.</h2>
+    <p>The biggest predictor of whether a FinOps practice sticks: whether engineers see cost as an engineering signal or as a finance imposition.</p>
+    <p>If cost is "something finance asks us to care about," it will be deprioritized whenever there's pressure on delivery. If cost is "another performance characteristic of the systems we operate, alongside latency and error rate," it becomes a normal engineering concern.</p>
+    <p>The practices above are designed to enable that mindset shift. Cost shows up in the same dashboards as other operational data. Cost regressions trigger alerts like other regressions. Right-sizing analysis is part of code review like other quality concerns.</p>
+
+    <h2>A concrete example.</h2>
+    <p>One client we worked with had AWS spend that had grown from $80K/month to $310K/month over 18 months, while team headcount roughly doubled. Standard FinOps practice would have been a cost audit followed by recommendations.</p>
+    <p>Instead, we spent the first two weeks setting up the four practices above. Tag enforcement via Terraform. Cost data into the team's Grafana. Cost alerts wired into PagerDuty. Kubecost integrated into the PR workflow.</p>
+    <p>The next two weeks were dedicated optimization work — but unlike the typical pattern, the optimizations were identified by the engineering team themselves through the new visibility. Engineers saw their service's cost in their dashboard, noticed when something looked off, and fixed it. The role of "FinOps consultant" was minimal once the infrastructure was in place.</p>
+    <p>The result: a 38% cost reduction in 8 weeks, and — more importantly — a practice the team has maintained themselves for the 18 months since. Costs have stayed roughly flat as the platform has continued to grow. No quarterly review meetings required.</p>
+    
+</article>
+
+<section class="article-footer-section">
+  <div class="article-footer-inner">
+    <div class="author-bio-card">
+      <div class="author-bio-avatar" style="background: linear-gradient(135deg, #65A30D, #84CC16);">JK</div>
+      <div class="author-bio-info">
+        <h4>[Cloud Practice Lead]</h4>
+        <div class="author-bio-title">Cloud Practice Lead · Alpine Quantum</div>
+        <p>Lead architect for Alpine Quantum's cloud practice, with deep experience across AWS, GCP, and Azure. Specializes in cloud-native modernization, FinOps, and the unglamorous engineering that makes cloud actually deliver. Writes about the realities of operating at scale.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-bg"><img src="../../images/footer-mountains.png" alt="" /></div>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <a href="../../index.html" class="logo">
+        <svg width="32" height="32" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M6 42 L24 10 L42 42 Z" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"/>
+          <path d="M16 42 L28 22 L40 42 Z" fill="currentColor"/>
+          <circle cx="24" cy="10" r="3.2" fill="#FF5B2E"/>
+        </svg>
+        <span>Alpine <em>Quantum</em></span>
+      </a>
+      <p>A software development and digital services company building innovative solutions across AI, cloud, data, and engineering services for global enterprises.</p>
+      <div class="footer-social"><a href="#" aria-label="LinkedIn">in</a><a href="#" aria-label="X / Twitter">𝕏</a><a href="#" aria-label="GitHub">⌘</a><a href="#" aria-label="YouTube">▶</a></div>
+    </div>
+    <div class="footer-col"><h4>Services</h4><ul>
+      <li><a href="../../pages/services/artificial-intelligence.html">Artificial Intelligence</a></li>
+      <li><a href="../../pages/services/software-engineering.html">Software Engineering</a></li>
+      <li><a href="../../pages/services/cloud-devops.html">Cloud &amp; DevOps</a></li>
+      <li><a href="../../pages/services/big-data-analytics.html">Big Data &amp; Analytics</a></li>
+    </ul></div>
+    <div class="footer-col"><h4>Industries</h4><ul>
+      <li><a href="../../pages/industries/financial-services.html">Financial Services</a></li>
+      <li><a href="../../pages/industries/healthcare.html">Healthcare</a></li>
+      <li><a href="../../pages/industries/retail.html">Retail</a></li>
+      <li><a href="../../pages/industries/manufacturing.html">Manufacturing</a></li>
+    </ul></div>
+    <div class="footer-col"><h4>Company</h4><ul>
+      <li><a href="../../pages/about.html">About us</a></li>
+      <li><a href="../../pages/work/">Client stories</a></li>
+      <li><a href="../../pages/careers.html">Careers</a></li>
+      <li><a href="../../pages/contact.html">Contact</a></li>
+    </ul></div>
+  </div>
+  <div class="footer-bottom">
+    <div>© 2026 Alpine <em style="color: var(--accent); font-weight: 600;">Quantum</em> Inc. All rights reserved.</div>
+    <div><a href="../../pages/legal/privacy.html">Privacy</a><a href="../../pages/legal/terms.html">Terms</a><a href="#">Security</a><a href="#">Sitemap</a></div>
+  </div>
+</footer>
+<script src="../../site.js"></script>
+</body>
+</html>

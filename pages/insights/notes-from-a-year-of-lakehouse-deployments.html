@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Notes from a year of lakehouse deployments. — Alpine Quantum</title>
+<meta name="description" content="What worked, what didn't, and what we'd do differently — across six lakehouse implementations spanning finance, healthcare, and retail." />
+<link rel="icon" type="image/svg+xml" href="../../favicon.svg" />
+<link rel="icon" type="image/x-icon" href="../../favicon.ico" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../styles.css">
+<style>
+  .article-hero {
+    padding: 160px 40px 80px;
+    background: var(--surface-2);
+    border-bottom: 1px solid var(--line);
+  }
+  .article-hero-content { max-width: 800px; margin: 0 auto; }
+  .article-hero .category-tag {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-family: var(--mono); font-size: 11px;
+    text-transform: uppercase; letter-spacing: 0.15em;
+    color: var(--accent); margin-bottom: 24px;
+  }
+  .article-hero .category-tag::before {
+    content: ""; width: 32px; height: 1px; background: var(--accent);
+  }
+  .article-hero h1 {
+    font-family: var(--display); font-size: clamp(36px, 5vw, 56px);
+    font-weight: 700; line-height: 1.1; letter-spacing: -0.02em;
+    margin-bottom: 24px;
+  }
+  .article-hero h1 em { color: var(--accent); }
+  .article-hero .article-lede {
+    font-size: 20px; line-height: 1.5; color: var(--ink-soft);
+    margin-bottom: 40px;
+  }
+  .article-meta-row {
+    display: flex; align-items: center; gap: 16px;
+    padding-top: 32px; border-top: 1px solid var(--line);
+  }
+  .article-author { display: flex; align-items: center; gap: 12px; flex: 1; }
+  .article-author-avatar {
+    width: 44px; height: 44px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    color: white; font-weight: 600;
+    font-family: var(--display);
+  }
+  .article-author-info { line-height: 1.3; }
+  .article-author-name { font-size: 14px; font-weight: 500; color: var(--ink); }
+  .article-author-title { font-size: 12px; color: var(--ink-muted); }
+  .article-meta-stats {
+    display: flex; gap: 24px;
+    font-family: var(--mono); font-size: 12px;
+    color: var(--ink-muted);
+  }
+  .article-body {
+    max-width: 720px; margin: 0 auto;
+    padding: 80px 40px;
+  }
+  .article-body p {
+    font-size: 18px; line-height: 1.65;
+    color: var(--ink); margin-bottom: 24px;
+  }
+  .article-body h2 {
+    font-family: var(--display); font-size: 32px; font-weight: 600;
+    line-height: 1.15; letter-spacing: -0.02em;
+    margin-top: 56px; margin-bottom: 20px;
+  }
+  .article-body h2 em { color: var(--accent); }
+  .article-body h3 {
+    font-family: var(--display); font-size: 22px; font-weight: 600;
+    line-height: 1.2; margin-top: 40px; margin-bottom: 12px;
+  }
+  .article-body ul, .article-body ol { margin: 0 0 24px 24px; }
+  .article-body ul li, .article-body ol li {
+    font-size: 18px; line-height: 1.6; color: var(--ink);
+    margin-bottom: 10px;
+  }
+  .article-body strong { color: var(--ink); font-weight: 600; }
+  .article-body code {
+    background: var(--surface-2); padding: 2px 6px;
+    border-radius: 4px; font-family: var(--mono); font-size: 0.9em;
+  }
+  .article-body blockquote {
+    border-left: 4px solid var(--accent);
+    padding: 12px 24px; margin: 32px 0;
+    background: var(--surface-2); border-radius: 0 12px 12px 0;
+    font-family: var(--display); font-size: 22px; font-weight: 500;
+    line-height: 1.4; color: var(--ink);
+  }
+  .pull-quote {
+    margin: 48px -40px; padding: 32px;
+    background: var(--ink); color: var(--paper);
+    border-radius: 16px;
+    font-family: var(--display); font-size: 24px; font-weight: 500;
+    line-height: 1.3; letter-spacing: -0.01em; text-align: center;
+  }
+  .pull-quote em { color: var(--accent); font-weight: 600; }
+  .article-footer-section {
+    background: var(--surface-2);
+    border-top: 1px solid var(--line);
+    padding: 80px 40px;
+  }
+  .article-footer-inner { max-width: 800px; margin: 0 auto; }
+  .author-bio-card {
+    background: var(--paper); border: 1px solid var(--line);
+    border-radius: 24px; padding: 32px;
+    display: grid; grid-template-columns: 80px 1fr; gap: 24px;
+  }
+  .author-bio-avatar {
+    width: 80px; height: 80px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    color: white; font-weight: 600;
+    font-family: var(--display); font-size: 32px;
+  }
+  .author-bio-info h4 {
+    font-family: var(--display); font-size: 20px; font-weight: 600;
+    margin-bottom: 4px;
+  }
+  .author-bio-title {
+    font-size: 13px; color: var(--accent); font-weight: 500;
+    margin-bottom: 12px;
+  }
+  .author-bio-info p { font-size: 14px; line-height: 1.5; color: var(--ink-soft); }
+  @media (max-width: 1024px) {
+    .article-hero { padding: 120px 24px 64px; }
+    .article-body { padding: 64px 24px; }
+    .pull-quote { margin-left: -24px; margin-right: -24px; }
+    .article-footer-section { padding: 64px 24px; }
+    .author-bio-card { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <a href="../../index.html" class="logo">
+    <svg width="32" height="32" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <path d="M6 42 L24 10 L42 42 Z" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"/>
+      <path d="M16 42 L28 22 L40 42 Z" fill="currentColor"/>
+      <circle cx="24" cy="10" r="3.2" fill="#FF5B2E"/>
+    </svg>
+    <span>Alpine <em>Quantum</em></span>
+  </a>
+  <div class="nav-links">
+    <a href="../../index.html#services">Services</a>
+    <a href="../../index.html#industries">Industries</a>
+    <a href="../../pages/work/">Client Stories</a>
+    <a href="../../pages/about.html">About</a>
+    <a href="../../pages/insights/" class="active">Resources</a>
+  </div>
+  <a href="../../pages/contact.html" class="nav-cta">Contact us</a>
+  <button class="mobile-toggle" aria-label="Menu"><span></span><span></span><span></span></button>
+</nav>
+
+<section class="article-hero">
+  <div class="article-hero-content">
+    <div class="breadcrumb">
+      <a href="../../index.html">Home</a>
+      <span class="breadcrumb-sep">/</span>
+      <a href="index.html">Insights</a>
+      <span class="breadcrumb-sep">/</span>
+      <span class="current">Notes from a year of lakehouse deploymen...</span>
+    </div>
+    <div class="category-tag">Data</div>
+    <h1>Notes from a year of <em>lakehouse deployments.</em></h1>
+    <p class="article-lede">What worked, what didn't, and what we'd do differently — across six lakehouse implementations spanning finance, healthcare, and retail.</p>
+    <div class="article-meta-row">
+      <div class="article-author">
+        <div class="article-author-avatar" style="background: linear-gradient(135deg, #7C3AED, #A78BFA);">PM</div>
+        <div class="article-author-info">
+          <div class="article-author-name">[Data Practice Lead]</div>
+          <div class="article-author-title">Data Practice Lead · Alpine Quantum</div>
+        </div>
+      </div>
+      <div class="article-meta-stats">
+        <span>April 28, 2026</span>
+        <span>14 min read</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<article class="article-body">
+
+    <p>In the past 14 months, Alpine Quantum has shipped six lakehouse deployments across finance, healthcare, and retail. Three on Databricks. Two on Snowflake with Iceberg tables. One on a self-managed open-source stack using Iceberg + Trino. The use cases varied. The patterns that emerged didn't.</p>
+    <p>This is a candid retrospective on what worked, what didn't, and what we'd do differently next time.</p>
+
+    <h2>What we got <em>consistently right.</em></h2>
+
+    <h3>1. Treating governance as foundational, not an add-on</h3>
+    <p>The single most consistent decision we made was treating governance (catalog, lineage, access controls) as part of the foundational architecture, not as something to "add later." On every project where we deferred governance, it cost us later. On every project where we treated it as foundational, the team had a working data platform within months.</p>
+    <p>Practically: Unity Catalog (on Databricks) or a comparable equivalent (Atlas, DataHub) gets configured during week one. Access patterns get defined before tables get loaded. Data classification (PII, financial, clinical) gets applied at the schema level.</p>
+
+    <h3>2. Modeling for the actual analytical workload</h3>
+    <p>Lakehouses tempt teams toward "land all the data, model later." For prototypes this is fine; for production systems serving real BI workloads it's a trap. Every project where we did upfront dimensional modeling (Kimball-style or similar) on a curated layer outperformed projects where we tried to model later.</p>
+    <p>The right pattern: raw data lands in a bronze layer (immutable, schema-on-read), structured but unmodeled data sits in silver (cleaned, conformed), and properly modeled data lives in gold (dimensional models, ready for BI). Sounds basic — most teams skip the gold layer.</p>
+
+    <h3>3. Catalog-first developer experience</h3>
+    <p>The teams that adopted a "catalog-first" mindset shipped faster than teams that didn't. Catalog-first means engineers discover, document, and govern through the catalog UI rather than via SQL files in a git repo. Atlan, Collibra, and Unity Catalog all support this. The catalog becomes the source of truth, with the underlying SQL generated from it.</p>
+
+    <div class="pull-quote">A lakehouse without a working catalog is just <em>an expensive data swamp.</em> Every deployment needs the catalog from day one.</div>
+
+    <h2>What we got <em>wrong (and corrected).</em></h2>
+
+    <h3>1. Underestimating the ingestion problem</h3>
+    <p>In two early projects, we underestimated the engineering effort to get data <em>into</em> the lakehouse reliably. The fashionable approach (Fivetran or similar managed ELT) handles 80% of sources well; the remaining 20% are where the work lives. SAP, mainframe systems, legacy databases with no proper change-data-capture, real-time message buses — these need custom ingestion work.</p>
+    <p>We now scope ingestion engineering as a separate workstream in the project plan, sized realistically, not assumed to be "Fivetran will handle it."</p>
+
+    <h3>2. Premature optimization for cost</h3>
+    <p>On two projects, the client team had been so spooked by cloud bill horror stories that they over-optimized infrastructure choices before the platform was operationally proven. Smaller clusters, fewer reserved purchases, more aggressive autoscaling than the workload warranted.</p>
+    <p>The result was slow query performance, frustrated analysts, and ironically higher total spend because everything took longer. Premature optimization for cost is worse than ignoring cost — at least the latter doesn't hurt your team's experience.</p>
+    <p>We now recommend: spend in line with realistic workload sizing for the first 3-6 months, then optimize once you have actual usage data. FinOps is a continuous practice, not a one-time decision.</p>
+
+    <h3>3. Real-time everything</h3>
+    <p>Two projects started with the assumption that "streaming" was the default ingestion pattern, with batch reserved for legacy systems. We ended up walking both back to batch-first ingestion with streaming only for the use cases that genuinely required real-time.</p>
+    <p>Streaming infrastructure is genuinely harder to operate than batch. The exactly-once semantics, watermarking, late-arriving data, backfills — all of it adds operational complexity. If your downstream consumer doesn't need sub-minute freshness, batch is the right answer.</p>
+
+    <h2>Patterns that <em>compound over time.</em></h2>
+
+    <h3>Data product thinking</h3>
+    <p>The lakehouses that delivered the most business value treated curated datasets as products with explicit owners, SLAs, and documentation. The lakehouses that delivered the least value treated them as files in a folder.</p>
+    <p>Data product thinking — formalized by Zhamak Dehghani's data mesh writing — translates well to lakehouse architecture. Every gold-layer dataset has an owner. Every dataset has documented expected freshness, schema stability, and quality SLAs. Every dataset has a consumer view of what makes it useful.</p>
+
+    <h3>Quality monitoring as built-in, not bolted-on</h3>
+    <p>The lakehouses we're most proud of have quality monitoring baked in: schema-change detection, data quality checks (volume, freshness, distribution), and lineage tracking. The ones we're least proud of have these as separate dashboards nobody looks at.</p>
+    <p>Practically: every dbt model gets tests. Every ingestion gets a quality check. Every alert routes to the dataset's owning team. Data quality is engineering quality, with the same disciplines.</p>
+
+    <h2>What we'd <em>do differently.</em></h2>
+    <p>Looking back across the six deployments, three changes we'd make to our default playbook:</p>
+    <ol>
+      <li><strong>Catalog before pipelines.</strong> We'd stand up the catalog and access governance before writing a single ingestion pipeline. Twice we did it the other way and regretted it.</li>
+      <li><strong>Smaller initial use case.</strong> The most successful deployments had a single, well-scoped initial use case that proved the platform. The least successful tried to support multiple use cases simultaneously and stretched the foundation too thin.</li>
+      <li><strong>Pair with the consumer.</strong> The deployments that had a dedicated business consumer (a BI team, a data science team, an analytics function) embedded from day one outperformed deployments where the consumer was theoretical. If you can't name your first consumer, you're not ready to build.</li>
+    </ol>
+    <p>Lakehouses are powerful infrastructure. They reward upfront discipline and punish shortcuts. The patterns above won't make every project succeed — but they'll prevent the most common ways projects fail.</p>
+    
+</article>
+
+<section class="article-footer-section">
+  <div class="article-footer-inner">
+    <div class="author-bio-card">
+      <div class="author-bio-avatar" style="background: linear-gradient(135deg, #7C3AED, #A78BFA);">PM</div>
+      <div class="author-bio-info">
+        <h4>[Data Practice Lead]</h4>
+        <div class="author-bio-title">Data Practice Lead · Alpine Quantum</div>
+        <p>Heads Alpine Quantum's data practice. Has architected lakehouses, warehouses, and real-time platforms across finance, healthcare, retail, and manufacturing. Writes about modern data infrastructure and the engineering decisions that compound over time.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-bg"><img src="../../images/footer-mountains.png" alt="" /></div>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <a href="../../index.html" class="logo">
+        <svg width="32" height="32" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M6 42 L24 10 L42 42 Z" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"/>
+          <path d="M16 42 L28 22 L40 42 Z" fill="currentColor"/>
+          <circle cx="24" cy="10" r="3.2" fill="#FF5B2E"/>
+        </svg>
+        <span>Alpine <em>Quantum</em></span>
+      </a>
+      <p>A software development and digital services company building innovative solutions across AI, cloud, data, and engineering services for global enterprises.</p>
+      <div class="footer-social"><a href="#" aria-label="LinkedIn">in</a><a href="#" aria-label="X / Twitter">𝕏</a><a href="#" aria-label="GitHub">⌘</a><a href="#" aria-label="YouTube">▶</a></div>
+    </div>
+    <div class="footer-col"><h4>Services</h4><ul>
+      <li><a href="../../pages/services/artificial-intelligence.html">Artificial Intelligence</a></li>
+      <li><a href="../../pages/services/software-engineering.html">Software Engineering</a></li>
+      <li><a href="../../pages/services/cloud-devops.html">Cloud &amp; DevOps</a></li>
+      <li><a href="../../pages/services/big-data-analytics.html">Big Data &amp; Analytics</a></li>
+    </ul></div>
+    <div class="footer-col"><h4>Industries</h4><ul>
+      <li><a href="../../pages/industries/financial-services.html">Financial Services</a></li>
+      <li><a href="../../pages/industries/healthcare.html">Healthcare</a></li>
+      <li><a href="../../pages/industries/retail.html">Retail</a></li>
+      <li><a href="../../pages/industries/manufacturing.html">Manufacturing</a></li>
+    </ul></div>
+    <div class="footer-col"><h4>Company</h4><ul>
+      <li><a href="../../pages/about.html">About us</a></li>
+      <li><a href="../../pages/work/">Client stories</a></li>
+      <li><a href="../../pages/careers.html">Careers</a></li>
+      <li><a href="../../pages/contact.html">Contact</a></li>
+    </ul></div>
+  </div>
+  <div class="footer-bottom">
+    <div>© 2026 Alpine <em style="color: var(--accent); font-weight: 600;">Quantum</em> Inc. All rights reserved.</div>
+    <div><a href="../../pages/legal/privacy.html">Privacy</a><a href="../../pages/legal/terms.html">Terms</a><a href="#">Security</a><a href="#">Sitemap</a></div>
+  </div>
+</footer>
+<script src="../../site.js"></script>
+</body>
+</html>

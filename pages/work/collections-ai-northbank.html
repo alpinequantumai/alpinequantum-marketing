@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Collections AI Platform — North·Bank | Alpine Quantum</title>
+<meta name="description" content="How a Tier-1 bank scaled AI in collections operations across 3.5M monthly accounts, achieving 3.2× revenue lift in two quarters." />
+<link rel="icon" type="image/svg+xml" href="../../favicon.svg" />
+<link rel="icon" type="image/x-icon" href="../../favicon.ico" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../styles.css">
+<style>
+  .case-detail-hero {
+    background: linear-gradient(135deg, var(--ink) 0%, #1A1A1D 100%);
+    color: var(--paper);
+    padding: 180px 40px 100px;
+    position: relative;
+    overflow: hidden;
+  }
+  .case-detail-hero::before {
+    content: ""; position: absolute; top: -30%; right: -10%; width: 60%; height: 200%;
+    background: radial-gradient(circle, rgba(255,91,46,0.18), transparent 60%);
+    pointer-events: none;
+  }
+  .case-detail-hero-content {
+    max-width: 1280px; margin: 0 auto; position: relative; z-index: 1;
+  }
+  .case-detail-hero .breadcrumb { margin-bottom: 32px; color: rgba(255,255,255,0.6); }
+  .case-detail-hero .breadcrumb a { color: rgba(255,255,255,0.6); }
+  .case-detail-hero .breadcrumb a:hover { color: var(--paper); }
+  .case-detail-hero .breadcrumb .current { color: var(--paper); }
+  .case-detail-meta {
+    font-family: var(--mono); font-size: 11px;
+    text-transform: uppercase; letter-spacing: 0.15em;
+    color: rgba(255,255,255,0.6);
+    margin-bottom: 24px;
+    display: flex; gap: 16px; align-items: center; flex-wrap: wrap;
+  }
+  .case-detail-hero h1 {
+    font-family: var(--display); font-size: clamp(40px, 6vw, 72px);
+    font-weight: 700; line-height: 1.05; letter-spacing: -0.03em;
+    margin-bottom: 24px; max-width: 1000px;
+  }
+  .case-detail-hero h1 em { color: var(--accent); }
+  .case-detail-hero p.lede {
+    font-size: 19px; color: rgba(255,255,255,0.75);
+    max-width: 720px; line-height: 1.55;
+  }
+
+  .case-overview-grid {
+    background: var(--ink); color: var(--paper);
+    padding: 0 40px 80px;
+    position: relative;
+  }
+  .case-overview-grid-inner {
+    max-width: 1280px; margin: 0 auto;
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px;
+    padding-top: 40px;
+    border-top: 1px solid rgba(255,255,255,0.1);
+  }
+  .case-overview-item .label {
+    font-family: var(--mono); font-size: 10px;
+    text-transform: uppercase; letter-spacing: 0.12em;
+    color: rgba(255,255,255,0.5);
+    margin-bottom: 8px;
+  }
+  .case-overview-item .value {
+    font-size: 15px; font-weight: 500; color: var(--paper);
+    line-height: 1.4;
+  }
+
+  .case-body-section { padding: 100px 40px; }
+  .case-body-container { max-width: 800px; margin: 0 auto; }
+  .case-body-section h2 {
+    font-family: var(--display); font-size: clamp(32px, 4vw, 48px);
+    font-weight: 600; line-height: 1.1; letter-spacing: -0.02em;
+    margin-bottom: 24px;
+  }
+  .case-body-section h2 em { color: var(--accent); }
+  .case-body-section h3 {
+    font-family: var(--display); font-size: 22px; font-weight: 600;
+    line-height: 1.2; letter-spacing: -0.01em;
+    margin-top: 40px; margin-bottom: 16px;
+  }
+  .case-body-section p {
+    font-size: 17px; line-height: 1.65; color: var(--ink-soft);
+    margin-bottom: 20px;
+  }
+  .case-body-section ul { margin: 0 0 24px 24px; }
+  .case-body-section ul li {
+    font-size: 17px; line-height: 1.6; color: var(--ink-soft);
+    margin-bottom: 8px;
+  }
+
+  .metrics-band {
+    background: var(--surface-2);
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    padding: 80px 40px;
+  }
+  .metrics-band-inner {
+    max-width: 1280px; margin: 0 auto;
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;
+  }
+  .metric-card {
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: 24px;
+    padding: 40px;
+    text-align: center;
+  }
+  .metric-card .value {
+    font-family: var(--display); font-size: 72px; font-weight: 700;
+    color: var(--accent); line-height: 1; margin-bottom: 16px;
+    letter-spacing: -0.03em;
+  }
+  .metric-card .label {
+    font-size: 15px; color: var(--ink-soft); line-height: 1.5;
+  }
+
+  .quote-block {
+    background: var(--paper);
+    border-left: 4px solid var(--accent);
+    padding: 32px 40px;
+    margin: 40px 0;
+    border-radius: 0 16px 16px 0;
+  }
+  .quote-block blockquote {
+    font-family: var(--display); font-size: 22px; font-weight: 500;
+    line-height: 1.4; letter-spacing: -0.01em;
+    margin: 0 0 20px 0; color: var(--ink);
+  }
+  .quote-attribution { font-size: 14px; color: var(--ink-soft); }
+  .quote-attribution strong { color: var(--ink); display: block; margin-bottom: 4px; }
+
+  .tech-stack-section {
+    background: var(--ink); color: var(--paper);
+    padding: 80px 40px;
+  }
+  .tech-stack-inner { max-width: 1280px; margin: 0 auto; }
+  .tech-stack-inner .section-eyebrow { color: rgba(255,255,255,0.6); }
+  .tech-stack-inner .section-eyebrow::before { background: var(--paper); }
+  .tech-stack-inner h2 {
+    font-family: var(--display); font-size: clamp(32px, 4vw, 48px);
+    font-weight: 600; line-height: 1.1; letter-spacing: -0.02em;
+    margin-bottom: 40px;
+  }
+  .tech-stack-inner h2 em { color: rgba(255,255,255,0.5); }
+  .tech-stack-grid {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px;
+  }
+  .tech-stack-item {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 12px;
+    padding: 20px;
+  }
+  .tech-stack-cat {
+    font-family: var(--mono); font-size: 10px;
+    text-transform: uppercase; letter-spacing: 0.12em;
+    color: var(--accent); margin-bottom: 10px;
+  }
+  .tech-stack-items { font-size: 14px; line-height: 1.5; color: rgba(255,255,255,0.85); }
+
+  @media (max-width: 1024px) {
+    .case-detail-hero { padding: 130px 24px 64px; }
+    .case-overview-grid { padding: 0 24px 64px; }
+    .case-overview-grid-inner { grid-template-columns: repeat(2, 1fr); }
+    .case-body-section { padding: 64px 24px; }
+    .metrics-band { padding: 64px 24px; }
+    .metrics-band-inner { grid-template-columns: 1fr; }
+    .tech-stack-section { padding: 64px 24px; }
+    .tech-stack-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <a href="../../index.html" class="logo">
+    <svg width="32" height="32" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <path d="M6 42 L24 10 L42 42 Z" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"/>
+      <path d="M16 42 L28 22 L40 42 Z" fill="currentColor"/>
+      <circle cx="24" cy="10" r="3.2" fill="#FF5B2E"/>
+    </svg>
+    <span>Alpine <em>Quantum</em></span>
+  </a>
+  <div class="nav-links">
+    <a href="../../index.html#services">Services</a>
+    <a href="../../index.html#industries">Industries</a>
+    <a href="../../index.html#work" class="active">Client Stories</a>
+    <a href="../../pages/about.html">About</a>
+    <a href="../../pages/insights/" >Resources</a>
+    
+  </div>
+  <a href="../../pages/contact.html" class="nav-cta">Contact us</a>
+  <button class="mobile-toggle" aria-label="Menu"><span></span><span></span><span></span></button>
+</nav>
+
+<!-- Dark hero -->
+<section class="case-detail-hero">
+  <div class="case-detail-hero-content">
+    <div class="breadcrumb">
+      <a href="../../index.html">Home</a>
+      <span class="breadcrumb-sep">/</span>
+      <a href="index.html">Client Stories</a>
+      <span class="breadcrumb-sep">/</span>
+      <span class="current">North·Bank</span>
+    </div>
+    <div class="case-detail-meta">
+      <span>Client Story · 01</span>
+      <span>·</span>
+      <span>Financial Services</span>
+      <span>·</span>
+      <span>22-week engagement</span>
+    </div>
+    <h1>Helping a global bank scale AI in <em>collections operations.</em></h1>
+    <p class="lede">A Tier-1 financial institution needed to modernize its collections platform with production-grade machine learning that could handle 3.5 million monthly accounts. Within two quarters, a custom ensemble model delivered 3.2× revenue lift and an AI capability the bank can replicate across other functions.</p>
+  </div>
+</section>
+
+<!-- Overview grid (still on dark) -->
+<div class="case-overview-grid">
+  <div class="case-overview-grid-inner">
+    <div class="case-overview-item">
+      <div class="label">Client</div>
+      <div class="value">North·Bank (Tier-1 financial institution)</div>
+    </div>
+    <div class="case-overview-item">
+      <div class="label">Industry</div>
+      <div class="value">Retail &amp; commercial banking</div>
+    </div>
+    <div class="case-overview-item">
+      <div class="label">Services</div>
+      <div class="value">AI &amp; ML, Data Engineering, MLOps</div>
+    </div>
+    <div class="case-overview-item">
+      <div class="label">Timeline</div>
+      <div class="value">22 weeks · 3 phases</div>
+    </div>
+  </div>
+</div>
+
+<!-- The challenge -->
+<section class="case-body-section">
+  <div class="case-body-container">
+    <div class="section-eyebrow">The challenge</div>
+    <h2>Why the bank's collections platform <em>was leaving money on the table.</em></h2>
+    <p>North·Bank's collections operations processed 3.5 million accounts every month across multiple lending products. The team operated on a 20-year-old rules-based engine that scored accounts using static heuristics — last-payment date, balance band, days past due, and a handful of behavioral flags maintained by hand.</p>
+    <p>The model worked, but it was leaving real money on the table. Accounts that would self-cure were getting expensive outreach. Accounts likely to charge off weren't being prioritized fast enough. And the operations team couldn't experiment — every rule change required six weeks of risk and compliance review.</p>
+    <p>Leadership had an internal mandate to bring machine learning into collections, but two previous attempts had stalled. The team had built models that worked in notebooks but couldn't get them into production. Compliance review was a maze. The data infrastructure wasn't ready. Nobody had successfully bridged the gap between a data science prototype and a production system that risk, compliance, and operations all trusted.</p>
+  </div>
+</section>
+
+<!-- The approach -->
+<section class="case-body-section" style="background: var(--surface-2); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line);">
+  <div class="case-body-container">
+    <div class="section-eyebrow">The approach</div>
+    <h2>What we did <em>differently this time.</em></h2>
+    <p>We started with the operating reality, not the model. Before any data science work, we spent two weeks with the collections operations team and the risk function to understand what a deployable model actually needed to look like:</p>
+    <ul>
+      <li>Explainable predictions for every account, not just aggregate accuracy</li>
+      <li>An evaluation framework that risk and compliance could audit independently</li>
+      <li>Champion-challenger infrastructure so the team could experiment safely</li>
+      <li>Latency under 200ms per prediction so it could plug into existing workflows</li>
+      <li>Drift detection and alert routing built in from day one</li>
+    </ul>
+
+    <h3>Phase 1: Data &amp; foundations (weeks 1–6)</h3>
+    <p>We built the data pipeline first. North·Bank had eight years of historical collections data spread across mainframe extracts, an aging Oracle warehouse, and several operational systems. We engineered a feature store on the bank's existing Databricks footprint, with 247 candidate features covering payment behavior, balance velocity, account tenure, and product mix.</p>
+
+    <h3>Phase 2: Modeling &amp; validation (weeks 7–14)</h3>
+    <p>We trained an ensemble of three models — a gradient-boosted classifier for charge-off risk, a regression model for expected recoverable balance, and a survival model for time-to-cure. The combined output produced an action recommendation per account that prioritized expected value, not just probability.</p>
+    <p>The bigger investment in this phase was the evaluation framework. We worked with the model risk management team to build an offline backtesting engine that could compare any model variant against the existing rules-based system across a representative population of historical accounts.</p>
+
+    <h3>Phase 3: Production deployment (weeks 15–22)</h3>
+    <p>Production deployment used a champion-challenger pattern. The new model ran in shadow mode for four weeks on 100% of accounts, producing recommendations that were logged but not acted on. We compared shadow recommendations against actual collections outcomes and tuned thresholds before going live.</p>
+    <p>Once live, the model ran in active mode for 5% of accounts initially, with the population expanding weekly as the operations team gained confidence. By week 22, the model was driving prioritization for 100% of in-scope accounts, with humans always able to override individual recommendations.</p>
+  </div>
+</section>
+
+<!-- The metrics -->
+<section class="metrics-band">
+  <div class="metrics-band-inner">
+    <div class="metric-card">
+      <div class="value">3.2×</div>
+      <div class="label">Revenue lift on prioritized accounts vs. the previous rules engine</div>
+    </div>
+    <div class="metric-card">
+      <div class="value">47%</div>
+      <div class="label">Reduction in unproductive outreach to accounts likely to self-cure</div>
+    </div>
+    <div class="metric-card">
+      <div class="value">18hr</div>
+      <div class="label">Time to deploy a new model variant — down from 6 weeks</div>
+    </div>
+  </div>
+</section>
+
+<!-- Quote -->
+<section class="case-body-section">
+  <div class="case-body-container">
+    <div class="quote-block">
+      <blockquote>"What made this different from our previous AI efforts wasn't the model — it was the way Alpine Quantum brought risk and compliance into the design process from day one. The model that shipped was the same one we showed risk in week four. That's how it cleared review in two months instead of two quarters."</blockquote>
+      <div class="quote-attribution">
+        <strong>VP of Collections Strategy</strong>
+        North·Bank
+      </div>
+    </div>
+
+    <div class="section-eyebrow" style="margin-top: 60px;">The outcome</div>
+    <h2>What North·Bank has now <em>that they didn't before.</em></h2>
+    <p>Beyond the headline numbers, the engagement left North·Bank with three things that compound over time:</p>
+    <p><strong>An AI capability they can extend.</strong> The feature store, evaluation framework, and deployment infrastructure are reusable across other risk and decisioning use cases. The team is already piloting a similar approach for credit line management.</p>
+    <p><strong>A working relationship between data science and risk.</strong> The model risk management team now reviews model changes in days rather than weeks. The collaboration patterns built during this project are being applied to every new ML initiative.</p>
+    <p><strong>Internal engineers who can operate it.</strong> Two of North·Bank's engineers worked alongside Alpine Quantum throughout the build. They now own day-to-day operations, model retraining, and the roadmap for what comes next.</p>
+  </div>
+</section>
+
+<!-- Tech stack -->
+<section class="tech-stack-section">
+  <div class="tech-stack-inner">
+    <div class="section-eyebrow">Technology</div>
+    <h2>The <em>stack</em> behind the system.</h2>
+    <div class="tech-stack-grid">
+      <div class="tech-stack-item">
+        <div class="tech-stack-cat">Data infra</div>
+        <div class="tech-stack-items">Databricks, Delta Lake, Apache Spark, Airflow</div>
+      </div>
+      <div class="tech-stack-item">
+        <div class="tech-stack-cat">Modeling</div>
+        <div class="tech-stack-items">XGBoost, LightGBM, scikit-learn, SHAP for explainability</div>
+      </div>
+      <div class="tech-stack-item">
+        <div class="tech-stack-cat">MLOps</div>
+        <div class="tech-stack-items">MLflow, Feature Store, Databricks Workflows</div>
+      </div>
+      <div class="tech-stack-item">
+        <div class="tech-stack-cat">Serving</div>
+        <div class="tech-stack-items">FastAPI, Kubernetes, Redis cache, Prometheus</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-band">
+  <div class="container">
+    <h2>Want a similar story <em>for your business?</em></h2>
+    <p>Tell us what you're trying to solve. A senior AI engineer will reply within one business day.</p>
+    <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
+      <a href="../../pages/contact.html" class="btn btn-primary">Start a conversation <span class="btn-arrow">→</span></a>
+      <a href="index.html" class="btn btn-ghost">More client stories <span class="btn-arrow">→</span></a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-bg"><img src="../../images/footer-mountains.png" alt="" /></div>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <a href="../../index.html" class="logo">
+        <svg width="32" height="32" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M6 42 L24 10 L42 42 Z" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"/>
+          <path d="M16 42 L28 22 L40 42 Z" fill="currentColor"/>
+          <circle cx="24" cy="10" r="3.2" fill="#FF5B2E"/>
+        </svg>
+        <span>Alpine <em>Quantum</em></span>
+      </a>
+      <p>A software development and digital services company building innovative solutions across AI, cloud, data, and engineering services for global enterprises.</p>
+      <div class="footer-social">
+        <a href="#" aria-label="LinkedIn">in</a>
+        <a href="#" aria-label="X / Twitter">𝕏</a>
+        <a href="#" aria-label="GitHub">⌘</a>
+        <a href="#" aria-label="YouTube">▶</a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>Services</h4>
+      <ul>
+        <li><a href="../../pages/services/artificial-intelligence.html">Artificial Intelligence</a></li>
+        <li><a href="../../pages/services/software-engineering.html">Software Engineering</a></li>
+        <li><a href="../../pages/services/cloud-devops.html">Cloud &amp; DevOps</a></li>
+        <li><a href="../../pages/services/big-data-analytics.html">Big Data &amp; Analytics</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Industries</h4>
+      <ul>
+        <li><a href="../../pages/industries/financial-services.html">Financial Services</a></li>
+        <li><a href="../../pages/industries/healthcare.html">Healthcare</a></li>
+        <li><a href="../../pages/industries/retail.html">Retail</a></li>
+        <li><a href="../../pages/industries/manufacturing.html">Manufacturing</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Company</h4>
+      <ul>
+        <li><a href="../../pages/about.html">About us</a></li>
+        <li><a href="../../pages/work/">Client stories</a></li>
+        <li><a href="../../pages/careers.html">Careers</a></li>
+        <li><a href="../../pages/contact.html">Contact</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div>© 2026 Alpine <em style="color: var(--accent); font-weight: 600;">Quantum</em> Inc. All rights reserved.</div>
+    <div>
+      <a href="../../pages/legal/privacy.html">Privacy</a>
+      <a href="../../pages/legal/terms.html">Terms</a>
+      <a href="#">Security</a>
+      <a href="#">Sitemap</a>
+    </div>
+  </div>
+</footer>
+<script src="../../site.js"></script>
+</body>
+</html>

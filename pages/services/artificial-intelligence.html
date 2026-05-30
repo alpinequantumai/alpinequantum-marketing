@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Artificial Intelligence — Alpine Quantum</title>
+<meta name="description" content="AI strategy, generative AI, agentic systems, and production ML engineering for global enterprises." />
+<link rel="icon" type="image/svg+xml" href="../../favicon.svg" />
+<link rel="icon" type="image/x-icon" href="../../favicon.ico" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../styles.css">
+<style>
+  /* Service detail page specific */
+  .service-overview {
+    padding: 100px 40px;
+  }
+  .overview-grid {
+    max-width: 1280px; margin: 0 auto;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 80px;
+    align-items: center;
+  }
+  .overview-text h2 {
+    font-family: var(--display);
+    font-size: clamp(36px, 5vw, 56px);
+    font-weight: 600;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    margin-bottom: 24px;
+  }
+  .overview-text h2 em { color: var(--accent); }
+  .overview-text p {
+    font-size: 17px; line-height: 1.6;
+    color: var(--ink-soft);
+    margin-bottom: 18px;
+  }
+  .overview-visual {
+    aspect-ratio: 4/5;
+    border-radius: 24px;
+    overflow: hidden;
+  }
+  .overview-visual img { width: 100%; height: 100%; object-fit: cover; }
+
+  /* Capabilities */
+  .capabilities {
+    background: var(--surface-2);
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    padding: 120px 40px;
+  }
+  .capabilities-grid {
+    display: grid; grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+  }
+  .capability {
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: 24px;
+    padding: 40px;
+    transition: all 0.3s;
+  }
+  .capability:hover { border-color: var(--ink); transform: translateY(-4px); }
+  .capability-num {
+    font-family: var(--mono); font-size: 12px;
+    color: var(--ink-muted); margin-bottom: 16px;
+    letter-spacing: 0.1em;
+  }
+  .capability h3 {
+    font-family: var(--display);
+    font-size: 26px;
+    font-weight: 600;
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+    margin-bottom: 16px;
+  }
+  .capability p {
+    font-size: 14px;
+    line-height: 1.55;
+    color: var(--ink-soft);
+    margin-bottom: 24px;
+  }
+  .capability ul { list-style: none; }
+  .capability ul li {
+    font-size: 13px;
+    padding: 10px 0;
+    border-top: 1px solid var(--line);
+    display: flex; align-items: center; gap: 12px;
+  }
+  .capability ul li::before {
+    content: "→"; color: var(--accent); font-weight: 600;
+  }
+
+  /* Approach */
+  .approach-grid {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px;
+  }
+  .approach-step {
+    border-top: 2px solid var(--ink);
+    padding-top: 32px;
+  }
+  .approach-step .num {
+    font-family: var(--mono); font-size: 11px;
+    text-transform: uppercase; letter-spacing: 0.1em;
+    color: var(--accent);
+    margin-bottom: 16px;
+    font-weight: 500;
+  }
+  .approach-step h3 {
+    font-family: var(--display);
+    font-size: 26px; font-weight: 600;
+    line-height: 1.1; letter-spacing: -0.01em;
+    margin-bottom: 16px;
+  }
+  .approach-step p {
+    font-size: 14px;
+    line-height: 1.55;
+    color: var(--ink-soft);
+  }
+
+  /* Tech stack */
+  .stack-section {
+    background: var(--ink); color: var(--paper);
+    padding: 120px 40px;
+  }
+  .stack-section .section-eyebrow { color: rgba(255,255,255,0.6); }
+  .stack-section .section-eyebrow::before { background: var(--paper); }
+  .stack-section .section-title em { color: rgba(255,255,255,0.5); }
+  .stack-section .section-desc { color: rgba(255,255,255,0.75); }
+  .stack-grid {
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    gap: 1px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 16px; overflow: hidden;
+  }
+  .stack-cell {
+    background: var(--ink);
+    padding: 32px;
+    min-height: 140px;
+    display: flex; flex-direction: column; justify-content: space-between;
+    transition: background 0.3s;
+  }
+  .stack-cell:hover { background: var(--bg-secondary); }
+  .stack-cat {
+    font-family: var(--mono);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--accent);
+    margin-bottom: 16px;
+  }
+  .stack-items {
+    font-family: var(--display);
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 1.3;
+    letter-spacing: -0.01em;
+  }
+  .stack-items span {
+    color: rgba(255,255,255,0.7);
+    font-weight: 400;
+    font-size: 14px;
+  }
+
+  /* Case study highlight */
+  .case-highlight {
+    padding: 120px 40px;
+    background: var(--surface-2);
+    border-top: 1px solid var(--line);
+  }
+  .case-highlight-grid {
+    max-width: 1280px; margin: 0 auto;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 64px;
+    align-items: center;
+  }
+  .case-highlight-text .tag {
+    font-family: var(--mono);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--accent);
+    margin-bottom: 16px;
+  }
+  .case-highlight-text .metric {
+    font-family: var(--display);
+    font-size: clamp(72px, 10vw, 140px);
+    font-weight: 700;
+    line-height: 0.9;
+    letter-spacing: -0.03em;
+    margin-bottom: 8px;
+  }
+  .case-highlight-text .metric-x { color: var(--accent); }
+  .case-highlight-text .metric-label {
+    font-size: 16px; color: var(--ink-soft);
+    margin-bottom: 32px;
+    max-width: 360px;
+    line-height: 1.5;
+  }
+  .case-highlight-card {
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: 24px;
+    padding: 40px;
+  }
+  .case-highlight-card h3 {
+    font-family: var(--display);
+    font-size: 28px; font-weight: 600;
+    line-height: 1.15; letter-spacing: -0.01em;
+    margin-bottom: 16px;
+  }
+  .case-highlight-card p {
+    font-size: 15px; color: var(--ink-soft);
+    line-height: 1.55; margin-bottom: 24px;
+  }
+  .case-highlight-card .read-more {
+    font-size: 13px; color: var(--accent); font-weight: 500;
+    display: inline-flex; align-items: center; gap: 8px;
+    transition: gap 0.25s;
+  }
+  .case-highlight-card .read-more:hover { gap: 12px; }
+
+  /* Other services nav */
+  .other-services {
+    background: var(--paper);
+    border-top: 1px solid var(--line);
+  }
+  .other-services-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;
+  }
+  .other-service {
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    padding: 32px;
+    display: flex; justify-content: space-between; align-items: center;
+    transition: all 0.3s;
+  }
+  .other-service:hover { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+  .other-service-name {
+    font-family: var(--display);
+    font-size: 20px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+  .other-service .arrow {
+    font-size: 20px;
+    color: var(--accent);
+    transition: transform 0.25s;
+  }
+  .other-service:hover .arrow { transform: translateX(6px); }
+
+  @media (max-width: 1024px) {
+    .overview-grid { grid-template-columns: 1fr; gap: 48px; }
+    .overview-visual { aspect-ratio: 16/10; }
+    .capabilities-grid { grid-template-columns: 1fr; }
+    .approach-grid { grid-template-columns: 1fr; gap: 32px; }
+    .stack-grid { grid-template-columns: 1fr 1fr; }
+    .case-highlight-grid { grid-template-columns: 1fr; }
+    .other-services-grid { grid-template-columns: 1fr; }
+    .service-overview, .capabilities, .stack-section, .case-highlight { padding-left: 24px; padding-right: 24px; }
+    .capabilities, .stack-section, .case-highlight { padding-top: 80px; padding-bottom: 80px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ================== NAV ================== -->
+<nav class="nav">
+  <a href="../../index.html" class="logo">
+    <svg width="32" height="32" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <path d="M6 42 L24 10 L42 42 Z" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"/>
+      <path d="M16 42 L28 22 L40 42 Z" fill="currentColor"/>
+      <circle cx="24" cy="10" r="3.2" fill="#FF5B2E"/>
+    </svg>
+    <span>Alpine <em>Quantum</em></span>
+  </a>
+  <div class="nav-links">
+    <a href="../../index.html#services" class="active">Services</a>
+    <a href="../../index.html#industries">Industries</a>
+    <a href="../../index.html#work">Client Stories</a>
+    <a href="../about.html">About</a>
+    <a href="../../index.html#insights">Resources</a>
+  </div>
+  <a href="../contact.html" class="nav-cta">Contact us</a>
+  <button class="mobile-toggle" aria-label="Menu"><span></span><span></span><span></span></button>
+</nav>
+
+<!-- ================== PAGE HERO ================== -->
+<section class="page-hero">
+  <div class="page-hero-content">
+    <div class="breadcrumb">
+      <a href="../../index.html">Home</a>
+      <span class="breadcrumb-sep">/</span>
+      <a href="../../index.html#services">Services</a>
+      <span class="breadcrumb-sep">/</span>
+      <span class="current">Artificial Intelligence</span>
+    </div>
+    <div class="page-hero-eyebrow">01 / Service</div>
+    <h1>Production-grade <em>artificial intelligence.</em></h1>
+    <p class="lede">From strategy and use case discovery to generative AI, machine learning, and agentic systems — engineered for scale, governed for production, owned by your team.</p>
+  </div>
+</section>
+
+<!-- ================== OVERVIEW ================== -->
+<section class="service-overview">
+  <div class="overview-grid">
+    <div class="overview-text">
+      <div class="section-eyebrow">Overview</div>
+      <h2>The gap between AI prototypes and <em>real business outcomes.</em></h2>
+      <p>Most enterprises have spent the last two years experimenting with AI. Most have very little to show for it in production. Pilot projects stall in compliance review. Demos look great but never connect to operational systems. Models drift, fail silently, or produce outputs no one trusts.</p>
+      <p>Alpine Quantum's AI practice exists to close that gap. We design, build, and deploy AI systems that survive the journey from notebook to production — with proper evaluation, observability, governance, and accountability built in from day one.</p>
+      <p>We work across the full AI stack: classical machine learning, deep learning, generative AI, agentic systems, and the infrastructure that makes them reliable in production.</p>
+    </div>
+    <div class="overview-visual">
+      <img src="../../images/ai-collage.jpg" alt="Human and AI collaboration" />
+    </div>
+  </div>
+</section>
+
+<!-- ================== CAPABILITIES ================== -->
+<section class="capabilities">
+  <div class="container">
+    <div class="section-head">
+      <div>
+        <div class="section-eyebrow">Capabilities</div>
+        <h2 class="section-title">What we <em>build.</em></h2>
+      </div>
+      <p class="section-desc">Four core practice areas — combined or standalone — to take your AI initiative from idea to production.</p>
+    </div>
+
+    <div class="capabilities-grid">
+      <div class="capability">
+        <div class="capability-num">01 / STRATEGY</div>
+        <h3>AI Consulting &amp; Strategy</h3>
+        <p>We help leadership teams identify the AI opportunities that actually matter — and the ones that don't. Use case discovery, feasibility assessment, ROI modeling, and roadmap design.</p>
+        <ul>
+          <li>AI readiness assessment</li>
+          <li>Use case discovery &amp; prioritization</li>
+          <li>Architecture &amp; tech stack design</li>
+          <li>Build-vs-buy decision support</li>
+          <li>AI governance &amp; risk framework</li>
+        </ul>
+      </div>
+
+      <div class="capability">
+        <div class="capability-num">02 / GENAI</div>
+        <h3>Generative AI &amp; LLM Solutions</h3>
+        <p>Production-grade applications built on large language models — retrieval-augmented generation, chat agents, document understanding, code generation, and content automation.</p>
+        <ul>
+          <li>RAG systems &amp; vector search</li>
+          <li>Custom chat agents &amp; copilots</li>
+          <li>Fine-tuning &amp; model adaptation</li>
+          <li>Prompt engineering at scale</li>
+          <li>LLM evaluation &amp; observability</li>
+        </ul>
+      </div>
+
+      <div class="capability">
+        <div class="capability-num">03 / AGENTS</div>
+        <h3>Agentic AI Systems</h3>
+        <p>Autonomous and semi-autonomous AI agents that take action across enterprise systems — with proper tool use, memory, planning, and human-in-the-loop oversight.</p>
+        <ul>
+          <li>Multi-agent orchestration</li>
+          <li>Tool use &amp; API integration</li>
+          <li>Memory &amp; context management</li>
+          <li>Human-in-the-loop workflows</li>
+          <li>Agent observability &amp; tracing</li>
+        </ul>
+      </div>
+
+      <div class="capability">
+        <div class="capability-num">04 / ML</div>
+        <h3>Machine Learning Engineering</h3>
+        <p>Classical ML and deep learning systems for prediction, classification, recommendation, computer vision, and time-series forecasting — fully productionized.</p>
+        <ul>
+          <li>Predictive modeling &amp; forecasting</li>
+          <li>Computer vision &amp; document AI</li>
+          <li>Recommendation systems</li>
+          <li>MLOps &amp; model deployment</li>
+          <li>Model monitoring &amp; drift detection</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================== APPROACH ================== -->
+<section>
+  <div class="container">
+    <div class="section-head">
+      <div>
+        <div class="section-eyebrow">How we work</div>
+        <h2 class="section-title">A delivery model built<br/><em>for production AI.</em></h2>
+      </div>
+      <p class="section-desc">We follow a four-phase approach designed to reduce risk, validate value early, and ensure every system we ship is operable by your team from day one.</p>
+    </div>
+
+    <div class="approach-grid">
+      <div class="approach-step">
+        <div class="num">phase 01</div>
+        <h3>Discover</h3>
+        <p>Use case validation, data audit, success metrics, and architectural plan. We rule out projects that won't work in production before we write code.</p>
+      </div>
+      <div class="approach-step">
+        <div class="num">phase 02</div>
+        <h3>Design</h3>
+        <p>Model selection, system architecture, integration plan, and an evaluation framework that defines exactly what "good enough to ship" looks like.</p>
+      </div>
+      <div class="approach-step">
+        <div class="num">phase 03</div>
+        <h3>Build</h3>
+        <p>Agile delivery with weekly demos, continuous evaluation against the success metrics, and a deployment-ready system at the end of each sprint.</p>
+      </div>
+      <div class="approach-step">
+        <div class="num">phase 04</div>
+        <h3>Operate</h3>
+        <p>Production deployment, MLOps setup, observability dashboards, monitoring, and handover to your team — with optional managed-service support.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================== TECH STACK ================== -->
+<section class="stack-section">
+  <div class="container">
+    <div class="section-head">
+      <div>
+        <div class="section-eyebrow">Technology</div>
+        <h2 class="section-title">The stack we <em>work in.</em></h2>
+      </div>
+      <p class="section-desc">We're tool-agnostic but opinion-strong. These are the technologies we work in most often — chosen for production readiness, not novelty.</p>
+    </div>
+
+    <div class="stack-grid">
+      <div class="stack-cell">
+        <div class="stack-cat">Foundation Models</div>
+        <div class="stack-items">Claude, GPT-4, Gemini<br/><span>Open-source: Llama, Mistral, Qwen</span></div>
+      </div>
+      <div class="stack-cell">
+        <div class="stack-cat">ML Frameworks</div>
+        <div class="stack-items">PyTorch, TensorFlow<br/><span>scikit-learn, XGBoost</span></div>
+      </div>
+      <div class="stack-cell">
+        <div class="stack-cat">LLM Tooling</div>
+        <div class="stack-items">LangChain, LlamaIndex<br/><span>Pydantic AI, DSPy</span></div>
+      </div>
+      <div class="stack-cell">
+        <div class="stack-cat">Vector Databases</div>
+        <div class="stack-items">Pinecone, Weaviate<br/><span>pgvector, Qdrant</span></div>
+      </div>
+      <div class="stack-cell">
+        <div class="stack-cat">MLOps</div>
+        <div class="stack-items">MLflow, Weights &amp; Biases<br/><span>SageMaker, Vertex AI</span></div>
+      </div>
+      <div class="stack-cell">
+        <div class="stack-cat">Cloud</div>
+        <div class="stack-items">AWS, Azure, GCP<br/><span>Bedrock, OpenAI, Anthropic API</span></div>
+      </div>
+      <div class="stack-cell">
+        <div class="stack-cat">Orchestration</div>
+        <div class="stack-items">Airflow, Prefect<br/><span>Temporal, Dagster</span></div>
+      </div>
+      <div class="stack-cell">
+        <div class="stack-cat">Observability</div>
+        <div class="stack-items">LangSmith, Helicone<br/><span>Datadog, Prometheus</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================== CASE HIGHLIGHT ================== -->
+<section class="case-highlight">
+  <div class="case-highlight-grid">
+    <div class="case-highlight-text">
+      <div class="tag">FEATURED CLIENT STORY</div>
+      <div class="metric">3.2<span class="metric-x">×</span></div>
+      <div class="metric-label">Revenue lift through AI-driven customer prioritization across 3.5M monthly accounts</div>
+    </div>
+    <div class="case-highlight-card">
+      <h3>Helping a global bank scale AI in collections operations</h3>
+      <p>A Tier-1 financial institution needed to modernize its collections platform with production-grade machine learning that could handle 3.5 million monthly accounts. Working with Alpine Quantum, the bank deployed a custom ensemble model that meaningfully changed business outcomes within two quarters.</p>
+      <a href="../../index.html#work" class="read-more">Read the full story →</a>
+    </div>
+  </div>
+</section>
+
+<!-- ================== CTA ================== -->
+<section class="cta-band">
+  <div class="container">
+    <h2>Ready to put AI <em>into production?</em></h2>
+    <p>Tell us about your goals. A senior AI engineer will reply within one business day with honest scoping thoughts.</p>
+    <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
+      <a href="../contact.html" class="btn btn-primary">Start a conversation <span class="btn-arrow">→</span></a>
+      <a href="../../index.html#work" class="btn btn-ghost">See more client stories <span class="btn-arrow">→</span></a>
+    </div>
+  </div>
+</section>
+
+<!-- ================== OTHER SERVICES ================== -->
+<section class="other-services">
+  <div class="container">
+    <div class="section-head">
+      <div>
+        <div class="section-eyebrow">Other services</div>
+        <h2 class="section-title">Explore <em>more capabilities.</em></h2>
+      </div>
+      <p class="section-desc">AI rarely ships alone. Most engagements span at least one of these adjacent practices.</p>
+    </div>
+    <div class="other-services-grid">
+      <a href="software-engineering.html" class="other-service">
+        <span class="other-service-name">Software Engineering</span>
+        <span class="arrow">→</span>
+      </a>
+      <a href="cloud-devops.html" class="other-service">
+        <span class="other-service-name">Cloud &amp; DevOps</span>
+        <span class="arrow">→</span>
+      </a>
+      <a href="big-data-analytics.html" class="other-service">
+        <span class="other-service-name">Big Data &amp; Analytics</span>
+        <span class="arrow">→</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ================== FOOTER ================== -->
+<footer>
+  <div class="footer-bg"><img src="../../images/footer-mountains.png" alt="" /></div>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <a href="../../index.html" class="logo">
+        <svg width="32" height="32" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M6 42 L24 10 L42 42 Z" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"/>
+          <path d="M16 42 L28 22 L40 42 Z" fill="currentColor"/>
+          <circle cx="24" cy="10" r="3.2" fill="#FF5B2E"/>
+        </svg>
+        <span>Alpine <em>Quantum</em></span>
+      </a>
+      <p>A software development and digital services company building innovative solutions across AI, cloud, data, and engineering services for global enterprises.</p>
+      <div class="footer-social">
+        <a href="#" aria-label="LinkedIn">in</a>
+        <a href="#" aria-label="X / Twitter">𝕏</a>
+        <a href="#" aria-label="GitHub">⌘</a>
+        <a href="#" aria-label="YouTube">▶</a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>Services</h4>
+      <ul>
+        <li><a href="artificial-intelligence.html">Artificial Intelligence</a></li>
+        <li><a href="software-engineering.html">Software Engineering</a></li>
+        <li><a href="cloud-devops.html">Cloud &amp; DevOps</a></li>
+        <li><a href="big-data-analytics.html">Big Data &amp; Analytics</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Industries</h4>
+      <ul>
+        <li><a href="../industries/financial-services.html">Financial Services</a></li>
+        <li><a href="../industries/healthcare.html">Healthcare</a></li>
+        <li><a href="../industries/retail.html">Retail</a></li>
+        <li><a href="../industries/manufacturing.html">Manufacturing</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Company</h4>
+      <ul>
+        <li><a href="../about.html">About us</a></li>
+        <li><a href="../../index.html#work">Client stories</a></li>
+        <li><a href="../careers.html">Careers</a></li>
+        <li><a href="../contact.html">Contact</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div>© 2026 Alpine <em style="color: var(--accent); font-weight: 600;">Quantum</em> Inc. All rights reserved.</div>
+    <div>
+      <a href="../legal/privacy.html">Privacy</a>
+      <a href="../legal/terms.html">Terms</a>
+      <a href="#">Security</a>
+      <a href="#">Sitemap</a>
+    </div>
+  </div>
+</footer>
+
+<script src="../../site.js"></script>
+</body>
+</html>

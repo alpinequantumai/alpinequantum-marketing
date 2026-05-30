@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Evaluating RAG systems: what we use in practice. — Alpine Quantum</title>
+<meta name="description" content="Our standard evaluation framework for retrieval-augmented generation systems, with the specific metrics we report to clients and how we calibrate them." />
+<link rel="icon" type="image/svg+xml" href="../../favicon.svg" />
+<link rel="icon" type="image/x-icon" href="../../favicon.ico" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../styles.css">
+<style>
+  .article-hero {
+    padding: 160px 40px 80px;
+    background: var(--surface-2);
+    border-bottom: 1px solid var(--line);
+  }
+  .article-hero-content { max-width: 800px; margin: 0 auto; }
+  .article-hero .category-tag {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-family: var(--mono); font-size: 11px;
+    text-transform: uppercase; letter-spacing: 0.15em;
+    color: var(--accent); margin-bottom: 24px;
+  }
+  .article-hero .category-tag::before {
+    content: ""; width: 32px; height: 1px; background: var(--accent);
+  }
+  .article-hero h1 {
+    font-family: var(--display); font-size: clamp(36px, 5vw, 56px);
+    font-weight: 700; line-height: 1.1; letter-spacing: -0.02em;
+    margin-bottom: 24px;
+  }
+  .article-hero h1 em { color: var(--accent); }
+  .article-hero .article-lede {
+    font-size: 20px; line-height: 1.5; color: var(--ink-soft);
+    margin-bottom: 40px;
+  }
+  .article-meta-row {
+    display: flex; align-items: center; gap: 16px;
+    padding-top: 32px; border-top: 1px solid var(--line);
+  }
+  .article-author { display: flex; align-items: center; gap: 12px; flex: 1; }
+  .article-author-avatar {
+    width: 44px; height: 44px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    color: white; font-weight: 600;
+    font-family: var(--display);
+  }
+  .article-author-info { line-height: 1.3; }
+  .article-author-name { font-size: 14px; font-weight: 500; color: var(--ink); }
+  .article-author-title { font-size: 12px; color: var(--ink-muted); }
+  .article-meta-stats {
+    display: flex; gap: 24px;
+    font-family: var(--mono); font-size: 12px;
+    color: var(--ink-muted);
+  }
+  .article-body {
+    max-width: 720px; margin: 0 auto;
+    padding: 80px 40px;
+  }
+  .article-body p {
+    font-size: 18px; line-height: 1.65;
+    color: var(--ink); margin-bottom: 24px;
+  }
+  .article-body h2 {
+    font-family: var(--display); font-size: 32px; font-weight: 600;
+    line-height: 1.15; letter-spacing: -0.02em;
+    margin-top: 56px; margin-bottom: 20px;
+  }
+  .article-body h2 em { color: var(--accent); }
+  .article-body h3 {
+    font-family: var(--display); font-size: 22px; font-weight: 600;
+    line-height: 1.2; margin-top: 40px; margin-bottom: 12px;
+  }
+  .article-body ul, .article-body ol { margin: 0 0 24px 24px; }
+  .article-body ul li, .article-body ol li {
+    font-size: 18px; line-height: 1.6; color: var(--ink);
+    margin-bottom: 10px;
+  }
+  .article-body strong { color: var(--ink); font-weight: 600; }
+  .article-body code {
+    background: var(--surface-2); padding: 2px 6px;
+    border-radius: 4px; font-family: var(--mono); font-size: 0.9em;
+  }
+  .article-body blockquote {
+    border-left: 4px solid var(--accent);
+    padding: 12px 24px; margin: 32px 0;
+    background: var(--surface-2); border-radius: 0 12px 12px 0;
+    font-family: var(--display); font-size: 22px; font-weight: 500;
+    line-height: 1.4; color: var(--ink);
+  }
+  .pull-quote {
+    margin: 48px -40px; padding: 32px;
+    background: var(--ink); color: var(--paper);
+    border-radius: 16px;
+    font-family: var(--display); font-size: 24px; font-weight: 500;
+    line-height: 1.3; letter-spacing: -0.01em; text-align: center;
+  }
+  .pull-quote em { color: var(--accent); font-weight: 600; }
+  .article-footer-section {
+    background: var(--surface-2);
+    border-top: 1px solid var(--line);
+    padding: 80px 40px;
+  }
+  .article-footer-inner { max-width: 800px; margin: 0 auto; }
+  .author-bio-card {
+    background: var(--paper); border: 1px solid var(--line);
+    border-radius: 24px; padding: 32px;
+    display: grid; grid-template-columns: 80px 1fr; gap: 24px;
+  }
+  .author-bio-avatar {
+    width: 80px; height: 80px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    color: white; font-weight: 600;
+    font-family: var(--display); font-size: 32px;
+  }
+  .author-bio-info h4 {
+    font-family: var(--display); font-size: 20px; font-weight: 600;
+    margin-bottom: 4px;
+  }
+  .author-bio-title {
+    font-size: 13px; color: var(--accent); font-weight: 500;
+    margin-bottom: 12px;
+  }
+  .author-bio-info p { font-size: 14px; line-height: 1.5; color: var(--ink-soft); }
+  @media (max-width: 1024px) {
+    .article-hero { padding: 120px 24px 64px; }
+    .article-body { padding: 64px 24px; }
+    .pull-quote { margin-left: -24px; margin-right: -24px; }
+    .article-footer-section { padding: 64px 24px; }
+    .author-bio-card { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <a href="../../index.html" class="logo">
+    <svg width="32" height="32" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <path d="M6 42 L24 10 L42 42 Z" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"/>
+      <path d="M16 42 L28 22 L40 42 Z" fill="currentColor"/>
+      <circle cx="24" cy="10" r="3.2" fill="#FF5B2E"/>
+    </svg>
+    <span>Alpine <em>Quantum</em></span>
+  </a>
+  <div class="nav-links">
+    <a href="../../index.html#services">Services</a>
+    <a href="../../index.html#industries">Industries</a>
+    <a href="../../pages/work/">Client Stories</a>
+    <a href="../../pages/about.html">About</a>
+    <a href="../../pages/insights/" class="active">Resources</a>
+  </div>
+  <a href="../../pages/contact.html" class="nav-cta">Contact us</a>
+  <button class="mobile-toggle" aria-label="Menu"><span></span><span></span><span></span></button>
+</nav>
+
+<section class="article-hero">
+  <div class="article-hero-content">
+    <div class="breadcrumb">
+      <a href="../../index.html">Home</a>
+      <span class="breadcrumb-sep">/</span>
+      <a href="index.html">Insights</a>
+      <span class="breadcrumb-sep">/</span>
+      <span class="current">Evaluating RAG systems: what we use in p...</span>
+    </div>
+    <div class="category-tag">AI & ML</div>
+    <h1>Evaluating RAG systems: <em>what we use in practice.</em></h1>
+    <p class="article-lede">Our standard evaluation framework for retrieval-augmented generation systems, with the specific metrics we report to clients and how we calibrate them.</p>
+    <div class="article-meta-row">
+      <div class="article-author">
+        <div class="article-author-avatar" style="background: linear-gradient(135deg, #4338CA, #6366F1);">AB</div>
+        <div class="article-author-info">
+          <div class="article-author-name">[Co-Founder Name]</div>
+          <div class="article-author-title">Co-Founder & CTO · Alpine Quantum</div>
+        </div>
+      </div>
+      <div class="article-meta-stats">
+        <span>April 7, 2026</span>
+        <span>13 min read</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<article class="article-body">
+
+    <p>Every enterprise RAG project has the same untold problem: nobody knows whether it's working. Anecdotal feedback is positive when the demo goes well, negative when it doesn't, and most of the time genuinely unclear. Without a real evaluation framework, RAG systems either ship in a fog of guesswork or never ship at all.</p>
+    <p>Alpine Quantum has shipped a dozen production RAG systems across finance, healthcare, retail, and software. This is the evaluation framework that's evolved out of those engagements.</p>
+
+    <h2>Why standard <em>LLM evals don't work for RAG.</em></h2>
+    <p>Off-the-shelf LLM evals (HELM, MMLU, etc.) measure capabilities of the base model. RAG system evaluation needs to measure something different: how well the <em>system</em> answers questions over a specific corpus. The base model is one input; the retrieval is another; the prompt structure is a third. You need an eval that captures the system end-to-end.</p>
+    <p>The other failure mode: teams build an eval framework but only measure end-to-end answer quality. This makes it impossible to debug. When the answer is bad, you don't know whether the retrieval failed (wrong context) or the generation failed (right context, wrong synthesis).</p>
+
+    <h2>Four axes <em>every RAG system needs to measure.</em></h2>
+    <p>Our standard framework measures four things separately:</p>
+
+    <h3>1. Retrieval quality</h3>
+    <p>Given a query, did the retriever find the relevant documents? This is measured against a labeled set of (query, relevant-document-IDs) pairs. Metrics: precision@k, recall@k, MRR (mean reciprocal rank).</p>
+    <p>Critical detail: the labeling needs to be done by domain experts, not crowdsourced. "Relevant" is a domain-specific judgment in most enterprise corpora.</p>
+
+    <h3>2. Context utilization</h3>
+    <p>Given the right context, did the model use it correctly? We measure this by comparing answers generated with high-relevance context vs. answers generated with low-relevance context, controlling for everything else. A well-functioning system should show meaningful answer-quality difference; if it doesn't, the model isn't actually using the retrieved context.</p>
+
+    <h3>3. Answer correctness</h3>
+    <p>Given the full retrieval + generation pipeline, is the answer correct? Measured against a labeled set of (query, correct-answer) pairs. Scored by an LLM judge for fuzzy matching, with human spot-checks for calibration.</p>
+
+    <h3>4. Answer faithfulness</h3>
+    <p>Even when the answer is correct, is it grounded in the retrieved context, or is the model hallucinating? Measured by checking whether claims in the answer are supported by the retrieved documents. Critical for compliance-sensitive use cases.</p>
+
+    <div class="pull-quote">An answer that's <em>correct but unfaithful</em> is fine in some domains and catastrophic in others. <em>Measure both, separately.</em></div>
+
+    <h2>The eval dataset: <em>how to build one.</em></h2>
+    <p>The hard part of RAG evaluation isn't the metrics — it's the dataset. Three principles that have served us well:</p>
+
+    <h3>Start with real queries, not synthetic ones</h3>
+    <p>LLM-generated test queries (which are easy to produce) typically don't match the distribution of real user queries. Real users ask shorter, more elliptical, more ambiguous questions. Start by collecting real queries from initial users (or beta testers, or yourself acting as a user).</p>
+
+    <h3>Stratify by query type</h3>
+    <p>RAG systems perform very differently on different query types. Lookup queries ("what's the policy on X?") are easy. Synthesis queries ("compare our policy with regulation Y") are hard. Multi-hop queries ("what's the trend in X over the past three years?") are harder still.</p>
+    <p>Build your eval set with explicit stratification across query types, and report metrics per stratum. Aggregate metrics hide important failure modes.</p>
+
+    <h3>Grow the dataset from production failures</h3>
+    <p>Every time the production system answers something incorrectly, add that query to the eval set with the correct answer. This naturally targets eval expansion at the system's weakest points. The eval set becomes a regression test as much as a benchmark.</p>
+
+    <h2>Specific metrics we report.</h2>
+    <p>For client engagements, we typically report:</p>
+    <ul>
+      <li><strong>Retrieval recall@5</strong>: are the relevant documents in the top 5 results?</li>
+      <li><strong>Answer correctness rate</strong>: % of queries with correct answers, per query-type stratum</li>
+      <li><strong>Answer faithfulness rate</strong>: % of answers grounded in retrieved context</li>
+      <li><strong>Hallucination rate</strong>: % of answers containing claims not supported by context</li>
+      <li><strong>Refusal accuracy</strong>: when the system should say "I don't know," does it?</li>
+      <li><strong>Latency P50/P95</strong>: speed of end-to-end response</li>
+      <li><strong>Cost per query</strong>: $ cost including embeddings, retrieval, and generation</li>
+    </ul>
+    <p>These metrics are tracked over time, on a fixed eval set, so we can see whether the system is improving with our changes.</p>
+
+    <h2>Tools we use.</h2>
+    <p>For evaluation tooling, we typically reach for:</p>
+    <ul>
+      <li><strong>LangSmith</strong> for end-to-end trace logging and eval orchestration</li>
+      <li><strong>Helicone</strong> when we need lower-cost trace logging</li>
+      <li><strong>Ragas</strong> for the off-the-shelf RAG-specific metrics (faithfulness, answer relevancy)</li>
+      <li><strong>Custom Python harness</strong> for the eval-set management and scheduled runs</li>
+      <li><strong>OpenAI/Anthropic models as LLM judges</strong> for fuzzy answer scoring, calibrated against human judgment on a sample</li>
+    </ul>
+    <p>Most clients end up with a mix — typically LangSmith for trace logging plus a custom Python harness for the specific eval-set discipline.</p>
+
+    <h2>Common failure modes <em>this framework catches.</em></h2>
+    <p>Things this framework consistently identifies that anecdotal feedback would miss:</p>
+    <ul>
+      <li><strong>Embedding model mismatches.</strong> The system retrieves syntactically similar but semantically irrelevant content. Recall@k drops sharply.</li>
+      <li><strong>Chunk-size mistakes.</strong> Chunks too small lose context; chunks too large dilute the relevant information. Both manifest as degraded answer correctness with adequate retrieval recall.</li>
+      <li><strong>Prompt regressions.</strong> A "minor" prompt tweak silently degrades faithfulness or correctness. Periodic eval runs catch this.</li>
+      <li><strong>Model upgrade surprises.</strong> Moving from one model to another (e.g., GPT-4 to Claude) sometimes improves overall metrics while regressing on specific query strata. Stratified metrics catch this.</li>
+    </ul>
+
+    <h2>What's worth the investment.</h2>
+    <p>RAG evaluation is genuinely effortful. A proper eval framework typically costs us 2-3 weeks of focused work at the start of a project. It's tempting to skip it, especially when there's pressure to demo something quickly.</p>
+    <p>Almost every project where the team skipped a real eval framework ended up rebuilding it later — at higher cost and with less data than if they'd built it from the beginning. The eval framework is the foundation that everything else is built on. Treat it that way.</p>
+    
+</article>
+
+<section class="article-footer-section">
+  <div class="article-footer-inner">
+    <div class="author-bio-card">
+      <div class="author-bio-avatar" style="background: linear-gradient(135deg, #4338CA, #6366F1);">AB</div>
+      <div class="author-bio-info">
+        <h4>[Co-Founder Name]</h4>
+        <div class="author-bio-title">Co-Founder & CTO · Alpine Quantum</div>
+        <p>Former Principal Engineer at a leading cloud provider, with deep expertise in distributed systems, AI infrastructure, and production MLOps. Leads Alpine Quantum's technical practice and writes about engineering at the AI frontier.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-bg"><img src="../../images/footer-mountains.png" alt="" /></div>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <a href="../../index.html" class="logo">
+        <svg width="32" height="32" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M6 42 L24 10 L42 42 Z" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"/>
+          <path d="M16 42 L28 22 L40 42 Z" fill="currentColor"/>
+          <circle cx="24" cy="10" r="3.2" fill="#FF5B2E"/>
+        </svg>
+        <span>Alpine <em>Quantum</em></span>
+      </a>
+      <p>A software development and digital services company building innovative solutions across AI, cloud, data, and engineering services for global enterprises.</p>
+      <div class="footer-social"><a href="#" aria-label="LinkedIn">in</a><a href="#" aria-label="X / Twitter">𝕏</a><a href="#" aria-label="GitHub">⌘</a><a href="#" aria-label="YouTube">▶</a></div>
+    </div>
+    <div class="footer-col"><h4>Services</h4><ul>
+      <li><a href="../../pages/services/artificial-intelligence.html">Artificial Intelligence</a></li>
+      <li><a href="../../pages/services/software-engineering.html">Software Engineering</a></li>
+      <li><a href="../../pages/services/cloud-devops.html">Cloud &amp; DevOps</a></li>
+      <li><a href="../../pages/services/big-data-analytics.html">Big Data &amp; Analytics</a></li>
+    </ul></div>
+    <div class="footer-col"><h4>Industries</h4><ul>
+      <li><a href="../../pages/industries/financial-services.html">Financial Services</a></li>
+      <li><a href="../../pages/industries/healthcare.html">Healthcare</a></li>
+      <li><a href="../../pages/industries/retail.html">Retail</a></li>
+      <li><a href="../../pages/industries/manufacturing.html">Manufacturing</a></li>
+    </ul></div>
+    <div class="footer-col"><h4>Company</h4><ul>
+      <li><a href="../../pages/about.html">About us</a></li>
+      <li><a href="../../pages/work/">Client stories</a></li>
+      <li><a href="../../pages/careers.html">Careers</a></li>
+      <li><a href="../../pages/contact.html">Contact</a></li>
+    </ul></div>
+  </div>
+  <div class="footer-bottom">
+    <div>© 2026 Alpine <em style="color: var(--accent); font-weight: 600;">Quantum</em> Inc. All rights reserved.</div>
+    <div><a href="../../pages/legal/privacy.html">Privacy</a><a href="../../pages/legal/terms.html">Terms</a><a href="#">Security</a><a href="#">Sitemap</a></div>
+  </div>
+</footer>
+<script src="../../site.js"></script>
+</body>
+</html>

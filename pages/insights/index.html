@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Insights — Alpine Quantum</title>
+<meta name="description" content="Engineering perspectives, technical deep-dives, and industry analysis from the Alpine Quantum team." />
+<link rel="icon" type="image/svg+xml" href="../../favicon.svg" />
+<link rel="icon" type="image/x-icon" href="../../favicon.ico" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../styles.css">
+<style>
+  .insights-filters {
+    background: var(--paper);
+    border-bottom: 1px solid var(--line);
+    padding: 24px 40px;
+    position: sticky; top: 73px; z-index: 50;
+  }
+  .insights-filters-inner {
+    max-width: 1280px; margin: 0 auto;
+    display: flex; gap: 6px; align-items: center; flex-wrap: wrap;
+  }
+  .insights-filters .filter-label {
+    font-family: var(--mono); font-size: 11px;
+    text-transform: uppercase; letter-spacing: 0.12em;
+    color: var(--ink-muted);
+    margin-right: 16px;
+  }
+  .filter-pill {
+    padding: 6px 12px;
+    border-radius: 100px;
+    font-size: 12px; font-weight: 500;
+    border: 1px solid var(--line);
+    background: var(--paper);
+    color: var(--ink-soft);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .filter-pill:hover { border-color: var(--ink); color: var(--ink); }
+  .filter-pill.active { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+
+  .insights-featured {
+    max-width: 1280px; margin: 0 auto;
+    padding: 64px 40px 32px;
+  }
+  .featured-article {
+    background: var(--ink); color: var(--paper);
+    border-radius: 24px;
+    padding: 48px;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 64px;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .featured-article::before {
+    content: ""; position: absolute; top: -30%; right: -10%; width: 60%; height: 200%;
+    background: radial-gradient(circle, rgba(255,91,46,0.15), transparent 60%);
+    pointer-events: none;
+  }
+  .featured-article-content { position: relative; z-index: 1; }
+  .featured-eyebrow {
+    font-family: var(--mono); font-size: 11px;
+    text-transform: uppercase; letter-spacing: 0.15em;
+    color: var(--accent);
+    margin-bottom: 16px;
+  }
+  .featured-article h2 {
+    font-family: var(--display); font-size: clamp(28px, 4vw, 40px);
+    font-weight: 600; line-height: 1.1; letter-spacing: -0.02em;
+    margin-bottom: 16px;
+  }
+  .featured-article h2 em { color: var(--accent); }
+  .featured-article p {
+    font-size: 16px; line-height: 1.6;
+    color: rgba(255,255,255,0.75);
+    margin-bottom: 24px;
+  }
+  .featured-meta {
+    font-family: var(--mono); font-size: 11px;
+    text-transform: uppercase; letter-spacing: 0.12em;
+    color: rgba(255,255,255,0.55);
+    margin-bottom: 24px;
+    display: flex; gap: 12px; align-items: center;
+  }
+  .featured-author-card {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 16px;
+    padding: 24px;
+    position: relative; z-index: 1;
+  }
+  .featured-author-card .stats {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px;
+  }
+  .featured-author-card .stat-val {
+    font-family: var(--display); font-size: 28px; font-weight: 700;
+    color: var(--accent); line-height: 1; letter-spacing: -0.02em;
+  }
+  .featured-author-card .stat-lbl {
+    font-size: 11px; color: rgba(255,255,255,0.6); margin-top: 4px;
+    line-height: 1.4;
+  }
+  .featured-author-card .author-row {
+    display: flex; align-items: center; gap: 12px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(255,255,255,0.1);
+  }
+  .featured-author-card .author-avatar {
+    width: 40px; height: 40px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #FF5B2E, #C73A14);
+    display: flex; align-items: center; justify-content: center;
+    color: white; font-weight: 600;
+    font-family: var(--display);
+  }
+  .featured-author-card .author-name { font-size: 13px; font-weight: 500; color: var(--paper); }
+  .featured-author-card .author-title { font-size: 11px; color: rgba(255,255,255,0.6); }
+
+  .articles-grid {
+    max-width: 1280px; margin: 0 auto;
+    padding: 32px 40px 100px;
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;
+  }
+
+  .article-card {
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: 24px;
+    padding: 32px;
+    transition: all 0.3s;
+    display: flex; flex-direction: column;
+  }
+  .article-card:hover {
+    border-color: var(--ink);
+    transform: translateY(-4px);
+    box-shadow: 0 16px 40px -16px rgba(10,10,11,0.12);
+  }
+  .article-category {
+    font-family: var(--mono); font-size: 10px;
+    text-transform: uppercase; letter-spacing: 0.12em;
+    color: var(--accent);
+    margin-bottom: 12px;
+  }
+  .article-card h3 {
+    font-family: var(--display); font-size: 22px; font-weight: 600;
+    line-height: 1.2; letter-spacing: -0.01em;
+    margin-bottom: 12px;
+    flex: 1;
+  }
+  .article-excerpt {
+    font-size: 14px; line-height: 1.55; color: var(--ink-soft);
+    margin-bottom: 20px;
+  }
+  .article-footer {
+    margin-top: auto;
+    padding-top: 16px;
+    border-top: 1px solid var(--line);
+    display: flex; align-items: center; gap: 12px;
+  }
+  .article-author-avatar {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent), #C73A14);
+    display: flex; align-items: center; justify-content: center;
+    color: white; font-weight: 600;
+    font-size: 11px;
+    font-family: var(--display);
+  }
+  .article-author-avatar.var-2 { background: linear-gradient(135deg, #4338CA, #6366F1); }
+  .article-author-avatar.var-3 { background: linear-gradient(135deg, #0891B2, #06B6D4); }
+  .article-author-avatar.var-4 { background: linear-gradient(135deg, #65A30D, #84CC16); }
+  .article-author-avatar.var-5 { background: linear-gradient(135deg, #7C3AED, #A78BFA); }
+  .article-meta {
+    flex: 1;
+    font-size: 11px;
+    color: var(--ink-muted);
+    line-height: 1.4;
+  }
+  .article-meta strong { color: var(--ink); display: block; font-weight: 500; }
+
+  @media (max-width: 1024px) {
+    .insights-featured { padding: 48px 24px 24px; }
+    .featured-article { grid-template-columns: 1fr; padding: 32px; gap: 32px; }
+    .articles-grid { grid-template-columns: 1fr; padding: 24px; gap: 16px; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <a href="../../index.html" class="logo">
+    <svg width="32" height="32" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <path d="M6 42 L24 10 L42 42 Z" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"/>
+      <path d="M16 42 L28 22 L40 42 Z" fill="currentColor"/>
+      <circle cx="24" cy="10" r="3.2" fill="#FF5B2E"/>
+    </svg>
+    <span>Alpine <em>Quantum</em></span>
+  </a>
+  <div class="nav-links">
+    <a href="../../index.html#services">Services</a>
+    <a href="../../index.html#industries">Industries</a>
+    <a href="../../index.html#work" >Client Stories</a>
+    <a href="../../pages/about.html">About</a>
+    <a href="../../pages/insights/" class="active">Resources</a>
+    
+  </div>
+  <a href="../../pages/contact.html" class="nav-cta">Contact us</a>
+  <button class="mobile-toggle" aria-label="Menu"><span></span><span></span><span></span></button>
+</nav>
+
+<section class="page-hero">
+  <div class="page-hero-content">
+    <div class="breadcrumb">
+      <a href="../../index.html">Home</a>
+      <span class="breadcrumb-sep">/</span>
+      <span class="current">Insights</span>
+    </div>
+    <div class="page-hero-eyebrow">Insights</div>
+    <h1>Engineering perspectives,<br/><em>from the team.</em></h1>
+    <p class="lede">Technical deep-dives, industry analysis, and lessons from production engagements. Written by Alpine Quantum engineers, architects, and operators.</p>
+  </div>
+</section>
+
+<!-- Filters -->
+<div class="insights-filters">
+  <div class="insights-filters-inner">
+    <div class="filter-label">Topic</div>
+    <span class="filter-pill active">All</span>
+    <span class="filter-pill">AI &amp; ML</span>
+    <span class="filter-pill">Engineering</span>
+    <span class="filter-pill">Cloud</span>
+    <span class="filter-pill">Data</span>
+    <span class="filter-pill">Industry analysis</span>
+    <span class="filter-pill">Team &amp; culture</span>
+  </div>
+</div>
+
+<!-- Featured article -->
+<section class="insights-featured">
+  <a href="building-agentic-systems-production.html" class="featured-article" style="text-decoration:none; color:inherit;">
+    <div class="featured-article-content">
+      <div class="featured-eyebrow">Featured · Deep dive · 24 min read</div>
+      <h2>Building agentic systems <em>that actually work in production.</em></h2>
+      <p>A practical guide to building AI agents that ship: tool registries, deterministic routing, observability, the unsexy operations work that separates demos from systems your business depends on.</p>
+      <div class="featured-meta">
+        <span>AI &amp; ML</span>
+        <span>·</span>
+        <span>May 22, 2026</span>
+      </div>
+    </div>
+    <div class="featured-author-card">
+      <div class="stats">
+        <div>
+          <div class="stat-val">24min</div>
+          <div class="stat-lbl">Read time</div>
+        </div>
+        <div>
+          <div class="stat-val">5</div>
+          <div class="stat-lbl">Code examples</div>
+        </div>
+      </div>
+      <div class="author-row">
+        <div class="author-avatar">AB</div>
+        <div>
+          <div class="author-name">[Co-Founder Name]</div>
+          <div class="author-title">Co-Founder &amp; CTO</div>
+        </div>
+      </div>
+    </div>
+  </a>
+</section>
+
+<!-- Articles grid -->
+<section class="articles-grid">
+
+  <a href="#" class="article-card">
+    <div class="article-category">Engineering</div>
+    <h3>The case for boring infrastructure</h3>
+    <p class="article-excerpt">Why we still reach for Postgres + Spring Boot + a single VPS for new internal apps — and what we'd reach for if we couldn't.</p>
+    <div class="article-footer">
+      <div class="article-author-avatar var-2">AB</div>
+      <div class="article-meta">
+        <strong>[Co-Founder Name]</strong>
+        May 18, 2026 · 8 min read
+      </div>
+    </div>
+  </a>
+
+  <a href="#" class="article-card">
+    <div class="article-category">AI &amp; ML</div>
+    <h3>When NOT to use a language model</h3>
+    <p class="article-excerpt">Four production problems where teams reached for an LLM and ended up with worse outcomes than the classical alternative.</p>
+    <div class="article-footer">
+      <div class="article-author-avatar var-3">SD</div>
+      <div class="article-meta">
+        <strong>[Principal Engineer]</strong>
+        May 12, 2026 · 11 min read
+      </div>
+    </div>
+  </a>
+
+  <a href="#" class="article-card">
+    <div class="article-category">Cloud</div>
+    <h3>The real cost of multi-region — and when you actually need it</h3>
+    <p class="article-excerpt">Most multi-region deployments are over-engineered. A practical framework for deciding whether your workload genuinely warrants the operational complexity.</p>
+    <div class="article-footer">
+      <div class="article-author-avatar var-4">JK</div>
+      <div class="article-meta">
+        <strong>[Cloud Practice Lead]</strong>
+        May 06, 2026 · 9 min read
+      </div>
+    </div>
+  </a>
+
+  <a href="#" class="article-card">
+    <div class="article-category">Data</div>
+    <h3>Notes from a year of lakehouse deployments</h3>
+    <p class="article-excerpt">What worked, what didn't, and what we'd do differently — across six lakehouse implementations spanning finance, healthcare, and retail.</p>
+    <div class="article-footer">
+      <div class="article-author-avatar var-5">PM</div>
+      <div class="article-meta">
+        <strong>[Data Practice Lead]</strong>
+        Apr 28, 2026 · 14 min read
+      </div>
+    </div>
+  </a>
+
+  <a href="#" class="article-card">
+    <div class="article-category">Engineering</div>
+    <h3>Hiring senior engineers in 2026: what's changed</h3>
+    <p class="article-excerpt">What we look for, how we interview, and how the rise of AI coding tools is changing what "senior" actually means in software engineering.</p>
+    <div class="article-footer">
+      <div class="article-author-avatar">KP</div>
+      <div class="article-meta">
+        <strong>[Founder Name]</strong>
+        Apr 21, 2026 · 7 min read
+      </div>
+    </div>
+  </a>
+
+  <a href="#" class="article-card">
+    <div class="article-category">Industry analysis</div>
+    <h3>The next decade of enterprise software</h3>
+    <p class="article-excerpt">Three predictions about how enterprise software will be built, bought, and operated by 2035 — and what they mean for technology leaders today.</p>
+    <div class="article-footer">
+      <div class="article-author-avatar var-2">KP</div>
+      <div class="article-meta">
+        <strong>[Founder Name]</strong>
+        Apr 14, 2026 · 12 min read
+      </div>
+    </div>
+  </a>
+
+  <a href="#" class="article-card">
+    <div class="article-category">AI &amp; ML</div>
+    <h3>Evaluating RAG systems: what we use in practice</h3>
+    <p class="article-excerpt">Our standard evaluation framework for retrieval-augmented generation systems, with the specific metrics we report to clients and how we calibrate them.</p>
+    <div class="article-footer">
+      <div class="article-author-avatar var-3">AB</div>
+      <div class="article-meta">
+        <strong>[Co-Founder Name]</strong>
+        Apr 07, 2026 · 13 min read
+      </div>
+    </div>
+  </a>
+
+  <a href="#" class="article-card">
+    <div class="article-category">Team &amp; culture</div>
+    <h3>Why we still do weekly engineering demos</h3>
+    <p class="article-excerpt">A small ritual that pays compounding returns on team morale, client trust, and the quality of work that actually ships. Here's how we run them.</p>
+    <div class="article-footer">
+      <div class="article-author-avatar var-4">SD</div>
+      <div class="article-meta">
+        <strong>[Engagement Lead]</strong>
+        Mar 31, 2026 · 6 min read
+      </div>
+    </div>
+  </a>
+
+  <a href="#" class="article-card">
+    <div class="article-category">Cloud</div>
+    <h3>FinOps for engineers who hate spreadsheets</h3>
+    <p class="article-excerpt">A practical, code-first approach to cloud cost optimization that engineering teams will actually maintain — no quarterly review meetings required.</p>
+    <div class="article-footer">
+      <div class="article-author-avatar var-5">JK</div>
+      <div class="article-meta">
+        <strong>[Cloud Practice Lead]</strong>
+        Mar 24, 2026 · 10 min read
+      </div>
+    </div>
+  </a>
+
+</section>
+
+<!-- CTA -->
+<section class="cta-band">
+  <div class="container">
+    <h2>Want updates <em>in your inbox?</em></h2>
+    <p>Roughly one essay per month on engineering, AI, and the patterns we see across enterprise clients. No marketing, no fluff.</p>
+    <div style="display: flex; gap: 8px; justify-content: center; max-width: 480px; margin: 0 auto; flex-wrap: wrap;">
+      <input type="email" placeholder="your@email.com" style="flex:1; min-width:240px; padding: 16px 20px; border-radius: 100px; border: 1px solid rgba(255,255,255,0.2); background: rgba(255,255,255,0.05); color: white; font-family: inherit; font-size: 14px;">
+      <button class="btn btn-primary">Subscribe <span class="btn-arrow">→</span></button>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-bg"><img src="../../images/footer-mountains.png" alt="" /></div>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <a href="../../index.html" class="logo">
+        <svg width="32" height="32" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M6 42 L24 10 L42 42 Z" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"/>
+          <path d="M16 42 L28 22 L40 42 Z" fill="currentColor"/>
+          <circle cx="24" cy="10" r="3.2" fill="#FF5B2E"/>
+        </svg>
+        <span>Alpine <em>Quantum</em></span>
+      </a>
+      <p>A software development and digital services company building innovative solutions across AI, cloud, data, and engineering services for global enterprises.</p>
+      <div class="footer-social">
+        <a href="#" aria-label="LinkedIn">in</a>
+        <a href="#" aria-label="X / Twitter">𝕏</a>
+        <a href="#" aria-label="GitHub">⌘</a>
+        <a href="#" aria-label="YouTube">▶</a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>Services</h4>
+      <ul>
+        <li><a href="../../pages/services/artificial-intelligence.html">Artificial Intelligence</a></li>
+        <li><a href="../../pages/services/software-engineering.html">Software Engineering</a></li>
+        <li><a href="../../pages/services/cloud-devops.html">Cloud &amp; DevOps</a></li>
+        <li><a href="../../pages/services/big-data-analytics.html">Big Data &amp; Analytics</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Industries</h4>
+      <ul>
+        <li><a href="../../pages/industries/financial-services.html">Financial Services</a></li>
+        <li><a href="../../pages/industries/healthcare.html">Healthcare</a></li>
+        <li><a href="../../pages/industries/retail.html">Retail</a></li>
+        <li><a href="../../pages/industries/manufacturing.html">Manufacturing</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Company</h4>
+      <ul>
+        <li><a href="../../pages/about.html">About us</a></li>
+        <li><a href="../../pages/work/">Client stories</a></li>
+        <li><a href="../../pages/careers.html">Careers</a></li>
+        <li><a href="../../pages/contact.html">Contact</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div>© 2026 Alpine <em style="color: var(--accent); font-weight: 600;">Quantum</em> Inc. All rights reserved.</div>
+    <div>
+      <a href="../../pages/legal/privacy.html">Privacy</a>
+      <a href="../../pages/legal/terms.html">Terms</a>
+      <a href="#">Security</a>
+      <a href="#">Sitemap</a>
+    </div>
+  </div>
+</footer>
+<script src="../../site.js"></script>
+</body>
+</html>

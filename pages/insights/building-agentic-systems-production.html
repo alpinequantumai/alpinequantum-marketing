@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Building agentic systems that actually work in production — Alpine Quantum</title>
+<meta name="description" content="A practical guide to building AI agents that ship: tool registries, deterministic routing, observability, the unsexy operations work that separates demos from systems your business depends on." />
+<link rel="icon" type="image/svg+xml" href="../../favicon.svg" />
+<link rel="icon" type="image/x-icon" href="../../favicon.ico" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../styles.css">
+<style>
+  .article-hero {
+    padding: 160px 40px 80px;
+    background: var(--surface-2);
+    border-bottom: 1px solid var(--line);
+  }
+  .article-hero-content { max-width: 800px; margin: 0 auto; }
+  .article-hero .category-tag {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-family: var(--mono); font-size: 11px;
+    text-transform: uppercase; letter-spacing: 0.15em;
+    color: var(--accent);
+    margin-bottom: 24px;
+  }
+  .article-hero .category-tag::before {
+    content: ""; width: 32px; height: 1px; background: var(--accent);
+  }
+  .article-hero h1 {
+    font-family: var(--display); font-size: clamp(36px, 5vw, 56px);
+    font-weight: 700; line-height: 1.1; letter-spacing: -0.02em;
+    margin-bottom: 24px;
+  }
+  .article-hero h1 em { color: var(--accent); }
+  .article-hero .article-lede {
+    font-size: 20px; line-height: 1.5; color: var(--ink-soft);
+    margin-bottom: 40px;
+  }
+  .article-meta-row {
+    display: flex; align-items: center; gap: 16px;
+    padding-top: 32px;
+    border-top: 1px solid var(--line);
+  }
+  .article-author {
+    display: flex; align-items: center; gap: 12px; flex: 1;
+  }
+  .article-author-avatar {
+    width: 44px; height: 44px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #4338CA, #6366F1);
+    display: flex; align-items: center; justify-content: center;
+    color: white; font-weight: 600;
+    font-family: var(--display);
+  }
+  .article-author-info { line-height: 1.3; }
+  .article-author-name { font-size: 14px; font-weight: 500; color: var(--ink); }
+  .article-author-title { font-size: 12px; color: var(--ink-muted); }
+  .article-meta-stats {
+    display: flex; gap: 24px;
+    font-family: var(--mono); font-size: 12px;
+    color: var(--ink-muted);
+  }
+
+  .article-body {
+    max-width: 720px; margin: 0 auto;
+    padding: 80px 40px;
+  }
+  .article-body p {
+    font-size: 18px; line-height: 1.65;
+    color: var(--ink); /* darker for readability */
+    margin-bottom: 24px;
+  }
+  .article-body h2 {
+    font-family: var(--display); font-size: 32px; font-weight: 600;
+    line-height: 1.15; letter-spacing: -0.02em;
+    margin-top: 56px; margin-bottom: 20px;
+  }
+  .article-body h2 em { color: var(--accent); }
+  .article-body h3 {
+    font-family: var(--display); font-size: 22px; font-weight: 600;
+    line-height: 1.2;
+    margin-top: 40px; margin-bottom: 12px;
+  }
+  .article-body ul, .article-body ol { margin: 0 0 24px 24px; }
+  .article-body ul li, .article-body ol li {
+    font-size: 18px; line-height: 1.6; color: var(--ink);
+    margin-bottom: 10px;
+  }
+  .article-body strong { color: var(--ink); font-weight: 600; }
+  .article-body code {
+    background: var(--surface-2);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-family: var(--mono);
+    font-size: 0.9em;
+  }
+  .article-body pre {
+    background: var(--ink);
+    color: rgba(255,255,255,0.9);
+    padding: 24px;
+    border-radius: 12px;
+    overflow-x: auto;
+    font-family: var(--mono);
+    font-size: 13px;
+    line-height: 1.6;
+    margin: 32px 0;
+  }
+  .article-body pre code {
+    background: transparent;
+    padding: 0;
+    color: inherit;
+  }
+  .article-body blockquote {
+    border-left: 4px solid var(--accent);
+    padding: 12px 24px;
+    margin: 32px 0;
+    background: var(--surface-2);
+    border-radius: 0 12px 12px 0;
+    font-family: var(--display);
+    font-size: 22px;
+    font-weight: 500;
+    line-height: 1.4;
+    color: var(--ink);
+  }
+  .pull-quote {
+    margin: 48px -40px;
+    padding: 32px;
+    background: var(--ink);
+    color: var(--paper);
+    border-radius: 16px;
+    font-family: var(--display);
+    font-size: 24px;
+    font-weight: 500;
+    line-height: 1.3;
+    letter-spacing: -0.01em;
+    text-align: center;
+  }
+  .pull-quote em { color: var(--accent); font-weight: 600; }
+
+  .article-footer-section {
+    background: var(--surface-2);
+    border-top: 1px solid var(--line);
+    padding: 80px 40px;
+  }
+  .article-footer-inner { max-width: 800px; margin: 0 auto; }
+  .author-bio-card {
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: 24px;
+    padding: 32px;
+    display: grid; grid-template-columns: 80px 1fr; gap: 24px;
+    margin-bottom: 40px;
+  }
+  .author-bio-avatar {
+    width: 80px; height: 80px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #4338CA, #6366F1);
+    display: flex; align-items: center; justify-content: center;
+    color: white; font-weight: 600;
+    font-family: var(--display);
+    font-size: 32px;
+  }
+  .author-bio-info h4 {
+    font-family: var(--display); font-size: 20px; font-weight: 600;
+    margin-bottom: 4px;
+  }
+  .author-bio-title {
+    font-size: 13px; color: var(--accent); font-weight: 500;
+    margin-bottom: 12px;
+  }
+  .author-bio-info p { font-size: 14px; line-height: 1.5; color: var(--ink-soft); }
+
+  .related-articles {
+    background: var(--paper);
+    border-top: 1px solid var(--line);
+    padding: 80px 40px 120px;
+  }
+  .related-inner { max-width: 1280px; margin: 0 auto; }
+  .related-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;
+  }
+
+  @media (max-width: 1024px) {
+    .article-hero { padding: 120px 24px 64px; }
+    .article-body { padding: 64px 24px; }
+    .pull-quote { margin-left: -24px; margin-right: -24px; }
+    .article-footer-section { padding: 64px 24px; }
+    .author-bio-card { grid-template-columns: 1fr; }
+    .author-bio-avatar { width: 64px; height: 64px; font-size: 24px; }
+    .related-articles { padding: 64px 24px; }
+    .related-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <a href="../../index.html" class="logo">
+    <svg width="32" height="32" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <path d="M6 42 L24 10 L42 42 Z" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"/>
+      <path d="M16 42 L28 22 L40 42 Z" fill="currentColor"/>
+      <circle cx="24" cy="10" r="3.2" fill="#FF5B2E"/>
+    </svg>
+    <span>Alpine <em>Quantum</em></span>
+  </a>
+  <div class="nav-links">
+    <a href="../../index.html#services">Services</a>
+    <a href="../../index.html#industries">Industries</a>
+    <a href="../../index.html#work" >Client Stories</a>
+    <a href="../../pages/about.html">About</a>
+    <a href="../../pages/insights/" class="active">Resources</a>
+    
+  </div>
+  <a href="../../pages/contact.html" class="nav-cta">Contact us</a>
+  <button class="mobile-toggle" aria-label="Menu"><span></span><span></span><span></span></button>
+</nav>
+
+<!-- Article hero -->
+<section class="article-hero">
+  <div class="article-hero-content">
+    <div class="breadcrumb">
+      <a href="../../index.html">Home</a>
+      <span class="breadcrumb-sep">/</span>
+      <a href="index.html">Insights</a>
+      <span class="breadcrumb-sep">/</span>
+      <span class="current">Building agentic systems</span>
+    </div>
+    <div class="category-tag">AI &amp; ML · Deep Dive</div>
+    <h1>Building agentic systems <em>that actually work in production.</em></h1>
+    <p class="article-lede">A practical guide to building AI agents that ship — tool registries, deterministic routing, observability, the unsexy operations work that separates demos from systems your business depends on.</p>
+    <div class="article-meta-row">
+      <div class="article-author">
+        <div class="article-author-avatar">AB</div>
+        <div class="article-author-info">
+          <div class="article-author-name">[Co-Founder Name]</div>
+          <div class="article-author-title">Co-Founder &amp; CTO · Alpine Quantum</div>
+        </div>
+      </div>
+      <div class="article-meta-stats">
+        <span>May 22, 2026</span>
+        <span>24 min read</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Article body -->
+<article class="article-body">
+
+  <p>Every enterprise we work with is asking a variant of the same question: "How do we build AI agents that actually ship to production — and stay shipped?" Most have a prototype that demos beautifully but stalls in compliance review. Some have systems that made it to production and then drifted, broke silently, or got too expensive to operate.</p>
+
+  <p>This essay is the playbook we've developed across more than a dozen agentic deployments. It's opinionated, occasionally contrarian, and structured around the engineering decisions that matter — not the model selection or framework debates that dominate most agent content.</p>
+
+  <h2>The gap between a demo and <em>a system.</em></h2>
+
+  <p>An agent demo is easy. Wire an LLM to a few tools, give it a system prompt, and watch it handle a contrived task. The result is genuinely impressive — and almost entirely unrelated to what it takes to run an agent in production for two years.</p>
+
+  <p>The gap between demo and production agent has nothing to do with the model. Foundation models are good enough for almost every enterprise use case we encounter. The gap is operational: <strong>can your business trust this thing to act on its behalf, debug it when it fails, hold it accountable when it does something wrong, and improve it over time without breaking what's already working?</strong></p>
+
+  <p>That trust is engineered, not promised. Here's how.</p>
+
+  <h2>1. The tool registry is <em>the system.</em></h2>
+
+  <p>Every production agent we've shipped has a centralized, typed, versioned tool registry. Tools are not defined in prompts. They're not configured in the application code. They live in a registry the agent reads at runtime, with explicit schemas, RBAC permissions, audit hooks, and version history.</p>
+
+  <p>Why does this matter? Three reasons:</p>
+
+  <ul>
+    <li><strong>Permissions follow tools, not agents.</strong> When the same agent serves different surfaces (customer-facing vs internal vs admin), the available tools differ. Permission gating at the tool level is auditable; permission gating in prompts is not.</li>
+    <li><strong>You can swap models without changing tools.</strong> When you upgrade from GPT-4 to GPT-5 to Claude Opus 5 to whatever's next, your tool registry doesn't change. Your evaluation can compare models head-to-head on the same tool set.</li>
+    <li><strong>Audit and compliance become possible.</strong> Every tool call is logged with the agent, the user, the input, the output, the permissions checked. Regulators love this. Auditors love this. Your future self will love this.</li>
+  </ul>
+
+  <pre><code>// Example tool registry entry (simplified)
+{
+  "id": "lookup_employee",
+  "version": "2.1.0",
+  "description": "Look up employee by ID or email",
+  "input_schema": {
+    "type": "object",
+    "properties": {
+      "id_or_email": { "type": "string" }
+    },
+    "required": ["id_or_email"]
+  },
+  "output_schema": { /* ... */ },
+  "permissions": {
+    "roles": ["EMPLOYEE", "MANAGER", "HR_ADMIN"],
+    "scopes": ["read:employees"]
+  },
+  "side_effects": "none",
+  "rate_limit": "100/minute/user",
+  "deprecated": false
+}</code></pre>
+
+  <p>Tool registries that don't look roughly like this are not yet production-ready.</p>
+
+  <h2>2. Deterministic routing for <em>known intents.</em></h2>
+
+  <p>The single biggest gap between agent demos and production agents is what happens when the intent is known. In a demo, the LLM handles every turn. In production, that's slow, expensive, and unnecessary for 60-80% of interactions.</p>
+
+  <div class="pull-quote">If the user's intent is known, <em>don't ask the model.</em></div>
+
+  <p>Our standard pattern: a deterministic router catches well-formed intents (status checks, lookups, simple commands) and routes them to a finite-state machine or a small task handler. The LLM gets invoked only when the intent is genuinely open-ended, when reasoning is required, or when no rule applies.</p>
+
+  <p>The economics are striking. On a typical customer-service agent, we see 65% of interactions handled by the deterministic layer at sub-100ms latency, 25% by a single LLM call, and only 10% requiring multi-step reasoning. The cost difference between these tiers is roughly 1:50:500.</p>
+
+  <h2>3. Observability that's <em>built in, not bolted on.</em></h2>
+
+  <p>If you can't see what your agent is doing, you can't operate it. Every production agent needs at minimum:</p>
+
+  <ul>
+    <li><strong>Trace logging</strong> for every conversation — the full prompt history, tool calls, and outputs</li>
+    <li><strong>Latency and cost metrics</strong> per turn, per session, per user, per intent</li>
+    <li><strong>Quality signals</strong> — explicit user feedback, implicit signals like retry rate, escalation rate</li>
+    <li><strong>Drift detection</strong> — are the kinds of questions the agent receives shifting over time?</li>
+    <li><strong>Hallucination detection</strong> — are tool calls being fabricated? Are responses citing non-existent sources?</li>
+  </ul>
+
+  <p>We typically deploy LangSmith or Helicone for trace logging, with Prometheus + Grafana for the operational metrics, and a custom quality dashboard built on the conversation logs.</p>
+
+  <h2>4. Evaluation is the <em>real product.</em></h2>
+
+  <p>Here's a contrarian opinion: the most valuable artifact from an agent engagement is rarely the agent itself. It's the evaluation framework. The evaluation framework is what makes the agent operable.</p>
+
+  <p>A good evaluation framework includes:</p>
+
+  <ol>
+    <li>A test set of representative interactions, growing over time as production interactions are reviewed</li>
+    <li>Automated scoring per interaction across multiple dimensions (correctness, helpfulness, safety, format)</li>
+    <li>A way to compare two model/prompt/tool variants head-to-head on the test set</li>
+    <li>A way to debug specific failures — which test cases failed, why, and how to fix them</li>
+  </ol>
+
+  <p>Without this, every model change is a leap of faith. With it, you can ship updates confidently and measurably.</p>
+
+  <h2>5. Human-in-the-loop for <em>actions that matter.</em></h2>
+
+  <p>The most common production failure mode we see: an agent autonomously takes an action it shouldn't have. Refunded the wrong customer. Cancelled the wrong subscription. Sent a confidential document to the wrong recipient.</p>
+
+  <p>These don't usually require model failures. They happen when humans build systems where the agent can take consequential actions without human review. The solution is straightforward: <strong>categorize tools by their reversibility, and require human-in-the-loop confirmation for irreversible ones.</strong></p>
+
+  <p>In practice, this means a third axis on your tool registry beyond permissions and rate limits: a <code>requires_confirmation</code> flag. When set, the agent generates the proposed action and routes it to a human reviewer rather than executing directly. The reviewer accepts, modifies, or rejects.</p>
+
+  <h2>Putting it together: <em>a reference architecture.</em></h2>
+
+  <p>Every production agentic system we've shipped looks roughly like this:</p>
+
+  <pre><code>User input
+    ↓
+[Deterministic router] ─ handles 60-80% of intents
+    ↓ (unmatched)
+[Concierge LLM] ─ classifies intent, selects specialist agent
+    ↓
+[Specialist agent] ─ handles domain-specific reasoning
+    ↓ (tool calls)
+[Tool registry] ─ permission-checked, audit-logged, rate-limited
+    ↓
+[HITL queue] ─ for irreversible actions
+    ↓
+[Action executor]
+    ↓
+[Response synthesizer] ─ formats output for surface
+    ↓
+[Observability] ─ logs, metrics, evals — captured throughout</code></pre>
+
+  <p>This architecture has shipped in finance, healthcare, retail, and enterprise SaaS contexts. The specifics differ by domain. The bones are the same.</p>
+
+  <h2>Closing thought</h2>
+
+  <p>The hardest thing about agentic systems isn't building them. Foundation models have gotten good enough that the modeling work is increasingly commoditized. The hard part is the operational discipline: tool registries, deterministic routing, observability, evaluation, human-in-the-loop design.</p>
+
+  <p>If you're starting an agentic project, invest disproportionately in this discipline from day one. The teams that get this right ship in months. The teams that don't, ship demos for years.</p>
+
+</article>
+
+<!-- Author bio + share -->
+<section class="article-footer-section">
+  <div class="article-footer-inner">
+    <div class="author-bio-card">
+      <div class="author-bio-avatar">AB</div>
+      <div class="author-bio-info">
+        <h4>[Co-Founder Name]</h4>
+        <div class="author-bio-title">Co-Founder &amp; CTO · Alpine Quantum</div>
+        <p>Former Principal Engineer at a leading cloud provider, with deep expertise in distributed systems, AI infrastructure, and production MLOps. Leads Alpine Quantum's technical practice and writes about engineering at the AI frontier.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Related articles -->
+<section class="related-articles">
+  <div class="related-inner">
+    <div class="section-head">
+      <div>
+        <div class="section-eyebrow">Keep reading</div>
+        <h2 class="section-title">More from <em>Insights.</em></h2>
+      </div>
+    </div>
+    <div class="related-grid">
+      <a href="#" class="card" style="display:flex; flex-direction:column;">
+        <div style="font-family:var(--mono); font-size:10px; text-transform:uppercase; letter-spacing:0.12em; color:var(--accent); margin-bottom:12px;">AI &amp; ML</div>
+        <h3 style="font-family:var(--display); font-size:20px; font-weight:600; line-height:1.2; letter-spacing:-0.01em; margin-bottom:12px;">When NOT to use a language model</h3>
+        <p style="font-size:14px; color:var(--ink-soft); line-height:1.5; margin-top:auto;">Four production problems where teams reached for an LLM and ended up with worse outcomes than the classical alternative.</p>
+      </a>
+      <a href="#" class="card" style="display:flex; flex-direction:column;">
+        <div style="font-family:var(--mono); font-size:10px; text-transform:uppercase; letter-spacing:0.12em; color:var(--accent); margin-bottom:12px;">AI &amp; ML</div>
+        <h3 style="font-family:var(--display); font-size:20px; font-weight:600; line-height:1.2; letter-spacing:-0.01em; margin-bottom:12px;">Evaluating RAG systems: what we use in practice</h3>
+        <p style="font-size:14px; color:var(--ink-soft); line-height:1.5; margin-top:auto;">Our standard evaluation framework for retrieval-augmented generation systems, with the specific metrics we report to clients.</p>
+      </a>
+      <a href="#" class="card" style="display:flex; flex-direction:column;">
+        <div style="font-family:var(--mono); font-size:10px; text-transform:uppercase; letter-spacing:0.12em; color:var(--accent); margin-bottom:12px;">Engineering</div>
+        <h3 style="font-family:var(--display); font-size:20px; font-weight:600; line-height:1.2; letter-spacing:-0.01em; margin-bottom:12px;">The case for boring infrastructure</h3>
+        <p style="font-size:14px; color:var(--ink-soft); line-height:1.5; margin-top:auto;">Why we still reach for Postgres + Spring Boot + a single VPS for new internal apps — and what we'd reach for if we couldn't.</p>
+      </a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-bg"><img src="../../images/footer-mountains.png" alt="" /></div>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <a href="../../index.html" class="logo">
+        <svg width="32" height="32" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M6 42 L24 10 L42 42 Z" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"/>
+          <path d="M16 42 L28 22 L40 42 Z" fill="currentColor"/>
+          <circle cx="24" cy="10" r="3.2" fill="#FF5B2E"/>
+        </svg>
+        <span>Alpine <em>Quantum</em></span>
+      </a>
+      <p>A software development and digital services company building innovative solutions across AI, cloud, data, and engineering services for global enterprises.</p>
+      <div class="footer-social">
+        <a href="#" aria-label="LinkedIn">in</a>
+        <a href="#" aria-label="X / Twitter">𝕏</a>
+        <a href="#" aria-label="GitHub">⌘</a>
+        <a href="#" aria-label="YouTube">▶</a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>Services</h4>
+      <ul>
+        <li><a href="../../pages/services/artificial-intelligence.html">Artificial Intelligence</a></li>
+        <li><a href="../../pages/services/software-engineering.html">Software Engineering</a></li>
+        <li><a href="../../pages/services/cloud-devops.html">Cloud &amp; DevOps</a></li>
+        <li><a href="../../pages/services/big-data-analytics.html">Big Data &amp; Analytics</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Industries</h4>
+      <ul>
+        <li><a href="../../pages/industries/financial-services.html">Financial Services</a></li>
+        <li><a href="../../pages/industries/healthcare.html">Healthcare</a></li>
+        <li><a href="../../pages/industries/retail.html">Retail</a></li>
+        <li><a href="../../pages/industries/manufacturing.html">Manufacturing</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Company</h4>
+      <ul>
+        <li><a href="../../pages/about.html">About us</a></li>
+        <li><a href="../../pages/work/">Client stories</a></li>
+        <li><a href="../../pages/careers.html">Careers</a></li>
+        <li><a href="../../pages/contact.html">Contact</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div>© 2026 Alpine <em style="color: var(--accent); font-weight: 600;">Quantum</em> Inc. All rights reserved.</div>
+    <div>
+      <a href="../../pages/legal/privacy.html">Privacy</a>
+      <a href="../../pages/legal/terms.html">Terms</a>
+      <a href="#">Security</a>
+      <a href="#">Sitemap</a>
+    </div>
+  </div>
+</footer>
+<script src="../../site.js"></script>
+</body>
+</html>

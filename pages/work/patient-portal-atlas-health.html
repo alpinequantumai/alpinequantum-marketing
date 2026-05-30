@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Patient portal modernization across 2.8M annual visits. — Atlas Health | Alpine Quantum</title>
+<meta name="description" content="A multi-specialty healthcare network consolidated three disconnected patient-facing systems into a single modern portal — with FHIR-native EHR integration, AI-p" />
+<link rel="icon" type="image/svg+xml" href="../../favicon.svg" />
+<link rel="icon" type="image/x-icon" href="../../favicon.ico" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../styles.css">
+<style>
+  .case-detail-hero {
+    background: linear-gradient(135deg, var(--ink) 0%, #1A1A1D 100%);
+    color: var(--paper);
+    padding: 180px 40px 100px;
+    position: relative; overflow: hidden;
+  }
+  .case-detail-hero::before {
+    content: ""; position: absolute; top: -30%; right: -10%; width: 60%; height: 200%;
+    background: radial-gradient(circle, rgba(255,91,46,0.18), transparent 60%);
+    pointer-events: none;
+  }
+  .case-detail-hero-content { max-width: 1280px; margin: 0 auto; position: relative; z-index: 1; }
+  .case-detail-hero .breadcrumb { margin-bottom: 32px; color: rgba(255,255,255,0.6); }
+  .case-detail-hero .breadcrumb a { color: rgba(255,255,255,0.6); }
+  .case-detail-hero .breadcrumb a:hover { color: var(--paper); }
+  .case-detail-hero .breadcrumb .current { color: var(--paper); }
+  .case-detail-meta {
+    font-family: var(--mono); font-size: 11px;
+    text-transform: uppercase; letter-spacing: 0.15em;
+    color: rgba(255,255,255,0.6); margin-bottom: 24px;
+    display: flex; gap: 16px; align-items: center; flex-wrap: wrap;
+  }
+  .case-detail-hero h1 {
+    font-family: var(--display); font-size: clamp(40px, 6vw, 72px);
+    font-weight: 700; line-height: 1.05; letter-spacing: -0.03em;
+    margin-bottom: 24px; max-width: 1000px;
+  }
+  .case-detail-hero h1 em { color: var(--accent); }
+  .case-detail-hero p.lede {
+    font-size: 19px; color: rgba(255,255,255,0.75);
+    max-width: 720px; line-height: 1.55;
+  }
+
+  .case-overview-grid {
+    background: var(--ink); color: var(--paper);
+    padding: 0 40px 80px;
+  }
+  .case-overview-grid-inner {
+    max-width: 1280px; margin: 0 auto;
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px;
+    padding-top: 40px;
+    border-top: 1px solid rgba(255,255,255,0.1);
+  }
+  .case-overview-item .label {
+    font-family: var(--mono); font-size: 10px;
+    text-transform: uppercase; letter-spacing: 0.12em;
+    color: rgba(255,255,255,0.5); margin-bottom: 8px;
+  }
+  .case-overview-item .value { font-size: 15px; font-weight: 500; color: var(--paper); line-height: 1.4; }
+
+  .case-body-section { padding: 100px 40px; }
+  .case-body-container { max-width: 800px; margin: 0 auto; }
+  .case-body-section h2 {
+    font-family: var(--display); font-size: clamp(32px, 4vw, 48px);
+    font-weight: 600; line-height: 1.1; letter-spacing: -0.02em;
+    margin-bottom: 24px;
+  }
+  .case-body-section h2 em { color: var(--accent); }
+  .case-body-section h3 {
+    font-family: var(--display); font-size: 22px; font-weight: 600;
+    line-height: 1.2; letter-spacing: -0.01em;
+    margin-top: 40px; margin-bottom: 16px;
+  }
+  .case-body-section p {
+    font-size: 17px; line-height: 1.65; color: var(--ink-soft);
+    margin-bottom: 20px;
+  }
+  .case-body-section ul { margin: 0 0 24px 24px; }
+  .case-body-section ul li {
+    font-size: 17px; line-height: 1.6; color: var(--ink-soft);
+    margin-bottom: 8px;
+  }
+
+  .metrics-band {
+    background: var(--surface-2);
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    padding: 80px 40px;
+  }
+  .metrics-band-inner {
+    max-width: 1280px; margin: 0 auto;
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;
+  }
+  .metric-card {
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: 24px;
+    padding: 40px; text-align: center;
+  }
+  .metric-card .value {
+    font-family: var(--display); font-size: 72px; font-weight: 700;
+    color: var(--accent); line-height: 1; margin-bottom: 16px;
+    letter-spacing: -0.03em;
+  }
+  .metric-card .label { font-size: 15px; color: var(--ink-soft); line-height: 1.5; }
+
+  .quote-block {
+    background: var(--paper);
+    border-left: 4px solid var(--accent);
+    padding: 32px 40px;
+    margin: 40px 0;
+    border-radius: 0 16px 16px 0;
+  }
+  .quote-block blockquote {
+    font-family: var(--display); font-size: 22px; font-weight: 500;
+    line-height: 1.4; letter-spacing: -0.01em;
+    margin: 0 0 20px 0; color: var(--ink);
+  }
+  .quote-attribution { font-size: 14px; color: var(--ink-soft); }
+  .quote-attribution strong { color: var(--ink); display: block; margin-bottom: 4px; }
+
+  .tech-stack-section {
+    background: var(--ink); color: var(--paper);
+    padding: 80px 40px;
+  }
+  .tech-stack-inner { max-width: 1280px; margin: 0 auto; }
+  .tech-stack-inner .section-eyebrow { color: rgba(255,255,255,0.6); }
+  .tech-stack-inner .section-eyebrow::before { background: var(--paper); }
+  .tech-stack-inner h2 {
+    font-family: var(--display); font-size: clamp(32px, 4vw, 48px);
+    font-weight: 600; line-height: 1.1; letter-spacing: -0.02em;
+    margin-bottom: 40px;
+  }
+  .tech-stack-inner h2 em { color: rgba(255,255,255,0.5); }
+  .tech-stack-grid {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px;
+  }
+  .tech-stack-item {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 12px;
+    padding: 20px;
+  }
+  .tech-stack-cat {
+    font-family: var(--mono); font-size: 10px;
+    text-transform: uppercase; letter-spacing: 0.12em;
+    color: var(--accent); margin-bottom: 10px;
+  }
+  .tech-stack-items { font-size: 14px; line-height: 1.5; color: rgba(255,255,255,0.85); }
+
+  @media (max-width: 1024px) {
+    .case-detail-hero { padding: 130px 24px 64px; }
+    .case-overview-grid { padding: 0 24px 64px; }
+    .case-overview-grid-inner { grid-template-columns: repeat(2, 1fr); }
+    .case-body-section { padding: 64px 24px; }
+    .metrics-band { padding: 64px 24px; }
+    .metrics-band-inner { grid-template-columns: 1fr; }
+    .tech-stack-section { padding: 64px 24px; }
+    .tech-stack-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <a href="../../index.html" class="logo">
+    <svg width="32" height="32" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <path d="M6 42 L24 10 L42 42 Z" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"/>
+      <path d="M16 42 L28 22 L40 42 Z" fill="currentColor"/>
+      <circle cx="24" cy="10" r="3.2" fill="#FF5B2E"/>
+    </svg>
+    <span>Alpine <em>Quantum</em></span>
+  </a>
+  <div class="nav-links">
+    <a href="../../index.html#services">Services</a>
+    <a href="../../index.html#industries">Industries</a>
+    <a href="../../pages/work/" class="active">Client Stories</a>
+    <a href="../../pages/about.html">About</a>
+    <a href="../../pages/insights/">Resources</a>
+  </div>
+  <a href="../../pages/contact.html" class="nav-cta">Contact us</a>
+  <button class="mobile-toggle" aria-label="Menu"><span></span><span></span><span></span></button>
+</nav>
+
+<section class="case-detail-hero">
+  <div class="case-detail-hero-content">
+    <div class="breadcrumb">
+      <a href="../../index.html">Home</a>
+      <span class="breadcrumb-sep">/</span>
+      <a href="index.html">Client Stories</a>
+      <span class="breadcrumb-sep">/</span>
+      <span class="current">Atlas Health</span>
+    </div>
+    <div class="case-detail-meta">
+      <span>Client Story</span>
+      <span>·</span>
+      <span>Healthcare</span>
+      <span>·</span>
+      <span>22 weeks · 3 phases</span>
+    </div>
+    <h1>Patient portal modernization across <em>2.8M annual visits.</em></h1>
+    <p class="lede">A multi-specialty healthcare network consolidated three disconnected patient-facing systems into a single modern portal — with FHIR-native EHR integration, AI-powered triage, and a 52% reduction in onboarding time.</p>
+  </div>
+</section>
+
+<div class="case-overview-grid">
+  <div class="case-overview-grid-inner">
+    <div class="case-overview-item"><div class="label">Client</div><div class="value">Atlas Health Network</div></div>
+    <div class="case-overview-item"><div class="label">Industry</div><div class="value">Healthcare</div></div>
+    <div class="case-overview-item"><div class="label">Services</div><div class="value">Software Engineering, AI, HIPAA Cloud</div></div>
+    <div class="case-overview-item"><div class="label">Timeline</div><div class="value">22 weeks · 3 phases</div></div>
+  </div>
+</div>
+
+<section class="case-body-section">
+  <div class="case-body-container">
+    <div class="section-eyebrow">The challenge</div>
+    
+    <h2>Three portals, <em>zero alignment.</em></h2>
+    <p>Atlas Health Network serves 2.8 million patient visits annually across 14 specialty practices and 23 facilities. Through years of acquisitions and platform shifts, patient experience had fragmented across three separate portals — one for primary care, one for specialty visits, and a third for billing and lab results.</p>
+    <p>The result was predictable: patients with multiple care relationships maintained multiple logins. Information was duplicated, sometimes inconsistent. Scheduling friction drove a measurable share of appointments to phone-based booking, increasing call center load. The IT team spent the majority of its time integrating data across systems instead of building new capabilities.</p>
+    <p>Leadership had attempted a unified portal twice before. Both attempts stalled in the design phase — neither delivered to production. The third attempt needed a different approach.</p>
+  
+  </div>
+</section>
+
+<section class="case-body-section" style="background: var(--surface-2); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line);">
+  <div class="case-body-container">
+    <div class="section-eyebrow">The approach</div>
+    <h2>How we did it.</h2>
+    
+    <p>We started where the previous attempts had stalled: not with the visual design or the technical architecture, but with the data model. The fundamental obstacle to a unified portal wasn't UX — it was that the underlying systems didn't agree on basic concepts like "patient identity," "appointment," and "encounter."</p>
+
+    <h3>Phase 1: Identity &amp; integration foundation (weeks 1–8)</h3>
+    <p>We built a master patient index that resolved identities across all source systems, using a combination of deterministic matching (SSN, MRN, DOB) and probabilistic matching for ambiguous cases. The MPI sits in front of the three EHR systems and provides a single canonical patient ID to all downstream services.</p>
+    <p>On top of the MPI, we implemented a FHIR-native integration layer that exposed appointments, encounters, lab results, and clinical notes through standard FHIR resources. The previous portals had used three different ad-hoc APIs — we replaced them with one.</p>
+
+    <h3>Phase 2: Portal &amp; AI triage (weeks 9–18)</h3>
+    <p>The unified portal was built as a React + Next.js application, deployed to a HIPAA-compliant AWS environment with Cognito for authentication. Patients now log in once and see appointments, results, billing, and messaging across all their care relationships.</p>
+    <p>The AI triage layer was the trickiest design decision. Most clinical AI tools force an "AI handles it" or "human handles it" choice. We built a hybrid system: an LLM-based intake agent gathers symptoms and context from the patient, classifies urgency (with explicit conservative bias), and routes to either a nurse triage queue or a scheduled visit. Crucially, the AI never closes a case unilaterally — every interaction ends with a human-reviewed handoff.</p>
+
+    <h3>Phase 3: Migration &amp; rollout (weeks 19–22)</h3>
+    <p>We migrated 1.8 million active patient accounts across the three legacy portals through a coordinated cut-over weekend. Read-only access to the old portals remained available for 90 days, with automatic redirects guiding patients to the new system. The transition completed without a single missed appointment or lost message.</p>
+  
+  </div>
+</section>
+
+<section class="metrics-band">
+  <div class="metrics-band-inner">
+    
+    <div class="metric-card">
+      <div class="value">52%</div>
+      <div class="label">Reduction in average patient onboarding time vs the previous fragmented portals</div>
+    </div>
+    
+    <div class="metric-card">
+      <div class="value">38%</div>
+      <div class="label">Reduction in call center volume for routine scheduling and inquiries</div>
+    </div>
+    
+    <div class="metric-card">
+      <div class="value">2.8M</div>
+      <div class="label">Annual patient visits now served through a single unified portal</div>
+    </div>
+  </div>
+</section>
+
+<section class="case-body-section">
+  <div class="case-body-container">
+    <div class="quote-block">
+      <blockquote>"The breakthrough wasn't the portal — it was getting our team aligned on what a 'patient' actually meant across our systems. Once that was solved, everything else became possible."</blockquote>
+      <div class="quote-attribution">
+        <strong>Chief Digital Officer</strong>
+        Atlas Health Network
+      </div>
+    </div>
+
+    <div class="section-eyebrow" style="margin-top: 60px;">The outcome</div>
+    
+    <h2>What Atlas Health has <em>now.</em></h2>
+    <p>Beyond the headline metrics, the engagement delivered three durable capabilities:</p>
+    <p><strong>A master patient index that other initiatives can rely on.</strong> The MPI has since become the foundation for a population health platform, a referrals management tool, and an upcoming patient-app strategy. The team no longer rebuilds identity matching for every new project.</p>
+    <p><strong>A FHIR-native integration layer.</strong> Third-party vendors and partner systems integrate against modern FHIR endpoints instead of bespoke APIs. New integrations now take days instead of months.</p>
+    <p><strong>An internal pattern for clinical AI deployment.</strong> The conservative-bias-with-human-handoff pattern from the AI triage is now used as a template for other clinical AI projects across the network — including a recently-launched provider-side documentation assistant.</p>
+  
+  </div>
+</section>
+
+<section class="tech-stack-section">
+  <div class="tech-stack-inner">
+    <div class="section-eyebrow">Technology</div>
+    <h2>The <em>stack</em> behind it.</h2>
+    <div class="tech-stack-grid">
+      
+      <div class="tech-stack-item">
+        <div class="tech-stack-cat">Frontend</div>
+        <div class="tech-stack-items">React, Next.js, TypeScript, Tailwind</div>
+      </div>
+      
+      <div class="tech-stack-item">
+        <div class="tech-stack-cat">Backend</div>
+        <div class="tech-stack-items">Node.js, Python (AI services), FastAPI</div>
+      </div>
+      
+      <div class="tech-stack-item">
+        <div class="tech-stack-cat">Identity &amp; data</div>
+        <div class="tech-stack-items">Master Patient Index, FHIR R4, HL7v2 bridges</div>
+      </div>
+      
+      <div class="tech-stack-item">
+        <div class="tech-stack-cat">AI</div>
+        <div class="tech-stack-items">Claude, OpenAI, custom routing, LangSmith</div>
+      </div>
+      
+      <div class="tech-stack-item">
+        <div class="tech-stack-cat">Cloud</div>
+        <div class="tech-stack-items">AWS (HIPAA), Cognito, RDS Aurora</div>
+      </div>
+      
+      <div class="tech-stack-item">
+        <div class="tech-stack-cat">Integration</div>
+        <div class="tech-stack-items">HAPI FHIR, Mirth Connect, Kafka</div>
+      </div>
+      
+      <div class="tech-stack-item">
+        <div class="tech-stack-cat">Observability</div>
+        <div class="tech-stack-items">Datadog, AWS CloudWatch, custom audit log</div>
+      </div>
+      
+      <div class="tech-stack-item">
+        <div class="tech-stack-cat">Compliance</div>
+        <div class="tech-stack-items">HIPAA controls, SOC 2, audit log retention</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="cta-band">
+  <div class="container">
+    <h2>Want a similar story <em>for your business?</em></h2>
+    <p>Tell us what you're trying to solve. A senior engineer will reply within one business day.</p>
+    <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
+      <a href="../../pages/contact.html" class="btn btn-primary">Start a conversation <span class="btn-arrow">→</span></a>
+      <a href="index.html" class="btn btn-ghost">More client stories <span class="btn-arrow">→</span></a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-bg"><img src="../../images/footer-mountains.png" alt="" /></div>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <a href="../../index.html" class="logo">
+        <svg width="32" height="32" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M6 42 L24 10 L42 42 Z" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"/>
+          <path d="M16 42 L28 22 L40 42 Z" fill="currentColor"/>
+          <circle cx="24" cy="10" r="3.2" fill="#FF5B2E"/>
+        </svg>
+        <span>Alpine <em>Quantum</em></span>
+      </a>
+      <p>A software development and digital services company building innovative solutions across AI, cloud, data, and engineering services for global enterprises.</p>
+      <div class="footer-social"><a href="#" aria-label="LinkedIn">in</a><a href="#" aria-label="X / Twitter">𝕏</a><a href="#" aria-label="GitHub">⌘</a><a href="#" aria-label="YouTube">▶</a></div>
+    </div>
+    <div class="footer-col"><h4>Services</h4><ul>
+      <li><a href="../../pages/services/artificial-intelligence.html">Artificial Intelligence</a></li>
+      <li><a href="../../pages/services/software-engineering.html">Software Engineering</a></li>
+      <li><a href="../../pages/services/cloud-devops.html">Cloud &amp; DevOps</a></li>
+      <li><a href="../../pages/services/big-data-analytics.html">Big Data &amp; Analytics</a></li>
+    </ul></div>
+    <div class="footer-col"><h4>Industries</h4><ul>
+      <li><a href="../../pages/industries/financial-services.html">Financial Services</a></li>
+      <li><a href="../../pages/industries/healthcare.html">Healthcare</a></li>
+      <li><a href="../../pages/industries/retail.html">Retail</a></li>
+      <li><a href="../../pages/industries/manufacturing.html">Manufacturing</a></li>
+    </ul></div>
+    <div class="footer-col"><h4>Company</h4><ul>
+      <li><a href="../../pages/about.html">About us</a></li>
+      <li><a href="../../pages/work/">Client stories</a></li>
+      <li><a href="../../pages/careers.html">Careers</a></li>
+      <li><a href="../../pages/contact.html">Contact</a></li>
+    </ul></div>
+  </div>
+  <div class="footer-bottom">
+    <div>© 2026 Alpine <em style="color: var(--accent); font-weight: 600;">Quantum</em> Inc. All rights reserved.</div>
+    <div><a href="../../pages/legal/privacy.html">Privacy</a><a href="../../pages/legal/terms.html">Terms</a><a href="#">Security</a><a href="#">Sitemap</a></div>
+  </div>
+</footer>
+<script src="../../site.js"></script>
+</body>
+</html>

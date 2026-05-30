@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>About — Alpine Quantum</title>
+<meta name="description" content="Alpine Quantum is a digital engineering company helping global enterprises build, modernize, and scale their most important systems." />
+<link rel="icon" type="image/svg+xml" href="../favicon.svg" />
+<link rel="icon" type="image/x-icon" href="../favicon.ico" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../styles.css">
+<style>
+  /* Page-specific styles */
+  .story-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 80px;
+    align-items: center;
+  }
+  .story-text h2 {
+    font-family: var(--display);
+    font-size: clamp(36px, 5vw, 56px);
+    font-weight: 600;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    margin-bottom: 24px;
+  }
+  .story-text h2 em { color: var(--accent); }
+  .story-text p {
+    font-size: 17px; line-height: 1.6;
+    color: var(--ink-soft);
+    margin-bottom: 18px;
+  }
+  .story-visual {
+    position: relative;
+  }
+  .story-visual > img {
+    width: 100%;
+    aspect-ratio: 5/4;
+    object-fit: cover;
+    border-radius: 24px;
+  }
+  .story-stats {
+    position: absolute;
+    bottom: -32px; left: -32px; right: 32px;
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: 24px;
+    padding: 40px;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 24px;
+    box-shadow: 0 20px 60px -20px rgba(10,10,11,0.15);
+  }
+  .story-stat .num {
+    font-family: var(--display);
+    font-size: 56px;
+    font-weight: 600;
+    line-height: 1;
+    color: var(--accent);
+    margin-bottom: 8px;
+    letter-spacing: -0.02em;
+  }
+  .story-stat .label {
+    font-size: 13px;
+    color: var(--ink-soft);
+    line-height: 1.4;
+  }
+
+  /* Values section */
+  .values-grid {
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    gap: 1px; background: var(--line); border: 1px solid var(--line);
+    border-radius: 24px; overflow: hidden;
+  }
+  .value-card {
+    background: var(--paper);
+    padding: 48px 32px;
+    min-height: 280px;
+    display: flex; flex-direction: column;
+    transition: background 0.3s, color 0.3s;
+  }
+  .value-card:hover { background: var(--ink); color: var(--paper); }
+  .value-card:hover .value-num { color: var(--accent); }
+  .value-card:hover .value-desc { color: rgba(255,255,255,0.7); }
+  .value-num {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--ink-muted);
+    margin-bottom: 24px;
+    letter-spacing: 0.1em;
+  }
+  .value-title {
+    font-family: var(--display);
+    font-size: 24px;
+    font-weight: 600;
+    line-height: 1.1;
+    margin-bottom: 16px;
+    letter-spacing: -0.01em;
+  }
+  .value-desc {
+    font-size: 14px; line-height: 1.55;
+    color: var(--ink-soft);
+    transition: color 0.3s;
+  }
+
+  /* Leadership */
+  .leaders {
+    background: var(--surface-2);
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+  }
+  .leaders-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 32px;
+  }
+  .leader {
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: 24px;
+    padding: 32px;
+    transition: all 0.3s;
+  }
+  .leader:hover { border-color: var(--ink); transform: translateY(-4px); }
+  .leader-avatar {
+    width: 72px; height: 72px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent), #C73A14);
+    display: flex; align-items: center; justify-content: center;
+    color: white; font-weight: 600; font-size: 26px;
+    font-family: var(--display);
+    margin-bottom: 20px;
+  }
+  .leader-name {
+    font-family: var(--display);
+    font-size: 22px;
+    font-weight: 600;
+    margin-bottom: 4px;
+    letter-spacing: -0.01em;
+  }
+  .leader-title {
+    font-size: 13px;
+    color: var(--accent);
+    font-weight: 500;
+    margin-bottom: 16px;
+  }
+  .leader-bio {
+    font-size: 14px;
+    color: var(--ink-soft);
+    line-height: 1.55;
+    margin-bottom: 16px;
+  }
+  .leader-links {
+    display: flex; gap: 12px;
+    padding-top: 16px;
+    border-top: 1px solid var(--line);
+  }
+  .leader-links a {
+    font-size: 11px;
+    color: var(--ink-muted);
+    font-family: var(--mono);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    transition: color 0.2s;
+  }
+  .leader-links a:hover { color: var(--accent); }
+
+  /* Locations */
+  .locations-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+  .location {
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: 24px;
+    padding: 40px;
+    transition: all 0.3s;
+  }
+  .location:hover { border-color: var(--ink); transform: translateY(-4px); }
+  .location-flag {
+    font-family: var(--mono);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--accent);
+    margin-bottom: 16px;
+  }
+  .location-city {
+    font-family: var(--display);
+    font-size: 32px;
+    font-weight: 600;
+    line-height: 1;
+    letter-spacing: -0.02em;
+    margin-bottom: 8px;
+  }
+  .location-country {
+    font-size: 15px;
+    color: var(--ink-muted);
+    margin-bottom: 24px;
+  }
+  .location-meta {
+    padding-top: 24px;
+    border-top: 1px solid var(--line);
+    font-size: 13px;
+    color: var(--ink-soft);
+    line-height: 1.6;
+  }
+  .location-meta strong { display: block; color: var(--ink); font-weight: 500; margin-bottom: 4px; }
+
+  /* Logos band */
+  .logos-section {
+    background: var(--paper);
+    border-top: 1px solid var(--line);
+    padding: 80px 40px;
+  }
+  .logos-container { max-width: 1280px; margin: 0 auto; }
+  .logos-label {
+    text-align: center;
+    font-family: var(--mono);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--ink-muted);
+    margin-bottom: 40px;
+  }
+  .logos-grid {
+    display: grid; grid-template-columns: repeat(6, 1fr); gap: 24px; align-items: center;
+  }
+  .logo-cell {
+    height: 64px;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    background: var(--paper);
+    transition: all 0.3s;
+    font-family: var(--display);
+    font-weight: 600;
+    font-size: 16px;
+    color: var(--ink-soft);
+    letter-spacing: -0.01em;
+  }
+  .logo-cell:hover { color: var(--ink); border-color: var(--ink); transform: translateY(-2px); }
+  .logo-cell .dot { color: var(--accent); }
+
+  @media (max-width: 1024px) {
+    .story-grid { grid-template-columns: 1fr; gap: 80px; }
+    .story-stats { position: relative; bottom: auto; left: auto; right: auto; margin-top: 24px; padding: 28px; }
+    .values-grid { grid-template-columns: 1fr 1fr; }
+    .leaders-grid { grid-template-columns: 1fr; }
+    .locations-grid { grid-template-columns: 1fr; }
+    .logos-grid { grid-template-columns: repeat(3, 1fr); }
+  }
+  @media (max-width: 600px) {
+    .values-grid { grid-template-columns: 1fr; }
+    .logos-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+</style>
+</head>
+<body>
+
+<!-- ================== NAV ================== -->
+<nav class="nav">
+  <a href="../index.html" class="logo">
+    <svg width="32" height="32" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <path d="M6 42 L24 10 L42 42 Z" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"/>
+      <path d="M16 42 L28 22 L40 42 Z" fill="currentColor"/>
+      <circle cx="24" cy="10" r="3.2" fill="#FF5B2E"/>
+    </svg>
+    <span>Alpine <em>Quantum</em></span>
+  </a>
+  <div class="nav-links">
+    <a href="../index.html#services">Services</a>
+    <a href="../index.html#industries">Industries</a>
+    <a href="../index.html#work">Client Stories</a>
+    <a href="about.html" class="active">About</a>
+    <a href="../index.html#insights">Resources</a>
+  </div>
+  <a href="contact.html" class="nav-cta">Contact us</a>
+  <button class="mobile-toggle" aria-label="Menu"><span></span><span></span><span></span></button>
+</nav>
+
+<!-- ================== PAGE HERO ================== -->
+<section class="page-hero">
+  <div class="page-hero-content">
+    <div class="breadcrumb">
+      <a href="../index.html">Home</a>
+      <span class="breadcrumb-sep">/</span>
+      <span class="current">About</span>
+    </div>
+    <div class="page-hero-eyebrow">About Alpine Quantum</div>
+    <h1>A trusted partner for the <em>climb ahead.</em></h1>
+    <p class="lede">We're a digital engineering company helping global enterprises design, build, and modernize the systems that move their business forward — from strategy through scale.</p>
+  </div>
+</section>
+
+<!-- ================== STORY ================== -->
+<section>
+  <div class="container">
+    <div class="story-grid">
+      <div class="story-text">
+        <div class="section-eyebrow">Our story</div>
+        <h2>Engineering for the <em>AI era.</em></h2>
+        <p>Alpine Quantum was founded on a simple idea: that the next decade of enterprise software will look fundamentally different from the last. AI is not a feature — it's a foundational layer that changes how every system is designed, built, and operated.</p>
+        <p>We started with a team of senior engineers, architects, and data scientists who had shipped production AI and software at the world's largest companies. We were tired of generic consulting and wanted to build a firm that ships real systems — and stays accountable to outcomes, not slide decks.</p>
+        <p>Today, we partner with enterprises across financial services, healthcare, retail, and manufacturing to design and deliver the AI, software, cloud, and data platforms that power their most important work.</p>
+      </div>
+      <div class="story-visual">
+        <img src="../images/process-summit.jpg" alt="The Alpine Quantum approach — partnering for the long climb" />
+        <div class="story-stats">
+          <div class="story-stat">
+            <div class="num">95+</div>
+            <div class="label">Engineers, architects &amp; data scientists</div>
+          </div>
+          <div class="story-stat">
+            <div class="num">180+</div>
+            <div class="label">Enterprise engagements delivered</div>
+          </div>
+          <div class="story-stat">
+            <div class="num">12y</div>
+            <div class="label">Building production-grade systems</div>
+          </div>
+          <div class="story-stat">
+            <div class="num">4</div>
+            <div class="label">Global delivery regions</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================== VALUES ================== -->
+<section style="background: var(--surface-2); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); padding-top: 140px;">
+  <div class="container">
+    <div class="section-head">
+      <div>
+        <div class="section-eyebrow">What we believe</div>
+        <h2 class="section-title">Four ideas that <em>guide every engagement.</em></h2>
+      </div>
+      <p class="section-desc">These aren't aspirational values painted on a wall. They're the operating principles that decide how we run projects, hire engineers, and treat clients every day.</p>
+    </div>
+
+    <div class="values-grid">
+      <div class="value-card">
+        <div class="value-num">01</div>
+        <h3 class="value-title">Ship working systems, not slides.</h3>
+        <p class="value-desc">Strategy decks don't run in production. We measure ourselves by what actually ships and the business outcomes it drives.</p>
+      </div>
+      <div class="value-card">
+        <div class="value-num">02</div>
+        <h3 class="value-title">Senior engineers, hands on the keyboard.</h3>
+        <p class="value-desc">No junior-heavy pyramids. Every engagement is led by a hands-on architect with prior production experience in the domain.</p>
+      </div>
+      <div class="value-card">
+        <div class="value-num">03</div>
+        <h3 class="value-title">Your code, your IP — always.</h3>
+        <p class="value-desc">You own the systems we build, the models we train, and the infrastructure we deploy. No vendor lock-in, no dependence on us to maintain.</p>
+      </div>
+      <div class="value-card">
+        <div class="value-num">04</div>
+        <h3 class="value-title">Truth over comfort.</h3>
+        <p class="value-desc">We tell clients when a project is going off track, when an idea won't work, and when there's a simpler path. Honest is faster.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================== LEADERSHIP ================== -->
+<section class="leaders">
+  <div class="container">
+    <div class="section-head">
+      <div>
+        <div class="section-eyebrow">Leadership</div>
+        <h2 class="section-title">The team behind <em>the work.</em></h2>
+      </div>
+      <p class="section-desc">Alpine Quantum is led by engineers and operators who've shipped at Big Tech and grown global services firms. Hands-on leadership, not hands-off oversight.</p>
+    </div>
+
+    <div class="leaders-grid">
+      <div class="leader">
+        <div class="leader-avatar">KP</div>
+        <div class="leader-name">[Founder Name]</div>
+        <div class="leader-title">Co-Founder &amp; CEO</div>
+        <p class="leader-bio">Previously led technology portfolios at a global Fortune 50 financial institution. Specializes in enterprise AI strategy and large-scale platform engineering.</p>
+        <div class="leader-links">
+          <a href="#">LinkedIn</a>
+          <a href="#">Email</a>
+        </div>
+      </div>
+      <div class="leader">
+        <div class="leader-avatar">AB</div>
+        <div class="leader-name">[Co-Founder Name]</div>
+        <div class="leader-title">Co-Founder &amp; CTO</div>
+        <p class="leader-bio">Former Principal Engineer at a leading cloud provider, with deep expertise in distributed systems, AI infrastructure, and production MLOps.</p>
+        <div class="leader-links">
+          <a href="#">LinkedIn</a>
+          <a href="#">Email</a>
+        </div>
+      </div>
+      <div class="leader">
+        <div class="leader-avatar">SD</div>
+        <div class="leader-name">[Leader Name]</div>
+        <div class="leader-title">VP, Client Engagement</div>
+        <p class="leader-bio">Two decades of enterprise services leadership across Big Four consulting and global systems integrators. Brings a delivery-first lens to every engagement.</p>
+        <div class="leader-links">
+          <a href="#">LinkedIn</a>
+          <a href="#">Email</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================== LOGOS ================== -->
+<section class="logos-section">
+  <div class="logos-container">
+    <div class="logos-label">Trusted by enterprises worldwide</div>
+    <div class="logos-grid">
+      <div class="logo-cell">North<span class="dot">·</span>Bank</div>
+      <div class="logo-cell">Meridian</div>
+      <div class="logo-cell">Veridia<span class="dot">.</span></div>
+      <div class="logo-cell">Atlas Health</div>
+      <div class="logo-cell">Lumen Co.</div>
+      <div class="logo-cell">Quantum<span class="dot">+</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================== LOCATIONS ================== -->
+<section>
+  <div class="container">
+    <div class="section-head">
+      <div>
+        <div class="section-eyebrow">Where we work</div>
+        <h2 class="section-title">Global delivery,<br/><em>local accountability.</em></h2>
+      </div>
+      <p class="section-desc">We deliver from three continents — but every engagement gets a single accountable lead, regardless of where the engineering happens.</p>
+    </div>
+
+    <div class="locations-grid">
+      <div class="location">
+        <div class="location-flag">Headquarters</div>
+        <div class="location-city">Mumbai</div>
+        <div class="location-country">India</div>
+        <div class="location-meta">
+          <strong>Registered office</strong>
+          [Provider India Address]<br/>
+          Mumbai, Maharashtra
+        </div>
+      </div>
+      <div class="location">
+        <div class="location-flag">North America</div>
+        <div class="location-city">Austin</div>
+        <div class="location-country">Texas, United States</div>
+        <div class="location-meta">
+          <strong>Alpine Quantum, LLC</strong>
+          [Provider US Address]<br/>
+          Austin, TX
+        </div>
+      </div>
+      <div class="location">
+        <div class="location-flag">Europe</div>
+        <div class="location-city">Lisbon</div>
+        <div class="location-country">Portugal</div>
+        <div class="location-meta">
+          <strong>Engineering &amp; delivery</strong>
+          [European Office Address]<br/>
+          Lisbon, Portugal
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================== CTA ================== -->
+<section class="cta-band">
+  <div class="container">
+    <h2>Let's build <em>what's next.</em></h2>
+    <p>Whether you're starting a new initiative or scaling an existing one, our team is ready to help. A senior engineer will reply within one business day.</p>
+    <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
+      <a href="contact.html" class="btn btn-primary">Contact us <span class="btn-arrow">→</span></a>
+      <a href="../index.html#work" class="btn btn-ghost">See our work <span class="btn-arrow">→</span></a>
+    </div>
+  </div>
+</section>
+
+<!-- ================== FOOTER ================== -->
+<footer>
+  <div class="footer-bg"><img src="../images/footer-mountains.png" alt="" /></div>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <a href="../index.html" class="logo">
+        <svg width="32" height="32" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M6 42 L24 10 L42 42 Z" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"/>
+          <path d="M16 42 L28 22 L40 42 Z" fill="currentColor"/>
+          <circle cx="24" cy="10" r="3.2" fill="#FF5B2E"/>
+        </svg>
+        <span>Alpine <em>Quantum</em></span>
+      </a>
+      <p>A software development and digital services company building innovative solutions across AI, cloud, data, and engineering services for global enterprises.</p>
+      <div class="footer-social">
+        <a href="#" aria-label="LinkedIn">in</a>
+        <a href="#" aria-label="X / Twitter">𝕏</a>
+        <a href="#" aria-label="GitHub">⌘</a>
+        <a href="#" aria-label="YouTube">▶</a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>Services</h4>
+      <ul>
+        <li><a href="services/artificial-intelligence.html">Artificial Intelligence</a></li>
+        <li><a href="services/software-engineering.html">Software Engineering</a></li>
+        <li><a href="services/cloud-devops.html">Cloud &amp; DevOps</a></li>
+        <li><a href="services/big-data-analytics.html">Big Data &amp; Analytics</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Industries</h4>
+      <ul>
+        <li><a href="industries/financial-services.html">Financial Services</a></li>
+        <li><a href="industries/healthcare.html">Healthcare</a></li>
+        <li><a href="industries/retail.html">Retail</a></li>
+        <li><a href="industries/manufacturing.html">Manufacturing</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Company</h4>
+      <ul>
+        <li><a href="about.html">About us</a></li>
+        <li><a href="../index.html#work">Client stories</a></li>
+        <li><a href="careers.html">Careers</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div>© 2026 Alpine <em style="color: var(--accent); font-weight: 600;">Quantum</em> Inc. All rights reserved.</div>
+    <div>
+      <a href="legal/privacy.html">Privacy</a>
+      <a href="legal/terms.html">Terms</a>
+      <a href="#">Security</a>
+      <a href="#">Sitemap</a>
+    </div>
+  </div>
+</footer>
+
+<script src="../site.js"></script>
+</body>
+</html>

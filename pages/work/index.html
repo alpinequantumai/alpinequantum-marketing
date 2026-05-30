@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Client Stories — Alpine Quantum</title>
+<meta name="description" content="Real engagements with global enterprises across AI, software, cloud, and data. See how Alpine Quantum has helped clients ship outcomes that matter." />
+<link rel="icon" type="image/svg+xml" href="../../favicon.svg" />
+<link rel="icon" type="image/x-icon" href="../../favicon.ico" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../styles.css">
+<style>
+  .work-filters {
+    background: var(--paper);
+    border-bottom: 1px solid var(--line);
+    padding: 32px 40px;
+    position: sticky; top: 73px; z-index: 50;
+  }
+  .work-filters-inner {
+    max-width: 1280px; margin: 0 auto;
+    display: flex; flex-wrap: wrap; gap: 32px; align-items: center;
+  }
+  .filter-group { display: flex; gap: 8px; align-items: center; }
+  .filter-label {
+    font-family: var(--mono); font-size: 11px;
+    text-transform: uppercase; letter-spacing: 0.12em;
+    color: var(--ink-muted);
+  }
+  .filter-pills { display: flex; gap: 6px; flex-wrap: wrap; }
+  .filter-pill {
+    padding: 6px 12px;
+    border-radius: 100px;
+    font-size: 12px; font-weight: 500;
+    border: 1px solid var(--line);
+    background: var(--paper);
+    color: var(--ink-soft);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .filter-pill:hover { border-color: var(--ink); color: var(--ink); }
+  .filter-pill.active { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+
+  .work-grid {
+    max-width: 1280px; margin: 0 auto;
+    padding: 64px 40px 100px;
+    display: grid; grid-template-columns: repeat(2, 1fr); gap: 32px;
+  }
+
+  .case-card {
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: 24px;
+    padding: 40px;
+    transition: all 0.3s;
+    display: flex; flex-direction: column;
+  }
+  .case-card:hover {
+    border-color: var(--ink);
+    transform: translateY(-4px);
+    box-shadow: 0 20px 60px -20px rgba(10,10,11,0.15);
+  }
+  .case-card.featured {
+    grid-column: span 2;
+    background: linear-gradient(135deg, var(--ink) 0%, #1A1A1D 100%);
+    color: var(--paper);
+    border-color: transparent;
+    position: relative;
+    overflow: hidden;
+  }
+  .case-card.featured::before {
+    content: ""; position: absolute; top: -30%; right: -10%;
+    width: 60%; height: 200%;
+    background: radial-gradient(circle, rgba(255,91,46,0.15), transparent 60%);
+    pointer-events: none;
+  }
+  .case-card.featured .case-meta,
+  .case-card.featured .case-tags,
+  .case-card.featured .case-description { color: rgba(255,255,255,0.75); }
+  .case-card.featured .case-tag { background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.9); border-color: rgba(255,255,255,0.15); }
+
+  .case-meta {
+    font-family: var(--mono); font-size: 11px;
+    text-transform: uppercase; letter-spacing: 0.12em;
+    color: var(--ink-muted);
+    margin-bottom: 24px;
+    display: flex; gap: 16px; align-items: center;
+    position: relative; z-index: 1;
+  }
+  .case-meta-sep { opacity: 0.5; }
+  .case-metric {
+    font-family: var(--display); font-size: 64px; font-weight: 700;
+    line-height: 1; letter-spacing: -0.03em;
+    margin-bottom: 16px;
+    position: relative; z-index: 1;
+  }
+  .case-card.featured .case-metric { font-size: 88px; }
+  .case-metric em { color: var(--accent); }
+  .case-title {
+    font-family: var(--display); font-size: 28px; font-weight: 600;
+    line-height: 1.15; letter-spacing: -0.01em;
+    margin-bottom: 16px;
+    position: relative; z-index: 1;
+  }
+  .case-card.featured .case-title { font-size: 36px; }
+  .case-description {
+    font-size: 15px; line-height: 1.55;
+    color: var(--ink-soft);
+    margin-bottom: 24px;
+    position: relative; z-index: 1;
+  }
+  .case-tags {
+    display: flex; gap: 6px; flex-wrap: wrap;
+    margin-bottom: 24px;
+    position: relative; z-index: 1;
+  }
+  .case-tag {
+    font-family: var(--mono); font-size: 10px;
+    text-transform: uppercase; letter-spacing: 0.1em;
+    padding: 4px 10px;
+    border: 1px solid var(--line);
+    border-radius: 100px;
+    background: var(--surface-2);
+    color: var(--ink-soft);
+  }
+  .case-link {
+    margin-top: auto;
+    font-size: 13px; font-weight: 500;
+    color: var(--accent);
+    display: inline-flex; align-items: center; gap: 6px;
+    transition: gap 0.25s;
+    position: relative; z-index: 1;
+  }
+  .case-card:hover .case-link { gap: 10px; }
+
+  .logos-section {
+    background: var(--surface-2);
+    border-top: 1px solid var(--line);
+    padding: 80px 40px;
+  }
+  .logos-container { max-width: 1280px; margin: 0 auto; text-align: center; }
+  .logos-label {
+    font-family: var(--mono); font-size: 11px;
+    text-transform: uppercase; letter-spacing: 0.15em;
+    color: var(--ink-muted); margin-bottom: 40px;
+  }
+  .logos-grid {
+    display: grid; grid-template-columns: repeat(6, 1fr); gap: 24px;
+    align-items: center;
+  }
+  .logo-cell {
+    height: 64px;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    background: var(--paper);
+    transition: all 0.3s;
+    font-family: var(--display);
+    font-weight: 600; font-size: 16px;
+    color: var(--ink-soft);
+    letter-spacing: -0.01em;
+  }
+  .logo-cell:hover { color: var(--ink); border-color: var(--ink); transform: translateY(-2px); }
+  .logo-cell .dot { color: var(--accent); }
+
+  @media (max-width: 1024px) {
+    .work-grid { grid-template-columns: 1fr; padding: 48px 24px; gap: 24px; }
+    .case-card.featured { grid-column: span 1; }
+    .case-card.featured .case-metric { font-size: 64px; }
+    .case-card.featured .case-title { font-size: 28px; }
+    .work-filters { padding: 24px; }
+    .logos-grid { grid-template-columns: repeat(3, 1fr); }
+    .logos-section { padding: 64px 24px; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <a href="../../index.html" class="logo">
+    <svg width="32" height="32" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <path d="M6 42 L24 10 L42 42 Z" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"/>
+      <path d="M16 42 L28 22 L40 42 Z" fill="currentColor"/>
+      <circle cx="24" cy="10" r="3.2" fill="#FF5B2E"/>
+    </svg>
+    <span>Alpine <em>Quantum</em></span>
+  </a>
+  <div class="nav-links">
+    <a href="../../index.html#services">Services</a>
+    <a href="../../index.html#industries">Industries</a>
+    <a href="../../index.html#work" class="active">Client Stories</a>
+    <a href="../../pages/about.html">About</a>
+    <a href="../../pages/insights/" >Resources</a>
+    
+  </div>
+  <a href="../../pages/contact.html" class="nav-cta">Contact us</a>
+  <button class="mobile-toggle" aria-label="Menu"><span></span><span></span><span></span></button>
+</nav>
+
+<section class="page-hero">
+  <div class="page-hero-content">
+    <div class="breadcrumb">
+      <a href="../../index.html">Home</a>
+      <span class="breadcrumb-sep">/</span>
+      <span class="current">Client Stories</span>
+    </div>
+    <div class="page-hero-eyebrow">Client stories</div>
+    <h1>Outcomes that <em>actually shipped.</em></h1>
+    <p class="lede">Real engagements with global enterprises across AI, software, cloud, and data. Each story includes the problem, the approach, and the measurable outcomes.</p>
+  </div>
+</section>
+
+<!-- Filters -->
+<div class="work-filters">
+  <div class="work-filters-inner">
+    <div class="filter-group">
+      <div class="filter-label">Service</div>
+      <div class="filter-pills">
+        <span class="filter-pill active">All</span>
+        <span class="filter-pill">AI</span>
+        <span class="filter-pill">Software</span>
+        <span class="filter-pill">Cloud</span>
+        <span class="filter-pill">Data</span>
+      </div>
+    </div>
+    <div class="filter-group">
+      <div class="filter-label">Industry</div>
+      <div class="filter-pills">
+        <span class="filter-pill active">All</span>
+        <span class="filter-pill">Finance</span>
+        <span class="filter-pill">Healthcare</span>
+        <span class="filter-pill">Retail</span>
+        <span class="filter-pill">Manufacturing</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Case studies grid -->
+<section class="work-grid">
+
+  <!-- Featured (spans 2 cols) -->
+  <a href="collections-ai-northbank.html" class="case-card featured">
+    <div class="case-meta">
+      <span>North·Bank</span>
+      <span class="case-meta-sep">·</span>
+      <span>Financial Services</span>
+      <span class="case-meta-sep">·</span>
+      <span>AI &amp; ML</span>
+    </div>
+    <div class="case-metric">3.2<em>×</em></div>
+    <h2 class="case-title">Helping a global bank scale AI in collections operations</h2>
+    <p class="case-description">A Tier-1 financial institution needed to modernize its collections platform with production-grade machine learning that could handle 3.5 million monthly accounts. Within two quarters, a custom ensemble model meaningfully changed business outcomes — and the bank had an AI capability it could replicate across other functions.</p>
+    <div class="case-tags">
+      <span class="case-tag">Production ML</span>
+      <span class="case-tag">Risk modeling</span>
+      <span class="case-tag">MLOps</span>
+      <span class="case-tag">Regulatory compliance</span>
+    </div>
+    <span class="case-link">Read the full story →</span>
+  </a>
+
+  <a href="#" class="case-card">
+    <div class="case-meta">
+      <span>Atlas Health</span>
+      <span class="case-meta-sep">·</span>
+      <span>Healthcare</span>
+    </div>
+    <div class="case-metric">52<em>%</em></div>
+    <h2 class="case-title">Patient portal modernization across 2.8M annual visits</h2>
+    <p class="case-description">Consolidating three disconnected patient-facing systems into a single modern portal — with FHIR-native EHR integration and AI-powered triage.</p>
+    <div class="case-tags">
+      <span class="case-tag">Software engineering</span>
+      <span class="case-tag">FHIR</span>
+      <span class="case-tag">HIPAA</span>
+    </div>
+    <span class="case-link">Read story →</span>
+  </a>
+
+  <a href="#" class="case-card">
+    <div class="case-meta">
+      <span>Meridian</span>
+      <span class="case-meta-sep">·</span>
+      <span>Retail</span>
+    </div>
+    <div class="case-metric">$24<em>M</em></div>
+    <h2 class="case-title">Real-time recommendation engine across digital touchpoints</h2>
+    <p class="case-description">Turning years of clickstream data into a Kafka-to-feature-store-to-recommendation pipeline, deployed across every digital touchpoint in 18 weeks.</p>
+    <div class="case-tags">
+      <span class="case-tag">Big Data</span>
+      <span class="case-tag">Real-time ML</span>
+      <span class="case-tag">Personalization</span>
+    </div>
+    <span class="case-link">Read story →</span>
+  </a>
+
+  <a href="#" class="case-card">
+    <div class="case-meta">
+      <span>Veridia</span>
+      <span class="case-meta-sep">·</span>
+      <span>Technology</span>
+    </div>
+    <div class="case-metric">4.5<em>×</em></div>
+    <h2 class="case-title">Monolith-to-microservices modernization for a global fintech</h2>
+    <p class="case-description">A 15-year-old monolithic platform decomposed into independently deployable services with full backwards compatibility throughout the migration.</p>
+    <div class="case-tags">
+      <span class="case-tag">App modernization</span>
+      <span class="case-tag">Microservices</span>
+      <span class="case-tag">Cloud-native</span>
+    </div>
+    <span class="case-link">Read story →</span>
+  </a>
+
+  <a href="#" class="case-card">
+    <div class="case-meta">
+      <span>Lumen Co.</span>
+      <span class="case-meta-sep">·</span>
+      <span>Healthcare</span>
+    </div>
+    <div class="case-metric">38<em>%</em></div>
+    <h2 class="case-title">Cutting cloud spend by a third while doubling deployment frequency</h2>
+    <p class="case-description">FinOps + Kubernetes consolidation + CI/CD overhaul — measurable wins on cost and velocity in a single quarter.</p>
+    <div class="case-tags">
+      <span class="case-tag">Cloud &amp; DevOps</span>
+      <span class="case-tag">FinOps</span>
+      <span class="case-tag">Kubernetes</span>
+    </div>
+    <span class="case-link">Read story →</span>
+  </a>
+
+  <a href="#" class="case-card">
+    <div class="case-meta">
+      <span>Quantum+</span>
+      <span class="case-meta-sep">·</span>
+      <span>Manufacturing</span>
+    </div>
+    <div class="case-metric">37<em>%</em></div>
+    <h2 class="case-title">Predictive maintenance deployed across 23 manufacturing plants</h2>
+    <p class="case-description">Sensor-to-prediction-to-work-order pipeline using historian data, deployed in waves over 6 months with measurable downtime reduction at every site.</p>
+    <div class="case-tags">
+      <span class="case-tag">Industrial AI</span>
+      <span class="case-tag">IoT</span>
+      <span class="case-tag">Predictive maintenance</span>
+    </div>
+    <span class="case-link">Read story →</span>
+  </a>
+
+  <a href="#" class="case-card">
+    <div class="case-meta">
+      <span>Internal</span>
+      <span class="case-meta-sep">·</span>
+      <span>Research</span>
+    </div>
+    <div class="case-metric">8<em>weeks</em></div>
+    <h2 class="case-title">Open-source agent framework powering internal AI deployments</h2>
+    <p class="case-description">Our own internal research effort — a deterministic agent framework that became the foundation for half a dozen client deployments.</p>
+    <div class="case-tags">
+      <span class="case-tag">Agentic AI</span>
+      <span class="case-tag">Open source</span>
+      <span class="case-tag">R&amp;D</span>
+    </div>
+    <span class="case-link">Read story →</span>
+  </a>
+
+</section>
+
+<!-- Logos band -->
+<section class="logos-section">
+  <div class="logos-container">
+    <div class="logos-label">Trusted by enterprises worldwide</div>
+    <div class="logos-grid">
+      <div class="logo-cell">North<span class="dot">·</span>Bank</div>
+      <div class="logo-cell">Meridian</div>
+      <div class="logo-cell">Veridia<span class="dot">.</span></div>
+      <div class="logo-cell">Atlas Health</div>
+      <div class="logo-cell">Lumen Co.</div>
+      <div class="logo-cell">Quantum<span class="dot">+</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-band">
+  <div class="container">
+    <h2>Have a story you want <em>to be next?</em></h2>
+    <p>Tell us about your initiative. A senior engineer will reply within one business day with honest scoping thoughts.</p>
+    <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
+      <a href="../../pages/contact.html" class="btn btn-primary">Start a conversation <span class="btn-arrow">→</span></a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-bg"><img src="../../images/footer-mountains.png" alt="" /></div>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <a href="../../index.html" class="logo">
+        <svg width="32" height="32" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M6 42 L24 10 L42 42 Z" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"/>
+          <path d="M16 42 L28 22 L40 42 Z" fill="currentColor"/>
+          <circle cx="24" cy="10" r="3.2" fill="#FF5B2E"/>
+        </svg>
+        <span>Alpine <em>Quantum</em></span>
+      </a>
+      <p>A software development and digital services company building innovative solutions across AI, cloud, data, and engineering services for global enterprises.</p>
+      <div class="footer-social">
+        <a href="#" aria-label="LinkedIn">in</a>
+        <a href="#" aria-label="X / Twitter">𝕏</a>
+        <a href="#" aria-label="GitHub">⌘</a>
+        <a href="#" aria-label="YouTube">▶</a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>Services</h4>
+      <ul>
+        <li><a href="../../pages/services/artificial-intelligence.html">Artificial Intelligence</a></li>
+        <li><a href="../../pages/services/software-engineering.html">Software Engineering</a></li>
+        <li><a href="../../pages/services/cloud-devops.html">Cloud &amp; DevOps</a></li>
+        <li><a href="../../pages/services/big-data-analytics.html">Big Data &amp; Analytics</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Industries</h4>
+      <ul>
+        <li><a href="../../pages/industries/financial-services.html">Financial Services</a></li>
+        <li><a href="../../pages/industries/healthcare.html">Healthcare</a></li>
+        <li><a href="../../pages/industries/retail.html">Retail</a></li>
+        <li><a href="../../pages/industries/manufacturing.html">Manufacturing</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Company</h4>
+      <ul>
+        <li><a href="../../pages/about.html">About us</a></li>
+        <li><a href="../../pages/work/">Client stories</a></li>
+        <li><a href="../../pages/careers.html">Careers</a></li>
+        <li><a href="../../pages/contact.html">Contact</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div>© 2026 Alpine <em style="color: var(--accent); font-weight: 600;">Quantum</em> Inc. All rights reserved.</div>
+    <div>
+      <a href="../../pages/legal/privacy.html">Privacy</a>
+      <a href="../../pages/legal/terms.html">Terms</a>
+      <a href="#">Security</a>
+      <a href="#">Sitemap</a>
+    </div>
+  </div>
+</footer>
+<script src="../../site.js"></script>
+</body>
+</html>

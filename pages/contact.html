@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Contact — Alpine Quantum</title>
+<meta name="description" content="Get in touch with Alpine Quantum. A senior engineer will reply within one business day to discuss your project." />
+<link rel="icon" type="image/svg+xml" href="../favicon.svg" />
+<link rel="icon" type="image/x-icon" href="../favicon.ico" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../styles.css">
+<style>
+  /* Contact-specific styles */
+  .contact-main {
+    padding: 80px 40px;
+  }
+  .contact-grid {
+    max-width: 1280px; margin: 0 auto;
+    display: grid; grid-template-columns: 1fr 1.3fr;
+    gap: 80px;
+  }
+
+  /* Left column */
+  .contact-info-block {
+    margin-bottom: 48px;
+  }
+  .contact-info-block h3 {
+    font-family: var(--display);
+    font-size: 22px; font-weight: 600;
+    margin-bottom: 8px;
+    letter-spacing: -0.01em;
+  }
+  .contact-info-block p {
+    font-size: 15px;
+    color: var(--ink-soft);
+    line-height: 1.55;
+  }
+  .contact-info-block a {
+    color: var(--accent);
+    font-weight: 500;
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.2s;
+  }
+  .contact-info-block a:hover { border-bottom-color: var(--accent); }
+
+  .contact-channels {
+    margin-top: 32px;
+    border-top: 1px solid var(--line);
+    padding-top: 24px;
+  }
+  .contact-channel {
+    padding: 20px 0;
+    border-bottom: 1px solid var(--line);
+    display: grid; grid-template-columns: 120px 1fr; gap: 24px; align-items: start;
+  }
+  .contact-channel .label {
+    font-family: var(--mono); font-size: 11px;
+    text-transform: uppercase; letter-spacing: 0.1em;
+    color: var(--ink-muted);
+    padding-top: 2px;
+  }
+  .contact-channel .value { font-size: 15px; font-weight: 500; line-height: 1.5; }
+  .contact-channel .sub { font-size: 13px; color: var(--ink-soft); margin-top: 4px; font-weight: 400; }
+
+  /* Form */
+  .contact-form {
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: 24px;
+    padding: 48px;
+    position: sticky;
+    top: 100px;
+  }
+  .form-row { margin-bottom: 24px; }
+  .form-row.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px; }
+  .form-row.two-col > div { margin-bottom: 0; }
+  .form-row label {
+    display: block;
+    font-family: var(--mono);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--ink-muted);
+    margin-bottom: 10px;
+  }
+  .form-row input, .form-row textarea, .form-row select {
+    width: 100%;
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid var(--line);
+    padding: 12px 0;
+    font-family: var(--sans);
+    font-size: 15px;
+    color: var(--ink);
+    transition: border-color 0.25s;
+  }
+  .form-row input:focus, .form-row textarea:focus, .form-row select:focus {
+    outline: none;
+    border-bottom-color: var(--accent);
+  }
+  .form-row textarea { resize: vertical; min-height: 120px; }
+  .form-row select { appearance: none; background: transparent; cursor: pointer; }
+  .checkbox-row { display: flex; gap: 12px; align-items: flex-start; margin-bottom: 24px; }
+  .checkbox-row input { width: 18px; height: 18px; margin-top: 2px; accent-color: var(--accent); flex-shrink: 0; }
+  .checkbox-row label {
+    font-size: 13px; color: var(--ink-soft); line-height: 1.55;
+    text-transform: none; letter-spacing: 0; font-family: var(--sans); margin: 0;
+  }
+  .checkbox-row label a { color: var(--accent); }
+  .form-submit {
+    width: 100%;
+    background: var(--ink); color: var(--paper);
+    border: none;
+    padding: 18px;
+    border-radius: 100px;
+    font-size: 14px; font-weight: 500;
+    cursor: pointer;
+    transition: all 0.25s;
+    margin-top: 8px;
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+  }
+  .form-submit:hover { background: var(--accent); }
+
+  /* Offices section */
+  .offices {
+    background: var(--surface-2);
+    border-top: 1px solid var(--line);
+  }
+  .offices-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;
+  }
+  .office {
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: 24px;
+    padding: 40px;
+    transition: all 0.3s;
+  }
+  .office:hover { border-color: var(--ink); transform: translateY(-4px); }
+  .office-flag {
+    font-family: var(--mono); font-size: 11px;
+    text-transform: uppercase; letter-spacing: 0.1em;
+    color: var(--accent); margin-bottom: 12px;
+  }
+  .office-city {
+    font-family: var(--display);
+    font-size: 32px; font-weight: 600;
+    letter-spacing: -0.02em;
+    margin-bottom: 4px;
+  }
+  .office-region { font-size: 14px; color: var(--ink-muted); margin-bottom: 24px; }
+  .office-address {
+    padding-top: 24px; border-top: 1px solid var(--line);
+    font-size: 14px; color: var(--ink-soft); line-height: 1.6;
+  }
+  .office-address strong { display: block; color: var(--ink); font-weight: 500; margin-bottom: 6px; }
+
+  /* FAQ */
+  .faq-grid { max-width: 800px; margin: 0 auto; }
+  .faq-item {
+    padding: 24px 0;
+    border-top: 1px solid var(--line);
+  }
+  .faq-item:last-child { border-bottom: 1px solid var(--line); }
+  .faq-item summary {
+    font-family: var(--display);
+    font-size: 20px;
+    font-weight: 600;
+    cursor: pointer;
+    list-style: none;
+    display: flex; justify-content: space-between; align-items: center;
+    letter-spacing: -0.01em;
+  }
+  .faq-item summary::-webkit-details-marker { display: none; }
+  .faq-item summary::after {
+    content: "+";
+    color: var(--accent);
+    font-size: 24px;
+    transition: transform 0.3s;
+  }
+  .faq-item[open] summary::after { content: "−"; }
+  .faq-item p {
+    margin-top: 16px;
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--ink-soft);
+  }
+
+  @media (max-width: 1024px) {
+    .contact-grid { grid-template-columns: 1fr; gap: 48px; }
+    .contact-form { position: relative; top: 0; padding: 32px 24px; }
+    .form-row.two-col { grid-template-columns: 1fr; gap: 24px; }
+    .contact-main { padding: 64px 24px; }
+    .offices-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ================== NAV ================== -->
+<nav class="nav">
+  <a href="../index.html" class="logo">
+    <svg width="32" height="32" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <path d="M6 42 L24 10 L42 42 Z" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"/>
+      <path d="M16 42 L28 22 L40 42 Z" fill="currentColor"/>
+      <circle cx="24" cy="10" r="3.2" fill="#FF5B2E"/>
+    </svg>
+    <span>Alpine <em>Quantum</em></span>
+  </a>
+  <div class="nav-links">
+    <a href="../index.html#services">Services</a>
+    <a href="../index.html#industries">Industries</a>
+    <a href="../index.html#work">Client Stories</a>
+    <a href="about.html">About</a>
+    <a href="../index.html#insights">Resources</a>
+  </div>
+  <a href="contact.html" class="nav-cta">Contact us</a>
+  <button class="mobile-toggle" aria-label="Menu"><span></span><span></span><span></span></button>
+</nav>
+
+<!-- ================== PAGE HERO ================== -->
+<section class="page-hero">
+  <div class="page-hero-content">
+    <div class="breadcrumb">
+      <a href="../index.html">Home</a>
+      <span class="breadcrumb-sep">/</span>
+      <span class="current">Contact</span>
+    </div>
+    <div class="page-hero-eyebrow">Contact us</div>
+    <h1>Let's talk about <em>your project.</em></h1>
+    <p class="lede">Tell us about what you're trying to build. A senior engineer — not a sales rep — will reply within one business day with honest scoping thoughts.</p>
+  </div>
+</section>
+
+<!-- ================== CONTACT MAIN ================== -->
+<section class="contact-main">
+  <div class="contact-grid">
+    <div class="contact-left">
+      <div class="contact-info-block">
+        <h3>Project inquiries</h3>
+        <p>For new engagement requests, capability questions, or RFPs. Include a sentence or two about your goals and timeline — it helps us route to the right team faster.</p>
+      </div>
+
+      <div class="contact-channels">
+        <div class="contact-channel">
+          <div class="label">Email</div>
+          <div class="value">
+            hello@alpinequantum.io
+            <div class="sub">Primary inquiries — replied to within 1 business day</div>
+          </div>
+        </div>
+        <div class="contact-channel">
+          <div class="label">Phone (US)</div>
+          <div class="value">
+            +1 (415) 555-0142
+            <div class="sub">Mon–Fri, 9am–6pm PT</div>
+          </div>
+        </div>
+        <div class="contact-channel">
+          <div class="label">Phone (India)</div>
+          <div class="value">
+            +91 22 1234 5678
+            <div class="sub">Mon–Fri, 10am–7pm IST</div>
+          </div>
+        </div>
+        <div class="contact-channel">
+          <div class="label">Press</div>
+          <div class="value">
+            press@alpinequantum.io
+            <div class="sub">Media inquiries, speaking, brand assets</div>
+          </div>
+        </div>
+        <div class="contact-channel">
+          <div class="label">Careers</div>
+          <div class="value">
+            careers@alpinequantum.io
+            <div class="sub">Or apply via our <a href="careers.html">careers page</a></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <form class="contact-form">
+      <div class="form-row two-col">
+        <div>
+          <label for="f-firstname">First name</label>
+          <input id="f-firstname" type="text" placeholder="Jane" required />
+        </div>
+        <div>
+          <label for="f-lastname">Last name</label>
+          <input id="f-lastname" type="text" placeholder="Doe" required />
+        </div>
+      </div>
+      <div class="form-row two-col">
+        <div>
+          <label for="f-email">Business email</label>
+          <input id="f-email" type="email" placeholder="jane@company.com" required />
+        </div>
+        <div>
+          <label for="f-phone">Phone (optional)</label>
+          <input id="f-phone" type="tel" placeholder="+1 (555) 000-0000" />
+        </div>
+      </div>
+      <div class="form-row two-col">
+        <div>
+          <label for="f-company">Company</label>
+          <input id="f-company" type="text" placeholder="Company Inc." required />
+        </div>
+        <div>
+          <label for="f-role">Your role</label>
+          <input id="f-role" type="text" placeholder="VP Engineering" />
+        </div>
+      </div>
+      <div class="form-row two-col">
+        <div>
+          <label for="f-service">Area of interest</label>
+          <select id="f-service">
+            <option>Artificial Intelligence</option>
+            <option>Software Engineering</option>
+            <option>Cloud &amp; DevOps</option>
+            <option>Big Data &amp; Analytics</option>
+            <option>Multiple / Not sure</option>
+            <option>General inquiry</option>
+          </select>
+        </div>
+        <div>
+          <label for="f-budget">Estimated budget</label>
+          <select id="f-budget">
+            <option>Not sure yet</option>
+            <option>Under $50K</option>
+            <option>$50K – $250K</option>
+            <option>$250K – $1M</option>
+            <option>$1M+</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row">
+        <label for="f-message">Tell us about your project</label>
+        <textarea id="f-message" placeholder="A few lines about your business goals or initiative, current state, and what success looks like."></textarea>
+      </div>
+      <div class="checkbox-row">
+        <input type="checkbox" id="f-consent" />
+        <label for="f-consent">I agree to Alpine Quantum's <a href="legal/privacy.html">Privacy Policy</a> and consent to being contacted about my inquiry.</label>
+      </div>
+      <button class="form-submit" type="button">Submit inquiry <span>→</span></button>
+    </form>
+  </div>
+</section>
+
+<!-- ================== OFFICES ================== -->
+<section class="offices">
+  <div class="container">
+    <div class="section-head">
+      <div>
+        <div class="section-eyebrow">Our offices</div>
+        <h2 class="section-title">Three regions,<br/><em>one accountable team.</em></h2>
+      </div>
+      <p class="section-desc">We deliver from three continents to keep work moving across time zones. Every project still gets a single accountable lead, regardless of where the engineering happens.</p>
+    </div>
+
+    <div class="offices-grid">
+      <div class="office">
+        <div class="office-flag">Headquarters</div>
+        <div class="office-city">Mumbai</div>
+        <div class="office-region">India · IST (UTC+5:30)</div>
+        <div class="office-address">
+          <strong>Alpine Quantum Private Limited</strong>
+          [Provider India Address]<br/>
+          Mumbai, Maharashtra 400001<br/>
+          India
+        </div>
+      </div>
+      <div class="office">
+        <div class="office-flag">North America</div>
+        <div class="office-city">Austin</div>
+        <div class="office-region">Texas, USA · CT (UTC−6)</div>
+        <div class="office-address">
+          <strong>Alpine Quantum, LLC</strong>
+          [Provider US Address]<br/>
+          Austin, TX 78701<br/>
+          United States
+        </div>
+      </div>
+      <div class="office">
+        <div class="office-flag">Europe</div>
+        <div class="office-city">Lisbon</div>
+        <div class="office-region">Portugal · WET (UTC+0)</div>
+        <div class="office-address">
+          <strong>Engineering &amp; delivery</strong>
+          [European Office Address]<br/>
+          Lisbon, 1000-001<br/>
+          Portugal
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================== FAQ ================== -->
+<section>
+  <div class="container">
+    <div class="section-head" style="grid-template-columns: 1fr; text-align: center; margin-bottom: 48px;">
+      <div>
+        <div class="section-eyebrow" style="justify-content: center;">Common questions</div>
+        <h2 class="section-title">What to expect <em>after you reach out.</em></h2>
+      </div>
+    </div>
+    <div class="faq-grid">
+      <details class="faq-item">
+        <summary>How quickly will I hear back?</summary>
+        <p>Within one business day. Initial replies come from a senior engineer or engagement lead — not a sales rep — with honest first thoughts on scope, feasibility, and timeline.</p>
+      </details>
+      <details class="faq-item">
+        <summary>Do I need to have everything figured out first?</summary>
+        <p>No. Most of our best engagements start with a rough idea and a real business problem. We help shape scope during discovery. If your initiative is too early to scope, we'll say so.</p>
+      </details>
+      <details class="faq-item">
+        <summary>What does a typical engagement look like?</summary>
+        <p>Most projects run 8–16 weeks for an initial phase. We work in agile sprints with weekly demos, full visibility via your tools (Jira, GitHub, Slack), and a senior architect leading from start to finish.</p>
+      </details>
+      <details class="faq-item">
+        <summary>How is pricing structured?</summary>
+        <p>Fixed-price by default, with milestone-based payments tied to accepted deliverables. We also offer time &amp; materials and retainer models when they fit better. Every engagement is governed by our standard MSA.</p>
+      </details>
+      <details class="faq-item">
+        <summary>Who owns the IP?</summary>
+        <p>By default, you do. Every line of code, every model, every piece of documentation. We retain ownership only of underlying tools and frameworks that pre-exist the engagement.</p>
+      </details>
+      <details class="faq-item">
+        <summary>Do you sign NDAs before discovery calls?</summary>
+        <p>Yes, gladly. We have a mutual NDA we can send, or we can use yours. Just mention it in your inquiry.</p>
+      </details>
+    </div>
+  </div>
+</section>
+
+<!-- ================== FOOTER ================== -->
+<footer>
+  <div class="footer-bg"><img src="../images/footer-mountains.png" alt="" /></div>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <a href="../index.html" class="logo">
+        <svg width="32" height="32" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M6 42 L24 10 L42 42 Z" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"/>
+          <path d="M16 42 L28 22 L40 42 Z" fill="currentColor"/>
+          <circle cx="24" cy="10" r="3.2" fill="#FF5B2E"/>
+        </svg>
+        <span>Alpine <em>Quantum</em></span>
+      </a>
+      <p>A software development and digital services company building innovative solutions across AI, cloud, data, and engineering services for global enterprises.</p>
+      <div class="footer-social">
+        <a href="#" aria-label="LinkedIn">in</a>
+        <a href="#" aria-label="X / Twitter">𝕏</a>
+        <a href="#" aria-label="GitHub">⌘</a>
+        <a href="#" aria-label="YouTube">▶</a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>Services</h4>
+      <ul>
+        <li><a href="services/artificial-intelligence.html">Artificial Intelligence</a></li>
+        <li><a href="services/software-engineering.html">Software Engineering</a></li>
+        <li><a href="services/cloud-devops.html">Cloud &amp; DevOps</a></li>
+        <li><a href="services/big-data-analytics.html">Big Data &amp; Analytics</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Industries</h4>
+      <ul>
+        <li><a href="industries/financial-services.html">Financial Services</a></li>
+        <li><a href="industries/healthcare.html">Healthcare</a></li>
+        <li><a href="industries/retail.html">Retail</a></li>
+        <li><a href="industries/manufacturing.html">Manufacturing</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Company</h4>
+      <ul>
+        <li><a href="about.html">About us</a></li>
+        <li><a href="../index.html#work">Client stories</a></li>
+        <li><a href="careers.html">Careers</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div>© 2026 Alpine <em style="color: var(--accent); font-weight: 600;">Quantum</em> Inc. All rights reserved.</div>
+    <div>
+      <a href="legal/privacy.html">Privacy</a>
+      <a href="legal/terms.html">Terms</a>
+      <a href="#">Security</a>
+      <a href="#">Sitemap</a>
+    </div>
+  </div>
+</footer>
+
+<script src="../site.js"></script>
+</body>
+</html>
