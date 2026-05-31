@@ -54,21 +54,14 @@ img { max-width: 100%; display: block; }
 /* ================== NAV ================== */
 .nav {
   position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-  background: rgba(10,10,11,0.9);
+  background: rgba(255,255,255,0.92);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border-bottom: 1px solid rgba(255,255,255,0.08);
+  border-bottom: 1px solid var(--line);
   padding: 16px 40px;
   display: flex; align-items: center; justify-content: space-between;
   transition: background 0.3s, border-color 0.3s;
 }
-.nav .logo { color: var(--paper); }
-.nav .nav-links a { color: rgba(255,255,255,0.75); }
-.nav .nav-links a:hover { color: var(--paper); }
-.nav .nav-links a.active { color: var(--paper); }
-.nav .nav-cta { background: var(--paper); color: var(--ink); }
-.nav .nav-cta:hover { background: var(--accent); color: var(--paper); }
-.nav .mobile-toggle span { background: var(--paper); }
 /* When the page has a dark hero, the nav starts transparent-dark and switches on scroll */
 .nav.dark-hero:not(.scrolled) {
   background: rgba(10,10,11,0.4);
