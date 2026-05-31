@@ -21,7 +21,7 @@
   if (!toggle || !navLinks) return;
   toggle.addEventListener('click', () => {
     const isOpen = navLinks.style.display === 'flex';
-    navLinks.style.cssText = isOpen ? '' : 'display: flex; flex-direction: column; position: absolute; top: 100%; left: 0; right: 0; background: #0A0A0B; padding: 24px; border-bottom: 1px solid rgba(255,255,255,0.08); gap: 20px;';
+    navLinks.style.cssText = isOpen ? '' : 'display: flex; flex-direction: column; position: absolute; top: 100%; left: 0; right: 0; background: var(--paper); padding: 24px; border-bottom: 1px solid var(--line); gap: 20px;';
   });
 })();
 
