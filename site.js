@@ -1,4 +1,4 @@
-/* Alpine Quantum — site-wide scripts */
+/* AlpineQora — site-wide scripts */
 
 // Nav: switch nav appearance when scrolled past hero
 (function () {
