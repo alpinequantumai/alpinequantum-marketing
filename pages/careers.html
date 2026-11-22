@@ -397,6 +397,24 @@ footer > *:not(.footer-bg) { position: relative; z-index: 1; }
   .role-card-comp strong { color: var(--ink); font-weight: 600; }
   .role-card-cta { color: var(--accent); font-size: 14px; font-weight: 500; display: inline-flex; align-items: center; gap: 6px; transition: gap 0.25s; }
   .role-card:hover .role-card-cta { gap: 10px; }
+  .role-search { position: relative; margin-bottom: 24px; }
+  .role-search svg { position: absolute; left: 20px; top: 50%; transform: translateY(-50%); width: 18px; height: 18px; color: var(--ink-muted); pointer-events: none; }
+  .role-search input { width: 100%; font: inherit; font-size: 16px; color: var(--ink); background: var(--paper); border: 1px solid var(--line); border-radius: 100px; padding: 16px 20px 16px 50px; outline: none; transition: border-color 0.2s, box-shadow 0.2s; }
+  .role-search input::placeholder { color: var(--ink-muted); }
+  .role-search input:focus { border-color: var(--ink); box-shadow: 0 0 0 4px var(--accent-soft); }
+  .role-search input::-webkit-search-cancel-button { cursor: pointer; }
+  .role-search-count { font-family: var(--mono); font-size: 12px; color: var(--ink-muted); margin: -8px 0 16px 4px; min-height: 18px; }
+  .role-card[hidden] { display: none; }
+  .roles-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(340px, 100%), 1fr)); gap: 20px; }
+  .role-card { display: flex; flex-direction: column; padding: 28px; }
+  .role-card-top { flex-direction: column; gap: 14px; margin-bottom: 12px; }
+  .role-card-top .role-level-badge { align-self: flex-start; }
+  .role-card-title { font-size: 21px; }
+  .role-card-meta { gap: 8px 16px; margin-bottom: 0; }
+  .role-card-desc { font-size: 14.5px; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+  .role-card-footer { margin-top: auto; }
+  .roles-empty { background: var(--paper); border: 1px dashed var(--line); border-radius: 20px; padding: 40px 32px; text-align: center; color: var(--ink-soft); font-size: 15px; }
+  .roles-empty button { font: inherit; color: var(--accent); background: none; border: 0; padding: 0; cursor: pointer; font-weight: 500; }
 
   .process-section { background: var(--ink); color: var(--paper); padding: 120px 40px; }
   .process-section .section-eyebrow { color: rgba(255,255,255,0.6); }
@@ -490,6 +508,12 @@ footer > *:not(.footer-bg) { position: relative; z-index: 1; }
       </div>
       <p class="section-desc">Eleven open positions, all in Gandhinagar, Gujarat. Hybrid: 3 days office, 2 days remote.</p>
     </div>
+    <div class="role-search">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+      <input type="search" id="role-search" placeholder="Search by role, skill or tool" aria-label="Search open roles" autocomplete="off" />
+    </div>
+    <div class="role-search-count" id="role-search-count" aria-live="polite"></div>
+    <div class="roles-empty" id="roles-empty" hidden>No roles match <strong id="roles-empty-q"></strong>. <button type="button" id="roles-empty-clear">Show all roles</button></div>
     <div class="roles-list">
 
       <a href="careers/openings/appsec-remediation-lead.html" class="role-card">
@@ -802,5 +826,48 @@ footer > *:not(.footer-bg) { position: relative; z-index: 1; }
   </div>
 </footer>
 
+<script>
+(function () {
+  var input = document.getElementById('role-search');
+  if (!input) return;
+  var cards = Array.prototype.slice.call(document.querySelectorAll('.roles-list .role-card'));
+  var count = document.getElementById('role-search-count');
+  var empty = document.getElementById('roles-empty');
+  var emptyQ = document.getElementById('roles-empty-q');
+  var norm = function (s) { return s.toLowerCase().replace(/[\u2013\u2014]/g, '-').replace(/\s+/g, ' '); };
+  var aliases = { appsec: 'application security', qa: 'qa quality assurance testing', ai: 'ai artificial intelligence' };
+  var texts = cards.map(function (c) { return norm(c.textContent); });
+
+  function matches(text, words) {
+    return words.every(function (w) {
+      if (text.indexOf(w) !== -1) return true;
+      var alt = aliases[w];
+      return !!alt && alt.split(' ').some(function (a) { return text.indexOf(a) !== -1; });
+    });
+  }
+
+  function run() {
+    var q = norm(input.value.trim());
+    var words = q ? q.split(' ') : [];
+    var shown = 0;
+    cards.forEach(function (c, i) {
+      var ok = !words.length || matches(texts[i], words);
+      c.hidden = !ok;
+      if (ok) shown++;
+    });
+    count.textContent = words.length && shown ? shown + ' of ' + cards.length + ' roles' : '';
+    empty.hidden = !(words.length && !shown);
+    emptyQ.textContent = '\u201c' + input.value.trim() + '\u201d';
+    var url = new URL(window.location.href);
+    if (q) url.searchParams.set('q', input.value.trim()); else url.searchParams.delete('q');
+    history.replaceState(null, '', url);
+  }
+
+  document.getElementById('roles-empty-clear').addEventListener('click', function () { input.value = ''; run(); input.focus(); });
+  input.addEventListener('input', run);
+  var initial = new URLSearchParams(window.location.search).get('q');
+  if (initial) { input.value = initial; run(); }
+})();
+</script>
 </body>
 </html>
